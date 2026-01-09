@@ -1,5 +1,5 @@
 建置中,請稍侯
-
+Github新增資料夾的方法->Add file-> Create new file-> 輸入名字後再加個/ 然後隨便新增檔案即可
 
 https://easyway0301.github.io/
 
