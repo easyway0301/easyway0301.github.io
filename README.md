@@ -10,8 +10,5 @@ https://www.youtube.com/playlist?list=PLC8Q-euqu9-mXBQOIoq2xYPvSJmB-AIWd
 
 https://wiki.seeedstudio.com/cn/xiao_esp32s3_getting_started/
 
-行內樣式：
-![alt 文字](https://raw.githubusercontent.com/adam-p/markdown-here/master/src/common/images/icon48.png "Logo 標題文字 1")
-
-引用樣式: 
-![alt 文字][logo]
+Markdown Cheatsheet 中文版
+https://gist.github.com/billy3321/1001749662c370887c63bb30f26c9e6e
