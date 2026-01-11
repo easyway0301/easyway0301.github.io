@@ -101,9 +101,79 @@
 </div>
 
 <h2>第二步：開啟 Thonny</h2>
-    <a href="https://github.com/easyway0301/easyway0301.github.io/blob/main/Seeed%20Xiao%20Esp32S3%20With%20MicroPython/02-TurnOn%20UserLed/TurnOnUserLed.py" target="_blank">
-        程式碼在這
-    </a>
+    <style>
+.code-block {
+    position: relative;
+    background: #0d1117;
+    color: #c9d1d9;
+    border-radius: 10px;
+    padding: 18px;
+    margin: 30px 0;
+    font-family: Consolas, Monaco, monospace;
+    font-size: 14px;
+    overflow-x: auto;
+}
+
+.code-block pre {
+    margin: 0;
+    white-space: pre;
+}
+
+.copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #238636;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 5px 12px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.copy-btn:hover {
+    background: #2ea043;
+}
+</style>
+
+<div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code>
+from machine import Pin
+import time
+
+# 本範例適用：Seeed XIAO ESP32-S3 開發板
+# TYPE-C 插頭朝上時，User LED 位於右側
+# LED 亮燈時為「黃色」
+
+# 設定 LED 腳位（GPIO 21）
+UserLed = Pin(21, Pin.OUT)
+
+def 打開UserLed():
+    print("打開 UserLed")
+    UserLed.value(0)  # 低電位亮燈
+
+def 關掉UserLed():
+    print("關掉 UserLed")
+    UserLed.value(1)  # 高電位熄燈
+
+打開UserLed()
+print("暫停 2 秒")
+time.sleep(2)
+關掉UserLed()
+    </code></pre>
+</div>
+
+<script>
+function copyCode(btn) {
+    const code = btn.nextElementSibling.innerText;
+    navigator.clipboard.writeText(code);
+    btn.innerText = "Copied!";
+    setTimeout(() => btn.innerText = "Copy", 1500);
+}
+</script>
+
 
 
 <div class="video">
