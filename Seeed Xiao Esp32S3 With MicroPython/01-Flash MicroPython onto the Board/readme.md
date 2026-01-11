@@ -19,10 +19,14 @@
 ## 📖 線上教學文件（SOP）
 
 👉 **請從這裡開始閱讀完整教學：**  
-🔗  [GitHub Pages](https://www.google.com](https://easyway0301.github.io/Seeed%20Xiao%20Esp32S3%20With%20MicroPython/01-Flash%20MicroPython%20onto%20the%20Board/sop.html
-)
+🔗 <a href="https://easyway0301.github.io/Seeed%20Xiao%20Esp32S3%20With%20MicroPython/01-Flash%20MicroPython%20onto%20the%20Board/sop.html" target="_blank">
+GitHub Pages
+</a>
 
-🔗  [YouTube](https://youtu.be/c7OXmXeBEP4)
+🔗 <a href="https://youtu.be/c7OXmXeBEP4" target="_blank">
+YouTube 教學影片
+</a>
+
 
 ---
 
