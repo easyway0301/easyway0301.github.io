@@ -5,67 +5,69 @@
     body {
         font-family: Arial, "Microsoft JhengHei", sans-serif;
         line-height: 1.9;
-        max-width: 960px;
+        max-width: 980px;
         margin: 40px auto;
         padding: 0 20px;
         color: #222;
-        background-color: #fafafa;
+        background-color: #f5f7fa;
     }
 
     h1 {
         text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #555;
         margin-bottom: 50px;
     }
 
+    section {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 40px;
+        margin-bottom: 50px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
     h2 {
-        margin-top: 60px;
+        margin-top: 0;
         border-left: 6px solid #4CAF50;
-        padding-left: 12px;
+        padding-left: 14px;
     }
 
     p {
-        margin: 12px 0;
+        margin: 14px 0;
     }
 
     ul {
-        margin-left: 20px;
+        margin-left: 22px;
     }
 
     img {
         max-width: 100%;
         height: auto;
         display: block;
-        margin: 25px auto 10px;
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        margin: 28px auto 10px;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.12);
     }
 
     .source {
         font-size: 14px;
         color: #666;
         text-align: center;
-        margin-bottom: 40px;
+        margin-top: 8px;
     }
 
-    .tip {
-        background: #f1f8e9;
-        border-left: 6px solid #8bc34a;
-        padding: 14px 18px;
+    .highlight {
+        background: #e8f5e9;
+        border-left: 6px solid #4caf50;
+        padding: 16px 20px;
+        border-radius: 8px;
         margin: 20px 0;
-        border-radius: 6px;
-    }
-
-    .warning {
-        background: #fff3e0;
-        border-left: 6px solid #ff9800;
-        padding: 14px 18px;
-        margin: 20px 0;
-        border-radius: 6px;
-    }
-
-    .video {
-        text-align: center;
-        margin-top: 30px;
+        font-size: 16px;
     }
 
     a {
@@ -77,69 +79,89 @@
     a:hover {
         text-decoration: underline;
     }
+
+    /* Code block */
+    .code-block {
+        position: relative;
+        background: #0d1117;
+        color: #c9d1d9;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 30px 0;
+        font-family: Consolas, Monaco, monospace;
+        font-size: 14px;
+        overflow-x: auto;
+    }
+
+    .code-block pre {
+        margin: 0;
+        white-space: pre;
+    }
+
+    .copy-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: #238636;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 14px;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .copy-btn:hover {
+        background: #2ea043;
+    }
+
+    /* Video */
+    .video {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .video img {
+        max-width: 560px;
+    }
 </style>
 
 <h1>ESP32-S3 MicroPython 入門教學</h1>
+<div class="subtitle">User LED 控制與 MicroPython 基礎實作</div>
 
-<h2>第一步：認識 ESP32-S3 開發板</h2>
-<p>
-在開始之前，先來認識這塊 ESP32-S3 開發板上的User LED。
-</p>
+<section>
+    <h2>第一步：認識 ESP32-S3 開發板</h2>
 
-<p><strong>面向板子正面（USB 接口朝上）時：</strong></p>
-<ul>
-    <li><strong style="font-size: 16px;">UserLED燈在 BOOT 按鈕下方，亮起來是黃燈。</strong></li>
-</ul>
+    <p>
+        在開始撰寫程式之前，先來認識這塊 ESP32-S3 開發板上的 <strong>User LED</strong>。
+    </p>
 
-<img src="front-indication.png" alt="XIAO ESP32-S3 Front Indication">
+    <div class="highlight">
+        <strong>方向說明：</strong><br>
+        面向板子正面（USB Type-C 接口朝上）時，<br>
+        <strong>User LED 位於 BOOT 按鈕下方，亮起時為黃色。</strong>
+    </div>
 
-<div class="source">
-    圖片來源：
-    <a href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/" target="_blank">
-        Seeed Studio 官方文件
-    </a>
-</div>
+    <img src="front-indication.png" alt="XIAO ESP32-S3 Front Indication">
 
-<h2>第二步：開啟 Thonny</h2>
-    <style>
-.code-block {
-    position: relative;
-    background: #0d1117;
-    color: #c9d1d9;
-    border-radius: 10px;
-    padding: 18px;
-    margin: 30px 0;
-    font-family: Consolas, Monaco, monospace;
-    font-size: 14px;
-    overflow-x: auto;
-}
+    <div class="source">
+        圖片來源：
+        <a href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/" target="_blank">
+            Seeed Studio 官方文件
+        </a>
+    </div>
+</section>
 
-.code-block pre {
-    margin: 0;
-    white-space: pre;
-}
+<section>
+    <h2>第二步：開啟 Thonny 並執行範例程式</h2>
 
-.copy-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: #238636;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 5px 12px;
-    cursor: pointer;
-    font-size: 13px;
-}
+    <p>
+        以下範例將示範如何使用 MicroPython 控制 XIAO ESP32-S3 上的 User LED。
+    </p>
 
-.copy-btn:hover {
-    background: #2ea043;
-}
-</style>
-
-<div class="code-block">
-    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-    <pre><code>
+    <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code>
 from machine import Pin
 import time
 
@@ -162,8 +184,19 @@ def 關掉UserLed():
 print("暫停 2 秒")
 time.sleep(2)
 關掉UserLed()
-    </code></pre>
-</div>
+        </code></pre>
+    </div>
+</section>
+
+<section>
+    <h2>完整操作影片教學</h2>
+
+    <div class="video">
+        <a href="https://youtu.be/t7Ce9VMCXps" target="_blank">
+            <img src="http://img.youtube.com/vi/t7Ce9VMCXps/0.jpg" alt="完整步驟影片">
+        </a>
+    </div>
+</section>
 
 <script>
 function copyCode(btn) {
@@ -173,12 +206,3 @@ function copyCode(btn) {
     setTimeout(() => btn.innerText = "Copy", 1500);
 }
 </script>
-
-
-
-<div class="video">
-<p><strong>完整操作影片教學</strong></p>
-<a href="https://youtu.be/t7Ce9VMCXps" target="_blank">
-    <img src="http://img.youtube.com/vi/t7Ce9VMCXps/0.jpg" alt="完整步驟影片">
-</a>
-</div>
