@@ -1,6 +1,6 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
+
+
+
     <meta charset="UTF-8">
     <title>ESP32-S3 MicroPython 入門教學</title>
     <style>
@@ -33,8 +33,8 @@
             margin-top: 20px;
         }
     </style>
-</head>
-<body>
+
+
 
 <h1>ESP32-S3 MicroPython 入門教學</h1>
 
@@ -74,16 +74,18 @@
 <h2>第三步：將 ESP32-S3 連接電腦</h2>
 <p>
   使用 USB 傳輸線將 ESP32-S3 開發板連接到電腦。
-</p>
+</p><p><span style="font-size: 17px; background-color: rgb(255, 255, 255);">開啟 Thonny-&gt;執行-&gt;設定直譯器。</span></p><p>Thonny應該要用哪一種直譯器執行你的程式？<span style="font-size: 17px; background-color: rgb(255, 255, 255);"></span></p><p>選擇MicroPython (ESP32)</p><p>請注意選擇連接埠或是 WebREPL這裡，假如看到連接埠是Board CDC，這不是燒錄模式。</p><p>要先切換成燒錄模式，可以按著Boot按鈕然後插上傳輸線。（有焊上排針比較不好按）。我習慣是按著Boot按鈕不放，然後按一下Reset按鈕，最後再放開Boot按鈕。按鈕按下去都會有喀一聲，別怕按壞。</p>
+<img src="normal.png" alt="normal.png">
 <p>
-  連接完成後，電腦應能辨識到新的序列埠（COM Port）。
+  Serial debug unit連接埠才是燒錄模式。
 </p>
+<img src="bootloader.png" alt="bootloader.png">
 
 <h2>第四步：燒錄 MicroPython 韌體</h2>
-<p>
-  開啟 Thonny，選擇對應的 ESP32-S3 裝置，
-  並依照指示將 MicroPython 韌體燒錄至開發板中。
-</p>
+<p>依照下圖的設定，將 MicroPython 韌體燒錄至開發板中。</p>
+<img src="bootloader.png" alt="bootloader.png">
 
-</body>
-</html>
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=reb57K4xegegyfnF
+" target="_blank"><img src="http://img.youtube.com/vi/reb57K4xegegyfnF/0.jpg" 
+alt="圖片 ALT 文字放在這裡" width="240" height="180" border="10" /></a>
+
