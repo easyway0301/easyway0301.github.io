@@ -1,7 +1,7 @@
 # Seeed XIAO ESP32-S3 with MicroPython
 
 本專案為 **Seeed Studio XIAO ESP32-S3** 的 MicroPython 入門教學文件，  
-內容以「實際操作流程（SOP）」為導向，適合初學者、教學示範與自學使用。
+內容適合初學者、教學示範與自學使用。
 
 ---
 
