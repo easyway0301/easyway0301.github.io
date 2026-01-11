@@ -21,6 +21,7 @@
 👉 **請從這裡開始閱讀完整教學：**  
 🔗  （GitHub Pages）
 https://easyway0301.github.io/Seeed%20Xiao%20Esp32S3%20With%20MicroPython/01-Flash%20MicroPython%20onto%20the%20Board/sop.html
+
 🔗  （YouTube）
 https://youtu.be/c7OXmXeBEP4
 
