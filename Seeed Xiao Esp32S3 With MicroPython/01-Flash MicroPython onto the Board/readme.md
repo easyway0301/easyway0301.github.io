@@ -5,6 +5,16 @@
 
 ---
 
+## 🧰 使用設備與工具
+
+- Seeed Studio **XIAO ESP32-S3**
+- USB 傳輸線
+- 電腦（Windows / macOS / Linux）
+- **Thonny IDE**
+  - 官方網站：https://thonny.org
+
+---
+
 ## 📌 專案內容
 
 本教學將帶你完成以下流程：
@@ -30,12 +40,3 @@ YouTube 教學影片
 
 ---
 
-## 🧰 使用設備與工具
-
-- Seeed Studio **XIAO ESP32-S3**
-- USB 傳輸線
-- 電腦（Windows / macOS / Linux）
-- **Thonny IDE**
-  - 官方網站：https://thonny.org
-
----
