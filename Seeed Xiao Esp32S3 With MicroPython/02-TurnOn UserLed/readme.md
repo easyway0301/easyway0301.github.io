@@ -75,10 +75,3 @@ time.sleep(2)
 [![完整步驟影片](http://img.youtube.com/vi/t7Ce9VMCXps/0.jpg)](https://youtu.be/t7Ce9VMCXps)
 
 ---
-
-## 🔗 延伸閱讀
-
-👉 **完整圖文教學（GitHub Pages）**
-[https://easyway0301.github.io/Seeed%20Xiao%20Esp32S3%20With%20MicroPython/01-Flash%20MicroPython%20onto%20the%20Board/sop.html](https://easyway0301.github.io/Seeed%20Xiao%20Esp32S3%20With%20MicroPython/01-Flash%20MicroPython%20onto%20the%20Board/sop.html)
-
----
