@@ -1,0 +1,84 @@
+# ESP32-S3 MicroPython 入門教學
+
+> **Seeed XIAO ESP32-S3｜User LED 控制與 MicroPython 基礎實作**
+
+本教學將帶你認識 **Seeed XIAO ESP32-S3** 開發板上的 **User LED**，並使用 **MicroPython** 撰寫第一支控制 LED 的程式。
+
+---
+
+## 📌 第一步：認識 ESP32-S3 開發板
+
+在開始撰寫程式之前，先來認識這塊 ESP32-S3 開發板上的 **User LED**。
+
+### 🔍 方向與位置說明
+
+* 將開發板 **正面朝向自己**
+* **USB Type-C 接口朝上**
+* **User LED 位於 BOOT 按鈕下方**
+* LED 亮起時為 **黃色**
+* **User LED 使用 GPIO 21**
+
+![XIAO ESP32-S3 Front Indication](front-indication.png)
+
+> 圖片來源：
+> [Seeed Studio 官方文件](https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/)
+
+---
+
+## 🧑‍💻 第二步：開啟 Thonny 並執行範例程式
+
+請先安裝 **Thonny**（MicroPython 官方推薦的入門 IDE）：
+
+🔗 [https://thonny.org](https://thonny.org)
+
+以下範例示範如何使用 MicroPython 控制 XIAO ESP32-S3 上的 User LED。
+
+### 🧪 MicroPython 範例程式
+
+```python
+from machine import Pin
+import time
+
+# 本範例適用：Seeed XIAO ESP32-S3 開發板
+# TYPE-C 插頭朝上時，User LED 位於右側
+# LED 亮燈時為「黃色」
+
+# 設定 LED 腳位（GPIO 21）
+UserLed = Pin(21, Pin.OUT)
+
+def 打開UserLed():
+    print("打開 UserLed")
+    UserLed.value(0)  # 低電位亮燈
+
+def 關掉UserLed():
+    print("關掉 UserLed")
+    UserLed.value(1)  # 高電位熄燈
+
+打開UserLed()
+print("暫停 2 秒")
+time.sleep(2)
+關掉UserLed()
+```
+
+📌 **說明**：
+
+* XIAO ESP32-S3 的 User LED 為「**低電位亮燈**」
+* `value(0)` → LED 亮
+* `value(1)` → LED 滅
+
+---
+
+## 🎬 完整操作影片教學
+
+點擊下方圖片即可觀看完整實作影片（YouTube）：
+
+[![完整步驟影片](http://img.youtube.com/vi/t7Ce9VMCXps/0.jpg)](https://youtu.be/t7Ce9VMCXps)
+
+---
+
+## 🔗 延伸閱讀
+
+👉 **完整圖文教學（GitHub Pages）**
+[https://easyway0301.github.io/Seeed%20Xiao%20Esp32S3%20With%20MicroPython/01-Flash%20MicroPython%20onto%20the%20Board/sop.html](https://easyway0301.github.io/Seeed%20Xiao%20Esp32S3%20With%20MicroPython/01-Flash%20MicroPython%20onto%20the%20Board/sop.html)
+
+---
