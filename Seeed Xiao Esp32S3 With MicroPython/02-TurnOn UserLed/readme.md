@@ -6,6 +6,17 @@
 
 ---
 
+
+## 🧰 使用設備與工具
+
+- Seeed Studio **XIAO ESP32-S3**
+- USB 傳輸線
+- 電腦（Windows / macOS / Linux）
+- **Thonny IDE**
+  - 官方網站：https://thonny.org
+
+---
+
 ## 📌 第一步：認識 ESP32-S3 開發板
 
 在開始撰寫程式之前，先來認識這塊 ESP32-S3 開發板上的 **User LED**。
