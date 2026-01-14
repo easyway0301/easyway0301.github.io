@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>ESP32-S3 RGB LED 教學（共陽極）</title>
+
+<style>
+    body {
+        font-family: Arial, "Microsoft JhengHei", sans-serif;
+        line-height: 1.9;
+        max-width: 980px;
+        margin: 40px auto;
+        padding: 0 20px;
+        color: #222;
+        background-color: #f5f7fa;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #555;
+        margin-bottom: 50px;
+    }
+
+    section {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 40px;
+        margin-bottom: 50px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+        margin-top: 0;
+        border-left: 6px solid #4CAF50;
+        padding-left: 14px;
+    }
+
+    p {
+        margin: 14px 0;
+    }
+
+    ul {
+        margin-left: 22px;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 28px auto 10px;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
+
+    .highlight {
+        background: #e8f5e9;
+        border-left: 6px solid #4caf50;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-size: 16px;
+    }
+
+    /* Code block */
+    .code-block {
+        position: relative;
+        background: #0d1117;
+        color: #c9d1d9;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 30px 0;
+        font-family: Consolas, Monaco, monospace;
+        font-size: 14px;
+        overflow-x: auto;
+    }
+
+    .code-block pre {
+        margin: 0;
+        white-space: pre;
+    }
+
+    .copy-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: #238636;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 14px;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .copy-btn:hover {
+        background: #2ea043;
+    }
+</style>
+</head>
+
+<body>
+
+<h1>ESP32-S3 MicroPython 入門教學</h1>
+<div class="subtitle">KEYES 140C05 共陽極 RGB 全彩 LED</div>
+
+<section>
+    <h2>第一步：認識 RGB 共陽極 LED</h2>
+
+    <p>
+        本教學使用 <strong>KEYES 140C05 RGB 全彩 LED 模組</strong>，
+        這是一顆 <strong>共陽極（Common Anode）</strong> 的 RGB LED。
+    </p>
+
+    <div class="highlight">
+        <strong>共陽極重點：</strong><br>
+        • 共用正極接 VCC<br>
+        • 腳位輸出 <strong>0 = 亮燈</strong><br>
+        • 腳位輸出 <strong>1 = 熄燈</strong>
+    </div>
+
+    <ul>
+        <li>紅色 LED → GPIO 9</li>
+        <li>藍色 LED → GPIO 8</li>
+        <li>綠色 LED → GPIO 7</li>
+    </ul>
+
+<img src="Pin-List.png" alt="Pin-List.png">
+
+    <div class="source">
+        圖片來源：
+        <a href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/" target="_blank">
+            Seeed Studio 官方文件
+        </a>
+    </div>
+
+<img src="Pin-List.png" alt="KeyesLedRgb140C05.jpeg">
+
+</section>
+
+<section>
+    <h2>第二步：MicroPython 控制範例</h2>
+
+    <p>
+        以下程式會依序顯示 <strong>紅 → 綠 → 藍</strong>，
+        每個顏色亮 1 秒，再熄滅 0.5 秒。
+    </p>
+
+    <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+import machine, time
+
+# 科易 KEYES LED 140C05 RGB 全彩 LED（共陽極）
+
+# 共陽極 RGB LED 腳位
+red = machine.Pin(9, machine.Pin.OUT)
+blue = machine.Pin(8, machine.Pin.OUT)
+green = machine.Pin(7, machine.Pin.OUT)
+
+# 全部關燈（共陽極：1 = 關）
+red.value(1)
+green.value(1)
+blue.value(1)
+
+# 顏色清單（0 = 亮）
+colors = [
+    (0, 1, 1),  # 紅
+    (1, 0, 1),  # 綠
+    (1, 1, 0),  # 藍
+]
+
+for r, g, b in colors:
+    red.value(r)
+    green.value(g)
+    blue.value(b)
+    time.sleep(1)
+
+    # 關燈
+    red.value(1)
+    green.value(1)
+    blue.value(1)
+    time.sleep(0.5)
+
+print("結束了")
+        </code></pre>
+    </div>
+</section>
+
+<section>
+    <h2>補充說明</h2>
+
+    <div class="highlight">
+        如果你的 LED 行為「反過來」：<br>
+        • 幾乎可以確定你用的是 <strong>共陰極 RGB LED</strong><br>
+        • 共陰極邏輯：<strong>1 = 亮、0 = 關</strong>
+    </div>
+
+    <p>
+        實際使用時，請依你手上的 LED 模組種類調整邏輯。
+    </p>
+</section>
+
+<script>
+function copyCode(btn) {
+    const code = btn.nextElementSibling.innerText;
+    navigator.clipboard.writeText(code);
+    btn.innerText = "Copied!";
+    setTimeout(() => btn.innerText = "Copy", 1500);
+}
+</script>
+
+</body>
+</html>
