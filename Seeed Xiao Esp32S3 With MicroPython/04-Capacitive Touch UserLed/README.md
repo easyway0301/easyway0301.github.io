@@ -23,13 +23,13 @@
 
 ![Pin List for XIAO ESP32-S3](Pin-List.png)
 
-> 圖片來源：Seeed Studio 官方文件（XIAO ESP32-S3 硬體說明）:contentReference[oaicite:3]{index=3}
+> 圖片來源：Seeed Studio 官方文件（XIAO ESP32-S3 硬體說明）
 
 ---
 
 ## 🧑‍💻 MicroPython 範例程式
 
-⚠️ 本程式為 **無限迴圈**，若要停止執行請在 Thonny 內連按兩次 `Ctrl + C`。:contentReference[oaicite:4]{index=4}
+⚠️ 本程式為 **無限迴圈**，若要停止執行請在 Thonny 內連按兩次 `Ctrl + C`。
 
 ```python
 from machine import TouchPad, Pin
