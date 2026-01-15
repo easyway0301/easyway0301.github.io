@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>ESP32-S3 MicroPython 紅綠燈（Timer 定時器）教學</title>
+
+<style>
+body {
+    font-family: Arial, "Microsoft JhengHei", sans-serif;
+    line-height: 1.9;
+    max-width: 980px;
+    margin: 40px auto;
+    padding: 0 20px;
+    color: #222;
+    background-color: #f5f7fa;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #555;
+    margin-bottom: 50px;
+}
+
+section {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 40px;
+    margin-bottom: 50px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+h2 {
+    margin-top: 0;
+    border-left: 6px solid #4CAF50;
+    padding-left: 14px;
+}
+
+p {
+    margin: 14px 0;
+}
+
+ul {
+    margin-left: 22px;
+}
+
+.highlight {
+    background: #e8f5e9;
+    border-left: 6px solid #4caf50;
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    font-size: 16px;
+}
+
+.warning {
+    background: #fff3e0;
+    border-left: 6px solid #ff9800;
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+a {
+    color: #2e7d32;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Code block */
+.code-block {
+    position: relative;
+    background: #0d1117;
+    color: #c9d1d9;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 30px 0;
+    font-family: Consolas, Monaco, monospace;
+    font-size: 14px;
+    overflow-x: auto;
+}
+
+.code-block pre {
+    margin: 0;
+    white-space: pre;
+}
+
+.copy-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #238636;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.copy-btn:hover {
+    background: #2ea043;
+}
+</style>
+</head>
+
+<body>
+
+<h1>ESP32-S3 MicroPython 紅綠燈教學</h1>
+<div class="subtitle">使用 Timer 定時器實作交通號誌（共陰極 LED）</div>
+
+<section>
+<h2>第一步：硬體與原理說明</h2>
+
+<p>
+本教學使用 <strong>Seeed XIAO ESP32-S3</strong> 搭配三顆 LED，
+模擬「紅、綠、黃」交通號誌。
+</p>
+
+<div class="highlight">
+<strong>LED 類型：</strong> 共陰極（Common Cathode）<br>
+<strong>控制邏輯：</strong><br>
+GPIO = <strong>1</strong> → LED 亮<br>
+GPIO = <strong>0</strong> → LED 滅
+</div>
+
+<p><strong>GPIO 腳位配置：</strong></p>
+<ul>
+    <li>🔴 紅燈：GPIO 9</li>
+    <li>🟡 黃燈：GPIO 8</li>
+    <li>🟢 綠燈：GPIO 7</li>
+</ul>
+<img src="Pin-List.png" alt="Pin-List.png">
+
+    <div class="source">
+        圖片來源：
+        <a href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/" target="_blank">
+            Seeed Studio 官方文件
+        </a>
+    </div>
+
+<img src="TrafficLightLEDModule.jpeg" alt="TrafficLightLEDModule.jpeg">
+</section>
+
+<section>
+<h2>第二步：Timer 定時器概念</h2>
+
+<p>
+MicroPython 的 <code>Timer</code> 可以在背景定時執行程式，
+不需要使用 <code>while True</code> 搭配 <code>sleep()</code>。
+</p>
+
+<ul>
+    <li>本範例使用 <strong>每 1 秒</strong> 切換一次燈號</li>
+    <li>燈號順序：紅 → 綠 → 黃 → 重複</li>
+</ul>
+
+<div class="warning">
+<strong>注意：</strong><br>
+Timer 的 callback 函式中請避免使用 <code>sleep()</code>，
+否則可能造成系統不穩定。
+</div>
+</section>
+
+<section>
+<h2>第三步：MicroPython 程式碼</h2>
+
+<p>將以下程式碼貼到 Thonny，並上傳到 ESP32-S3 執行：</p>
+
+<div class="code-block">
+<button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><code>
+from machine import Pin, Timer
+# 從 machine 模組匯入 Pin（控制腳位）與 Timer（定時器）
+
+# === LED 腳位設定（共陰極：GPIO=1 亮） ===
+red = Pin(9, Pin.OUT)
+yellow = Pin(8, Pin.OUT)
+green = Pin(7, Pin.OUT)
+
+# === 燈號狀態表 ===
+# 每一組代表 (紅燈, 綠燈, 黃燈)
+# 1 = 亮，0 = 滅
+states = [
+    (1, 0, 0),  # 紅燈
+    (0, 1, 0),  # 綠燈
+    (0, 0, 1),  # 黃燈
+]
+
+state_index = 0
+
+def update_led(timer):
+    global state_index
+
+    r, g, y = states[state_index]
+
+    red.value(r)
+    green.value(g)
+    yellow.value(y)
+
+    state_index = (state_index + 1) % len(states)
+
+# === 設定定時器 ===
+tim = Timer(0)
+tim.init(
+    period=1000,          # 1 秒
+    mode=Timer.PERIODIC,
+    callback=update_led
+)
+</code></pre>
+</div>
+</section>
+
+<section>
+<h2>執行結果</h2>
+
+<ul>
+    <li>🔴 紅燈亮 1 秒</li>
+    <li>🟢 綠燈亮 1 秒</li>
+    <li>🟡 黃燈亮 1 秒</li>
+    <li>循環不停止（Timer 週期執行）</li>
+</ul>
+
+<div class="highlight">
+這個範例非常適合延伸成：<br>
+✔ 交通號誌模擬<br>
+✔ 狀態機（State Machine）教學<br>
+✔ 非阻塞式程式設計示範
+</div>
+</section>
+
+<script>
+function copyCode(btn) {
+    const code = btn.nextElementSibling.innerText;
+    navigator.clipboard.writeText(code);
+    btn.innerText = "Copied!";
+    setTimeout(() => btn.innerText = "Copy", 1500);
+}
+</script>
+
+</body>
+</html>
