@@ -142,6 +142,7 @@ Seeed Studio 官方文件
 
 <div class="code-block">
 <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code>
 from time import sleep_ms
 from machine import I2C, Pin
 from esp8266_i2c_lcd import I2cLcd
@@ -167,7 +168,7 @@ lcd.putstr("LCD1602A I2C OK")
 # 保持顯示
 while True:
     sleep_ms(1000)
-</pre>
+</code></pre>
 </div>
 
 <p>esp8266_i2c_lcd.py</p>
@@ -176,6 +177,7 @@ while True:
     
 <div class="code-block">
 <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code>
 # https://github.com/dhylands/python_lcd/blob/master/lcd/esp8266_i2c_lcd.py
 
 """Implements a HD44780 character LCD connected via PCF8574 on I2C.
@@ -262,13 +264,14 @@ class I2cLcd(LcdApi):
         self.i2c.writeto(self.i2c_addr, bytearray([byte | MASK_E]))
         self.i2c.writeto(self.i2c_addr, bytearray([byte]))
 
-</pre>
+</code></pre>
 </div>
 <p>lcd_api.py</p>
 <p># 資料來源： # https://github.com/dhylands/python_lcd/blob/master/lcd/lcd_api.py</p>
 
 <div class="code-block">
 <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code>
 
 # https://github.com/dhylands/python_lcd/blob/master/lcd/lcd_api.py
 
@@ -472,7 +475,7 @@ class LcdApi:
         """Sleep for some time (given in microseconds)."""
         time.sleep_us(usecs)
 
-</pre>
+</code></pre>
 </div>
 
     
