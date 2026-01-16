@@ -243,7 +243,8 @@ print("高度:", altitude, "m")
 </div>
 </section>
 
-    function copyCode(btn) {
+<script>
+function copyCode(btn) {
     const code = btn.nextElementSibling.innerText;
     navigator.clipboard.writeText(code);
     btn.innerText = "Copied!";
