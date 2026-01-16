@@ -58,9 +58,11 @@ lcd.putstr("Hello ESP32-S3")
 lcd.move_to(0, 1)
 lcd.putstr("LCD1602A I2C OK")
 
-# 保持顯示
-while True:
-    sleep_ms(1000)
+# 顯示5秒
+sleep_ms(1000)
+
+# 清除畫面
+lcd.clear()
 ```
 
 ### 💻 程式碼
