@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>BMP180 氣壓感測器｜MicroPython SOP</title>
+    <style>
+        body {
+            font-family: Arial, "Microsoft JhengHei", sans-serif;
+            line-height: 1.8;
+            background-color: #f9fafb;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #1f2937;
+        }
+        code, pre {
+            background-color: #111827;
+            color: #e5e7eb;
+            padding: 15px;
+            border-radius: 8px;
+            display: block;
+            overflow-x: auto;
+        }
+        ul {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>📘 BMP180 氣壓感測器 SOP（MicroPython）</h1>
+
+<p>
+本教學示範如何使用 <b>BMP180 氣壓感測器</b> 搭配
+<b>Seeed XIAO ESP32-S3</b>，透過 <b>I2C</b> 讀取：
+</p>
+
+<ul>
+    <li>🌡 溫度（°C）</li>
+    <li>🌬 氣壓（Pa）</li>
+    <li>⛰ 高度（m）</li>
+</ul>
+
+<p>本範例<strong>只執行一次量測</strong>，不使用 while 迴圈。</p>
+
+<hr>
+
+<h2>🔌 一、接線方式</h2>
+
+<ul>
+    <li>VCC → 3V3</li>
+    <li>GND → GND</li>
+    <li>SCL → GPIO6</li>
+    <li>SDA → GPIO5</li>
+</ul>
+
+<hr>
+
+<h2>📦 二、I2C 初始化</h2>
+
+<pre><code>
+from machine import I2C, Pin
+import time
+import ustruct
+
+# 初始化 I2C（I2C1）
+i2c = I2C(1, scl=Pin(6), sda=Pin(5), freq=100000)
+
+# 掃描 I2C 裝置
+print(i2c.scan())
+</code></pre>
+
+<hr>
+
+<h2>⚙ 三、讀取校正資料</h2>
+
+<pre><code>
+BMP180_ADDR = 0x77  # BMP180 I2C 位址
+
+def read_calibration():
+    # 從 0xAA 讀取 22 bytes 校正資料
+    calib = i2c.readfrom_mem(BMP180_ADDR, 0xAA, 22)
+    return ustruct.unpack("&gt;hhhHHhhhhhh", calib)
+
+AC1, AC2, AC3, AC4, AC5, AC6, B1, B2, MB, MC, MD = read_calibration()
+</code></pre>
+
+<hr>
+
+<h2>🌡 四、溫度讀取與計算</h2>
+
+<pre><code>
+def read_raw_temp():
+    # 發送溫度量測指令
+    i2c.writeto_mem(BMP180_ADDR, 0xF4, b'\x2E')
+    time.sleep_ms(5)
+
+    # 讀取原始溫度
+    raw = i2c.readfrom_mem(BMP180_ADDR, 0xF6, 2)
+    return ustruct.unpack("&gt;H", raw)[0]
+
+def get_temperature():
+    UT = read_raw_temp()
+    X1 = ((UT - AC6) * AC5) &gt;&gt; 15
+    X2 = (MC &lt;&lt; 11) // (X1 + MD)
+    B5 = X1 + X2
+    T = (B5 + 8) &gt;&gt; 4
+    return T / 10, B5
+</code></pre>
+
+<hr>
+
+<h2>🌬 五、氣壓讀取與計算</h2>
+
+<pre><code>
+def read_raw_pressure(oss=0):
+    i2c.writeto_mem(BMP180_ADDR, 0xF4, bytes([0x34 + (oss &lt;&lt; 6)]))
+    time.sleep_ms(2 + 3 * (1 &lt;&lt; oss))
+
+    msb = i2c.readfrom_mem(BMP180_ADDR, 0xF6, 1)[0]
+    lsb = i2c.readfrom_mem(BMP180_ADDR, 0xF7, 1)[0]
+    xlsb = i2c.readfrom_mem(BMP180_ADDR, 0xF8, 1)[0]
+
+    return ((msb &lt;&lt; 16) + (lsb &lt;&lt; 8) + xlsb) &gt;&gt; (8 - oss)
+
+def get_pressure():
+    oss = 0
+    temperature, B5 = get_temperature()
+    UP = read_raw_pressure(oss)
+
+    B6 = B5 - 4000
+    X1 = (B2 * (B6 * B6 &gt;&gt; 12)) &gt;&gt; 11
+    X2 = (AC2 * B6) &gt;&gt; 11
+    X3 = X1 + X2
+    B3 = (((AC1 * 4 + X3) &lt;&lt; oss) + 2) &gt;&gt; 2
+
+    X1 = (AC3 * B6) &gt;&gt; 13
+    X2 = (B1 * ((B6 * B6) &gt;&gt; 12)) &gt;&gt; 16
+    X3 = ((X1 + X2) + 2) &gt;&gt; 2
+    B4 = (AC4 * (X3 + 32768)) &gt;&gt; 15
+    B7 = (UP - B3) * (50000 &gt;&gt; oss)
+
+    if B7 &lt; 0x80000000:
+        p = (B7 * 2) // B4
+    else:
+        p = (B7 // B4) * 2
+
+    X1 = (p &gt;&gt; 8) * (p &gt;&gt; 8)
+    X1 = (X1 * 3038) &gt;&gt; 16
+    X2 = (-7357 * p) &gt;&gt; 16
+
+    return p + ((X1 + X2 + 3791) &gt;&gt; 4)
+</code></pre>
+
+<hr>
+
+<h2>⛰ 六、高度計算</h2>
+
+<pre><code>
+def get_altitude(p, p0=101325):
+    # 依標準大氣壓計算高度
+    return 44330 * (1 - (p / p0) ** (1 / 5.255))
+</code></pre>
+
+<hr>
+
+<h2>▶ 七、執行一次量測</h2>
+
+<pre><code>
+temperature, _ = get_temperature()
+pressure = get_pressure()
+altitude = get_altitude(pressure)
+
+print("溫度:", temperature, "°C")
+print("氣壓:", pressure, "Pa")
+print("高度:", altitude, "m")
+</code></pre>
+
+<hr>
+
+<h2>✅ 八、執行結果</h2>
+
+<ul>
+    <li>顯示目前溫度（°C）</li>
+    <li>顯示氣壓（Pa）</li>
+    <li>推算高度（公尺）</li>
+</ul>
+
+<p><b>本範例不使用 while 迴圈，適合測試與教學。</b></p>
+
+</body>
+</html>
