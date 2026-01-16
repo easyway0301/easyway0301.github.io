@@ -11,20 +11,18 @@ https://easyway0301.github.io/Seeed%20Xiao%20Esp32S3%20With%20MicroPython/B06-DS
 ## 📌 第一步：認識 DS18B20 感測器
 
 DS18B20 是一個數位溫度感測器，透過 **1-Wire** 單線通訊方式讀取溫度。  
-需外接 **4.7kΩ 上拉電阻** 連接 VCC。
 
 📌 模組規格：
 
 - 測量範圍：-55 ~ 125°C  
 - 精準度：±0.5°C  
 - 通訊方式：1-Wire（單線）  
-- 建議拉高電阻：4.7kΩ  
 
 📷 接線範例（Seeed XIAO ESP32-S3）：
 
 - VCC → 3V3  
 - GND → GND  
-- DATA → GPIO 9（加 4.7kΩ 上拉到 3V3）
+- DATA → GPIO 9
 
 ---
 
