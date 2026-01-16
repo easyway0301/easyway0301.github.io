@@ -173,6 +173,8 @@ while True:
 
 <p>esp8266_i2c_lcd.py</p>
 <p># 資料來源： https://github.com/dhylands/python_lcd/blob/master/lcd/esp8266_i2c_lcd.py</p>
+
+    
 <div class="code-block">
 <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('esp8266_i2c_lcd').innerText)">Copy</button>
 <pre id="esp8266_i2c_lcd">
@@ -488,6 +490,26 @@ class LcdApi:
 
 <p>若不確定 I2C 位址，可先執行 <strong>I2C Scan</strong> 程式確認。</p>
 </section>
+
+<section>
+    <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+from machine import I2C, Pin
+
+i2c = I2C(
+    scl=Pin(5),   # D1
+    sda=Pin(4),   # D2
+    freq=100000
+)
+
+print("I2C devices:", i2c.scan())
+
+        </code></pre>
+    </div>
+</section>
+
+            
 <script>
 function copyCode(btn) {
     const code = btn.nextElementSibling.innerText;
