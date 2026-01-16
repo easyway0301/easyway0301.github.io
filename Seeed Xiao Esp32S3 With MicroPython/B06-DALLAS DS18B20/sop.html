@@ -112,21 +112,29 @@
 <h2>第一步：認識 DS18B20 感測器</h2>
 <p>
 DS18B20 是一個數位溫度感測器，透過 <strong>1-Wire</strong> 單線通訊方式讀取溫度。  
-需外接 <strong>4.7kΩ 上拉電阻</strong> 連接 VCC。
 </p>
 <div class="highlight">
 <strong>模組規格：</strong><br>
 • 測量範圍：-55 ~ 125°C<br>
 • 精準度：±0.5°C<br>
 • 通訊方式：1-Wire（單線）<br>
-• 建議拉高電阻：4.7kΩ
 </div>
 <p><strong>I/O 腳位接線範例（Seeed XIAO ESP32-S3）：</strong></p>
 <ul>
 <li>VCC → 3V3</li>
 <li>GND → GND</li>
-<li>DATA → GPIO 9（加上 4.7kΩ 上拉到 3V3）</li>
+<li>DATA → GPIO 9</li>
 </ul>
+
+<img src="Pin-List.png" alt="I2C LCD Pin List">
+
+<div class="source">
+圖片來源：<a href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/" target="_blank">
+Seeed Studio 官方文件
+</a>
+</div>
+
+<img src="DallasDS18B20.jpeg" alt="DallasDS18B20.jpeg">
 </section>
 
 <section>
@@ -174,12 +182,6 @@ else:
 <li>若無感測器或接線錯誤會顯示錯誤提示</li>
 </ul>
 
-<div class="highlight">
-📌 延伸練習建議：<br>
-✔ 定時讀取溫度並記錄<br>
-✔ 顯示在 OLED / LCD 螢幕<br>
-✔ 結合蜂鳴器或 LED 做溫度警示
-</div>
 </section>
 
 <script>
