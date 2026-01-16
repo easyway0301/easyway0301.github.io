@@ -74,6 +74,3 @@ oled.text("SH1106 OLED", 0, 32)  # 第三行
 # === 更新顯示 ===
 oled.show()                     # 把緩衝區內容更新到 OLED
 
-# === 持續顯示 ===
-while True:
-    time.sleep(1)               # 每秒延遲一次
