@@ -71,6 +71,23 @@ img {
 pre {
     margin: 0;
 }
+
+.copy-btn {
+    float: right;
+    background: #2196F3;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.copy-btn:hover {
+    background: #1976D2;
+}
+
 </style>
 </head>
 
@@ -126,7 +143,7 @@ SH1106 OLED 使用 <code>framebuffer</code>（畫面緩衝區）概念，
 </p>
 
 <div class="code-block">
-    <button class="copy-btn" onclick="copyCode(this)">Copy</button
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
 <pre><code>
 from machine import Pin, I2C        # 匯入 Pin 與 I2C 類別
 import sh1106                      # 匯入 SH1106 OLED 驅動
