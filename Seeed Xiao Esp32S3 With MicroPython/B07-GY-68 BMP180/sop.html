@@ -5,63 +5,101 @@
 <title>BMP180 氣壓感測模組｜ESP32-S3 MicroPython SOP</title>
 
 <style>
-body {
-    font-family: Arial, "Microsoft JhengHei", sans-serif;
-    background: #f5f7fa;
-    color: #222;
-    line-height: 1.9;
-    max-width: 980px;
-    margin: 40px auto;
-    padding: 0 20px;
-}
+    body {
+        font-family: Arial, "Microsoft JhengHei", sans-serif;
+        line-height: 1.9;
+        max-width: 980px;
+        margin: 40px auto;
+        padding: 0 20px;
+        color: #222;
+        background-color: #f5f7fa;
+    }
 
-h1 {
-    text-align: center;
-    margin-bottom: 10px;
-}
+    h1 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
 
-.subtitle {
-    text-align: center;
-    color: #555;
-    margin-bottom: 50px;
-}
+    .subtitle {
+        text-align: center;
+        color: #555;
+        margin-bottom: 50px;
+    }
 
-section {
-    background: #ffffff;
-    border-radius: 14px;
-    padding: 40px;
-    margin-bottom: 50px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-}
+    section {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 40px;
+        margin-bottom: 50px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
 
-h2 {
-    margin-top: 0;
-    border-left: 6px solid #2196F3;
-    padding-left: 14px;
-}
+    h2 {
+        margin-top: 0;
+        border-left: 6px solid #4CAF50;
+        padding-left: 14px;
+    }
 
-.code-block {
-    background: #0d1117;
-    color: #c9d1d9;
-    border-radius: 12px;
-    padding: 20px;
-    margin: 30px 0;
-    font-family: Consolas, monospace;
-    font-size: 14px;
-    overflow-x: auto;
-}
+    p {
+        margin: 14px 0;
+    }
 
-pre {
-    margin: 0;
-}
+    ul {
+        margin-left: 22px;
+    }
 
-.highlight {
-    background: #e3f2fd;
-    border-left: 6px solid #2196f3;
-    padding: 16px 20px;
-    border-radius: 8px;
-    margin: 20px 0;
-}
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 28px auto 10px;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
+
+    .highlight {
+        background: #e8f5e9;
+        border-left: 6px solid #4caf50;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-size: 16px;
+    }
+
+    /* Code block */
+    .code-block {
+        position: relative;
+        background: #0d1117;
+        color: #c9d1d9;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 30px 0;
+        font-family: Consolas, Monaco, monospace;
+        font-size: 14px;
+        overflow-x: auto;
+    }
+
+    .code-block pre {
+        margin: 0;
+        white-space: pre;
+    }
+
+    .copy-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: #238636;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 14px;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .copy-btn:hover {
+        background: #2ea043;
+    }
 </style>
 </head>
 
@@ -111,6 +149,7 @@ BMP180 是一款常見的 <strong>數位氣壓與溫度感測模組</strong>，
 </p>
 
 <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
 <pre><code>
 from machine import I2C, Pin
 import time
@@ -193,6 +232,14 @@ print("高度:", altitude, "m")
 📌 若高度不準，請依實際地區氣壓調整基準值。
 </div>
 </section>
+
+    function copyCode(btn) {
+    const code = btn.nextElementSibling.innerText;
+    navigator.clipboard.writeText(code);
+    btn.innerText = "Copied!";
+    setTimeout(() => btn.innerText = "Copy", 1500);
+}
+</script>
 
 </body>
 </html>
