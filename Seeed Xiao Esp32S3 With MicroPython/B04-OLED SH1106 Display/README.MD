@@ -36,6 +36,15 @@ OLED 與 XIAO ESP32-S3 的連接方式如下：
 
 ---
 
+### 引腳示意圖（參考）
+![OledSh1106Display 示意圖](OledSh1106Display.jpeg)
+![Pin List](Pin-List.png)
+
+圖片來源：Seeed Studio 官方文件
+[https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/](https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/)
+
+---
+
 ## 🧠 第三步：MicroPython 顯示範例程式
 
 以下程式可在 Thonny 等 MicroPython IDE 上執行，  
