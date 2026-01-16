@@ -1,5 +1,5 @@
 from machine import Pin
-import onewire, ds18x20
+import onewire, ds18x20 # MicroPython 內建的驅動模組（driver）
 import time
 
 dat = Pin(9, Pin.IN, Pin.PULL_UP)  # 建議腳位
