@@ -141,8 +141,7 @@ Seeed Studio 官方文件
 <p>Lcd1602aI2C.py</p>
 
 <div class="code-block">
-<button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('lcd-code').innerText)">Copy</button>
-<pre id="lcd-code">
+<button class="copy-btn" onclick="copyCode(this)">Copy</button>
 from time import sleep_ms
 from machine import I2C, Pin
 from esp8266_i2c_lcd import I2cLcd
@@ -176,8 +175,7 @@ while True:
 
     
 <div class="code-block">
-<button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('esp8266_i2c_lcd').innerText)">Copy</button>
-<pre id="esp8266_i2c_lcd">
+<button class="copy-btn" onclick="copyCode(this)">Copy</button>
 # https://github.com/dhylands/python_lcd/blob/master/lcd/esp8266_i2c_lcd.py
 
 """Implements a HD44780 character LCD connected via PCF8574 on I2C.
@@ -270,8 +268,8 @@ class I2cLcd(LcdApi):
 <p># 資料來源： # https://github.com/dhylands/python_lcd/blob/master/lcd/lcd_api.py</p>
 
 <div class="code-block">
-<button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('lcd_api').innerText)">Copy</button>
-<pre id="lcd_api">
+<button class="copy-btn" onclick="copyCode(this)">Copy</button>
+
 # https://github.com/dhylands/python_lcd/blob/master/lcd/lcd_api.py
 
 """Provides an API for talking to HD44780 compatible character LCDs."""
