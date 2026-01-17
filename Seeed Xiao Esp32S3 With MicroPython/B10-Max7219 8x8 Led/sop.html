@@ -1,192 +1,169 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<title>MAX7219 8x8 LED｜MicroPython SOP</title>
+<title>ESP32-S3 MicroPython｜MAX7219 8x8 LED 跑馬燈教學</title>
+
 <style>
-    body {
-        font-family: Arial, "Microsoft JhengHei", sans-serif;
-        line-height: 1.9;
-        max-width: 980px;
-        margin: 40px auto;
-        padding: 0 20px;
-        color: #222;
-        background-color: #f5f7fa;
-    }
+body {
+    font-family: Arial, "Microsoft JhengHei", sans-serif;
+    background: #f5f7fa;
+    color: #222;
+    line-height: 1.9;
+    max-width: 980px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
 
-    h1 {
-        text-align: center;
-        margin-bottom: 10px;
-    }
+h1 {
+    text-align: center;
+    margin-bottom: 10px;
+}
 
-    .subtitle {
-        text-align: center;
-        color: #555;
-        margin-bottom: 50px;
-    }
+.subtitle {
+    text-align: center;
+    color: #555;
+    margin-bottom: 50px;
+}
 
-    section {
-        background: #ffffff;
-        border-radius: 14px;
-        padding: 40px;
-        margin-bottom: 50px;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-    }
+section {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 40px;
+    margin-bottom: 50px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
 
-    h2 {
-        margin-top: 0;
-        border-left: 6px solid #4CAF50;
-        padding-left: 14px;
-    }
+h2 {
+    margin-top: 0;
+    border-left: 6px solid #4CAF50;
+    padding-left: 14px;
+}
 
-    p {
-        margin: 14px 0;
-    }
+p {
+    margin: 14px 0;
+}
 
-    ul {
-        margin-left: 22px;
-    }
+ul {
+    margin-left: 22px;
+}
 
-    img {
-        max-width: 100%;
-        height: auto;
-        display: block;
-        margin: 28px auto 10px;
-        border-radius: 12px;
-        box-shadow: 0 6px 16px rgba(0,0,0,0.12);
-    }
+.highlight {
+    background: #e8f5e9;
+    border-left: 6px solid #4caf50;
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    font-size: 16px;
+}
 
-    .highlight {
-        background: #e8f5e9;
-        border-left: 6px solid #4caf50;
-        padding: 16px 20px;
-        border-radius: 8px;
-        margin: 20px 0;
-        font-size: 16px;
-    }
+.code-block {
+    background: #0d1117;
+    color: #c9d1d9;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 30px 0;
+    font-family: Consolas, monospace;
+    font-size: 14px;
+    overflow-x: auto;
+}
 
-    /* Code block */
-    .code-block {
-        position: relative;
-        background: #0d1117;
-        color: #c9d1d9;
-        border-radius: 12px;
-        padding: 20px;
-        margin: 30px 0;
-        font-family: Consolas, Monaco, monospace;
-        font-size: 14px;
-        overflow-x: auto;
-    }
+.copy-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #238636;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-size: 13px;
+}
 
-    .code-block pre {
-        margin: 0;
-        white-space: pre;
-    }
-
-    .copy-btn {
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        background: #238636;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        padding: 6px 14px;
-        cursor: pointer;
-        font-size: 13px;
-    }
-
-    .copy-btn:hover {
-        background: #2ea043;
-    }
+.copy-btn:hover {
+    background: #2ea043;
+}
 </style>
 </head>
+
 <body>
 
-<h1>MAX7219 8x8 LED（SPI）</h1>
+<h1>ESP32-S3 MicroPython MAX7219 8x8 LED 教學</h1>
+<div class="subtitle">顯示文字跑馬燈</div>
+
+<section>
+<h2>第一步：模組介紹</h2>
 
 <p>
-本 SOP 示範如何在 <b>Seeed XIAO ESP32S3</b> 上，
-使用 <b>MAX7219 8x8 LED 點陣模組</b>，
-透過 <b>MicroPython + SPI</b> 顯示簡單文字（HELLO）。
+本教學使用 <strong>MAX7219 8x8 LED 矩陣模組</strong>，透過 SPI 控制顯示文字。
 </p>
 
-<hr>
-
-<h2>一、硬體接線說明</h2>
-
-<table border="1" cellpadding="6">
-<tr><th>MAX7219</th><th>XIAO ESP32S3</th></tr>
-<tr><td>VCC</td><td>5V 或 3V3</td></tr>
-<tr><td>GND</td><td>GND</td></tr>
-<tr><td>DIN</td><td>GPIO 9 (MOSI)</td></tr>
-<tr><td>CS</td><td>GPIO 8</td></tr>
-<tr><td>CLK</td><td>GPIO 7 (SCK)</td></tr>
-</table>
-
-<hr>
-
-<h2>二、程式功能說明</h2>
-
-<ul>
-<li>使用 SPI 初始化 MAX7219</li>
-<li>設定亮度與清空畫面</li>
-<li>自建英文字母點陣資料</li>
-<li>逐字顯示 <b>HELLO</b></li>
-<li>不使用 while 迴圈</li>
-</ul>
-
-<hr>
-
-<h2>三、MicroPython 程式碼（逐行註釋）</h2>
-
-<div class="code-block">
-    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-<pre><code>
-from machine import Pin, SPI
-import max7219
-import time
-
-spi = SPI(1, baudrate=10_000_000, sck=Pin(7), mosi=Pin(9))
-cs = Pin(8, Pin.OUT)
-
-display = max7219.Matrix8x8(spi, cs, 1)
-display.brightness(5)
-
-for x in range(32, -40, -1):
-    display.fill(0)
-    display.text("HELLO", x, 0, 1)
-    display.show()
-    time.sleep(0.1)
-
-</code></pre>
+<div class="highlight">
+<strong>模組特點：</strong><br>
+• 8x8 LED 矩陣<br>
+• SPI 通訊控制<br>
+• 可串接多個模組
 </div>
 
-<hr>
+<p><strong>接線方式 (Seeed XIAO ESP32-S3)：</strong></p>
+<ul>
+    <li>VCC → 3V3</li>
+    <li>GND → GND</li>
+    <li>DIN / MOSI → GPIO 9</li>
+    <li>SCK → GPIO 7</li>
+    <li>CS → GPIO 8</li>
+</ul>
+</section>
 
-<h2>四、顯示效果</h2>
+<section>
+<h2>第二步：MicroPython 程式碼</h2>
 
-<p>
-8x8 點陣會依序顯示：
-</p>
+<p>以下程式碼可直接在 Thonny 上執行，顯示跑馬燈文字 "HELLO"。</p>
 
-<pre>
-H → E → L → L → O
-</pre>
+<div class="code-block">
+<button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><code>
+from machine import Pin, SPI      # 匯入 SPI 與 Pin 類別
+import max7219                    # 匯入 MAX7219 模組
+import time                        # 匯入時間模組
 
-<hr>
+# === 初始化 SPI ===
+spi = SPI(1, baudrate=10_000_000, sck=Pin(7), mosi=Pin(9))   # SPI 物件，指定 SCK 與 MOSI
+cs = Pin(8, Pin.OUT)                                         # CS 腳位
 
-<h2>五、延伸練習</h2>
+# === 初始化 MAX7219 ===
+display = max7219.Matrix8x8(spi, cs, 1)                      # 1 個 8x8 模組
+display.brightness(5)                                        # 設定亮度 0~15
+
+# === 顯示跑馬燈文字 ===
+# 往左移動文字從右邊開始跑到左邊
+for x in range(32, -40, -1):                                 # 文字 x 座標從 32 到 -40
+    display.fill(0)                                          # 清空畫面
+    display.text("HELLO", x, 0, 1)                           # 顯示文字
+    display.show()                                           # 更新顯示
+    time.sleep(0.1)                                         # 延遲 0.1 秒
+</code></pre>
+</div>
+</section>
+
+<section>
+<h2>執行結果</h2>
 
 <ul>
-<li>增加更多字母或數字字型</li>
-<li>串接多個 MAX7219 模組做跑馬燈</li>
-<li>搭配按鈕或搖桿控制顯示內容</li>
+    <li>文字 "HELLO" 從右往左平滑滾動</li>
+    <li>亮度可透過 <code>display.brightness()</code> 調整</li>
+    <li>可延伸成跑馬燈選單、訊息顯示</li>
 </ul>
 
-<hr>
+<div class="highlight">
+📌 延伸練習建議：<br>
+✔ 顯示其他字串或數字<br>
+✔ 串接多個 8x8 模組滾動更長文字<br>
+✔ 結合按鈕控制跑馬燈速度
+</div>
+</section>
 
-<p>✔ 可直接存成 <b>SOP.html</b> 使用</p>
 <script>
 function copyCode(btn) {
     const code = btn.nextElementSibling.innerText;
@@ -195,5 +172,6 @@ function copyCode(btn) {
     setTimeout(() => btn.innerText = "Copy", 1500);
 }
 </script>
+
 </body>
 </html>
