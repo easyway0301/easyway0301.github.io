@@ -1,4 +1,4 @@
-# BXX－搖桿模組（VRX / VRY / SW）｜MicroPython（Seeed XIAO ESP32S3）
+# Joystick雙軸搖桿
 
 本範例示範如何使用 **類比搖桿模組**（X 軸、Y 軸與按壓按鈕），  
 在 **不使用 while 迴圈** 的情況下，**執行約 10 秒鐘** 讀取方向與按鈕狀態。
