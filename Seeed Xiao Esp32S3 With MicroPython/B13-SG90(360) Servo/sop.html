@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>ESP32-S3 MicroPython｜SG90 360度伺服馬達教學</title>
+<style>
+body {
+    font-family: Arial, "Microsoft JhengHei", sans-serif;
+    background: #f5f7fa;
+    color: #222;
+    line-height: 1.9;
+    max-width: 980px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+h1 { text-align: center; margin-bottom: 10px; }
+.subtitle { text-align: center; color: #555; margin-bottom: 50px; }
+section {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 40px;
+    margin-bottom: 50px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+h2 { margin-top: 0; border-left: 6px solid #2196F3; padding-left: 14px; }
+.code-block {
+    background: #0d1117;
+    color: #c9d1d9;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 30px 0;
+    font-family: Consolas, monospace;
+    font-size: 14px;
+    overflow-x: auto;
+}
+pre { margin: 0; }
+.highlight {
+    background: #e3f2fd;
+    border-left: 6px solid #2196f3;
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+</style>
+</head>
+
+<body>
+
+<h1>ESP32-S3 MicroPython SG90 360° 伺服教學</h1>
+<div class="subtitle">控制旋轉方向與停止</div>
+
+<section>
+<h2>第一步：認識 SG90 360° 模組</h2>
+<p>SG90 360° 是連續旋轉伺服馬達，透過 PWM 脈衝控制轉速與方向。</p>
+<div class="highlight">
+📌 注意事項：<br>
+- 旋轉時不要超載，避免馬達燒毀<br>
+- 避免手動強行轉動齒輪
+</div>
+
+<p><strong>接線方式：</strong></p>
+<ul>
+<li>黃色線 → GPIO 9（PWM 控制訊號）</li>
+<li>紅色線 → 3V3</li>
+<li>褐色線 → GND</li>
+</ul>
+</section>
+
+<section>
+<h2>第二步：MicroPython 程式碼</h2>
+<p>以下程式碼示範正轉、停止、反轉，單次執行即可。</p>
+
+<div class="code-block">
+<pre><code>
+from machine import Pin, PWM      # 匯入 Pin 與 PWM 類別
+import time                        # 匯入時間模組
+
+# === 初始化 PWM ===
+pwm_pin = PWM(Pin(9))             # 將 GPIO9 設為 PWM 輸出
+pwm_pin.freq(50)                   # 設定頻率 50Hz（SG90 標準）
+
+# === 定義旋轉函式 ===
+def rotate(speed_ms):
+    """
+    speed_ms: PWM 脈衝寬度對應 (ms)
+        1.0 ~ 2.0 ms
+        1.5ms 停止
+    """
+    duty = int(speed_ms / 20 * 1023)  # 將 20ms 週期轉成 ESP32 10bit duty
+    pwm_pin.duty(duty)                 # 設定 PWM 輸出
+
+# === 順時針慢速 ===
+rotate(1.7)                          # PWM 1.7ms → 順時針轉
+time.sleep(2)                         # 旋轉 2 秒
+
+# === 停止 ===
+rotate(1.5)                          # PWM 1.5ms → 停止旋轉
+time.sleep(1)                         # 等待 1 秒
+
+# === 逆時針慢速 ===
+rotate(1.3)                          # PWM 1.3ms → 逆時針轉
+time.sleep(2)                         # 旋轉 2 秒
+
+# === 停止 ===
+rotate(1.5)                          # 停止
+time.sleep(1)                         # 等待 1 秒
+</code></pre>
+</div>
+</section>
+
+<section>
+<h2>第三步：執行結果</h2>
+<ul>
+<li>馬達依序正轉 → 停止 → 反轉 → 停止</li>
+<li>每個動作停留指定時間</li>
+<li>可延伸成自動旋轉控制或機器人行動控制</li>
+</ul>
+
+<div class="highlight">
+📌 延伸練習建議：<br>
+✔ 結合按鈕或搖桿控制旋轉方向<br>
+✔ 控制旋轉速度與持續時間<br>
+✔ 與 LED 或蜂鳴器做動作提示
+</div>
+</section>
+
+</body>
+</html>
