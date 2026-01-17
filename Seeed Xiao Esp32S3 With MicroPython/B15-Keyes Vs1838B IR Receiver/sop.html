@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>Bxx - VS1838B IR Receiver</title>
+
+<style>
+    body {
+        font-family: Arial, "Microsoft JhengHei", sans-serif;
+        line-height: 1.9;
+        max-width: 980px;
+        margin: 40px auto;
+        padding: 0 20px;
+        color: #222;
+        background-color: #f5f7fa;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #555;
+        margin-bottom: 50px;
+    }
+
+    section {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 40px;
+        margin-bottom: 50px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+        margin-top: 0;
+        border-left: 6px solid #4CAF50;
+        padding-left: 14px;
+    }
+
+    p {
+        margin: 14px 0;
+    }
+
+    ul {
+        margin-left: 22px;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 28px auto 10px;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
+
+    .highlight {
+        background: #e8f5e9;
+        border-left: 6px solid #4caf50;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-size: 16px;
+    }
+
+    /* Code block */
+    .code-block {
+        position: relative;
+        background: #0d1117;
+        color: #c9d1d9;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 30px 0;
+        font-family: Consolas, Monaco, monospace;
+        font-size: 14px;
+        overflow-x: auto;
+    }
+
+    .code-block pre {
+        margin: 0;
+        white-space: pre;
+    }
+
+    .copy-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: #238636;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 14px;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .copy-btn:hover {
+        background: #2ea043;
+    }
+</style>
+</head>
+
+<body>
+
+<h1>VS1838B 紅外線接收模組</h1>
+<div class="subtitle">ESP32-S3 MicroPython 紅外線接收教學</div>
+
+<section>
+<h2>📌 模組簡介</h2>
+<p>
+VS1838B 是常見的 <strong>38kHz 紅外線接收模組</strong>，
+可接收電視、冷氣等遙控器所發出的紅外線訊號。
+</p>
+<p>
+本範例示範使用 <strong>中斷（IRQ）</strong> 方式，
+在 <strong>10 秒內偵測是否有紅外線訊號</strong>，
+不使用 <code>while</code> 迴圈。
+</p>
+</section>
+
+<section>
+<h2>🔌 接線方式</h2>
+<ul>
+    <li>VCC → 3V3</li>
+    <li>GND → GND</li>
+    <li>OUT → GPIO 9</li>
+</ul>
+<img src="Pin-List.png" alt="XIAO ESP32S3 腳位">
+<img src="Receiver.jpeg" alt="Receiver">
+</section>
+
+<section>
+<h2>📦 使用函式庫</h2>
+<ul>
+    <li>machine</li>
+    <li>time</li>
+</ul>
+</section>
+
+<section>
+<h2>🧪 範例程式碼</h2>
+
+<div class="code-block">
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><code>from machine import Pin
+import time
+
+# ========= VS1838B 紅外線接收 =========
+
+# 將 GPIO9 設定為輸入，用來接收紅外線訊號
+ir = Pin(9, Pin.IN)
+
+# 接收狀態旗標，用來記錄是否收到紅外線
+收到紅外線 = False
+
+def ir_callback(pin):
+    # 使用全域變數記錄接收狀態
+    global 收到紅外線
+    收到紅外線 = True
+    
+    # 偵測到紅外線時顯示提示
+    print("📡 偵測到紅外線")
+
+# 設定中斷
+# VS1838B 偵測到紅外線時，OUT 腳位會變成 LOW
+ir.irq(trigger=Pin.IRQ_FALLING, handler=ir_callback)
+
+print("開始接收紅外線（10 秒）")
+
+# 等待 10 秒接收紅外線
+time.sleep(10)
+
+# 停止中斷接收
+ir.irq(handler=None)
+
+print("接收結束")
+
+# 根據旗標判斷結果
+if 收到紅外線:
+    print("✅ 10 秒內有收到紅外線")
+else:
+    print("❌ 10 秒內沒有收到紅外線")</code></pre>
+</div>
+</section>
+
+<section>
+<h2>▶ 執行結果</h2>
+<ul>
+    <li>10 秒內若有紅外線輸入，會立即顯示偵測訊息</li>
+    <li>時間結束後顯示是否成功接收到紅外線</li>
+</ul>
+
+<div class="highlight">
+📌 本範例僅示範「是否有紅外線訊號」，<br>
+未進行遙控器協定（NEC / RC5 / Sony）解碼。
+</div>
+</section>
+
+<section>
+<h2>⚠ 注意事項</h2>
+<ul>
+    <li>VS1838B 需對準紅外線來源，避免強光直射</li>
+    <li>不同模組 OUT 腳位邏輯可能略有差異</li>
+    <li>若要解碼遙控器，需搭配紅外線解碼程式</li>
+</ul>
+</section>
+<section>
+    <h2>完整操作影片教學</h2>
+
+    <div class="video">
+        <a href="https://youtu.be/K1en7WoVDvI" target="_blank">
+            <img src="http://img.youtube.com/vi/K1en7WoVDvI/0.jpg" alt="完整步驟影片">
+        </a>
+    </div>
+</section>
+<script>
+function copyCode(btn) {
+    const code = btn.nextElementSibling.innerText;
+    navigator.clipboard.writeText(code);
+    btn.innerText = "Copied!";
+    setTimeout(() => btn.innerText = "Copy", 1500);
+}
+</script>
+</body>
+</html>
