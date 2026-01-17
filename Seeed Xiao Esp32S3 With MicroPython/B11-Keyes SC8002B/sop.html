@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>ESP32-S3 MicroPython｜SC8002B 蜂鳴器教學</title>
+
+<style>
+body {
+    font-family: Arial, "Microsoft JhengHei", sans-serif;
+    background: #f5f7fa;
+    color: #222;
+    line-height: 1.9;
+    max-width: 980px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #555;
+    margin-bottom: 50px;
+}
+
+section {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 40px;
+    margin-bottom: 50px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+h2 {
+    margin-top: 0;
+    border-left: 6px solid #FF9800;
+    padding-left: 14px;
+}
+
+p {
+    margin: 14px 0;
+}
+
+ul {
+    margin-left: 22px;
+}
+
+.highlight {
+    background: #fff3e0;
+    border-left: 6px solid #ff9800;
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    font-size: 16px;
+}
+
+.code-block {
+    background: #0d1117;
+    color: #c9d1d9;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 30px 0;
+    font-family: Consolas, monospace;
+    font-size: 14px;
+    overflow-x: auto;
+}
+
+.copy-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #ff9800;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.copy-btn:hover {
+    background: #fb8c00;
+}
+</style>
+</head>
+
+<body>
+
+<h1>ESP32-S3 MicroPython SC8002B 蜂鳴器教學</h1>
+<div class="subtitle">簡單播放旋律示範</div>
+
+<section>
+<h2>第一步：模組介紹</h2>
+
+<p>
+SC8002B 蜂鳴器是一種可由 PWM 控制音高的模組，
+可播放音符與簡單旋律，但無法直接唸中文。
+</p>
+
+<div class="highlight">
+📌 注意事項：<br>
+• MicroPython 官方不支援直接播放 MP3<br>
+• 若要播放 MP3，需要使用 uPyAudio 或 mp3dec<br>
+• 本範例示範最簡單的 WAV / 音符播放
+</div>
+
+<p><strong>接線方式 (Seeed XIAO ESP32-S3)：</strong></p>
+<ul>
+    <li>Buzzer IN → GPIO 9</li>
+    <li>VCC → 3V3</li>
+    <li>GND → GND</li>
+</ul>
+</section>
+
+<section>
+<h2>第二步：MicroPython 程式碼</h2>
+
+<p>以下程式碼可在 Thonny 上執行，播放簡單旋律。</p>
+
+<div class="code-block">
+<button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><code>
+from machine import Pin, PWM        # 匯入 Pin 與 PWM 類別
+import time                         # 匯入時間模組
+
+# === 初始化 PWM ===
+buzzer = PWM(Pin(9))                # 將 GPIO9 設為 PWM 輸出腳位
+
+# === 定義音階頻率 (Hz) ===
+notes = {
+    'C4': 262,                      # C4
+    'D4': 294,                      # D4
+    'E4': 330,                      # E4
+    'F4': 349,                      # F4
+    'G4': 392,                      # G4
+    'A4': 440,                      # A4
+    'B4': 494,                      # B4
+    'C5': 523                       # C5
+}
+
+# === 定義旋律 ===
+melody = [
+    'C4', 'E4', 'G4', 'C5',         # 前半段
+    'C5', 'G4', 'E4', 'C4'          # 後半段
+]
+
+duration = 0.3                       # 每個音符長度 0.3 秒
+
+# === 播放旋律 ===
+for note in melody:                   # 遍歷旋律中的每個音符
+    freq = notes[note]                # 取得音符對應頻率
+    buzzer.freq(freq)                 # 設定 PWM 頻率
+    buzzer.duty_u16(32768)            # 設定 50% 音量
+    time.sleep(duration)              # 播放音符時間
+
+# === 停止 PWM ===
+buzzer.deinit()                       # 釋放 PWM，停止發聲
+</code></pre>
+</div>
+</section>
+
+<section>
+<h2>執行結果</h2>
+
+<ul>
+    <li>蜂鳴器播放簡單旋律</li>
+    <li>音量可透過 <code>duty_u16</code> 調整</li>
+    <li>可延伸成多音符播放或簡單音樂播放程式</li>
+</ul>
+
+<div class="highlight">
+📌 延伸練習建議：<br>
+✔ 播放其他旋律<br>
+✔ 加入按鈕控制播放<br>
+✔ 結合 LED 做音樂燈效
+</div>
+</section>
+
+<script>
+function copyCode(btn) {
+    const code = btn.nextElementSibling.innerText;
+    navigator.clipboard.writeText(code);
+    btn.innerText = "Copied!";
+    setTimeout(() => btn.innerText = "Copy", 1500);
+}
+</script>
+
+</body>
+</html>
