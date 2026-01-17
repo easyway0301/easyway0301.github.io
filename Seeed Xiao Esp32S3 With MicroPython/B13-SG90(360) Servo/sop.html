@@ -4,43 +4,101 @@
 <meta charset="UTF-8">
 <title>ESP32-S3 MicroPython｜SG90 360度伺服馬達教學</title>
 <style>
-body {
-    font-family: Arial, "Microsoft JhengHei", sans-serif;
-    background: #f5f7fa;
-    color: #222;
-    line-height: 1.9;
-    max-width: 980px;
-    margin: 40px auto;
-    padding: 0 20px;
-}
-h1 { text-align: center; margin-bottom: 10px; }
-.subtitle { text-align: center; color: #555; margin-bottom: 50px; }
-section {
-    background: #ffffff;
-    border-radius: 14px;
-    padding: 40px;
-    margin-bottom: 50px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-}
-h2 { margin-top: 0; border-left: 6px solid #2196F3; padding-left: 14px; }
-.code-block {
-    background: #0d1117;
-    color: #c9d1d9;
-    border-radius: 12px;
-    padding: 20px;
-    margin: 30px 0;
-    font-family: Consolas, monospace;
-    font-size: 14px;
-    overflow-x: auto;
-}
-pre { margin: 0; }
-.highlight {
-    background: #e3f2fd;
-    border-left: 6px solid #2196f3;
-    padding: 16px 20px;
-    border-radius: 8px;
-    margin: 20px 0;
-}
+    body {
+        font-family: Arial, "Microsoft JhengHei", sans-serif;
+        line-height: 1.9;
+        max-width: 980px;
+        margin: 40px auto;
+        padding: 0 20px;
+        color: #222;
+        background-color: #f5f7fa;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #555;
+        margin-bottom: 50px;
+    }
+
+    section {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 40px;
+        margin-bottom: 50px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+        margin-top: 0;
+        border-left: 6px solid #4CAF50;
+        padding-left: 14px;
+    }
+
+    p {
+        margin: 14px 0;
+    }
+
+    ul {
+        margin-left: 22px;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 28px auto 10px;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
+
+    .highlight {
+        background: #e8f5e9;
+        border-left: 6px solid #4caf50;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-size: 16px;
+    }
+
+    /* Code block */
+    .code-block {
+        position: relative;
+        background: #0d1117;
+        color: #c9d1d9;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 30px 0;
+        font-family: Consolas, Monaco, monospace;
+        font-size: 14px;
+        overflow-x: auto;
+    }
+
+    .code-block pre {
+        margin: 0;
+        white-space: pre;
+    }
+
+    .copy-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: #238636;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 14px;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .copy-btn:hover {
+        background: #2ea043;
+    }
 </style>
 </head>
 
@@ -64,6 +122,15 @@ pre { margin: 0; }
 <li>紅色線 → 3V3</li>
 <li>褐色線 → GND</li>
 </ul>
+
+<img src="Pin-List.png" alt="I2C LCD Pin List">
+
+<div class="source">
+圖片來源：<a href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/" target="_blank">
+Seeed Studio 官方文件
+</a>
+</div>
+    <img src="SG90(360)Servo.jpeg" alt="SG90(360)Servo.jpeg">
 </section>
 
 <section>
@@ -123,6 +190,22 @@ time.sleep(1)                         # 等待 1 秒
 ✔ 與 LED 或蜂鳴器做動作提示
 </div>
 </section>
+<section>
+    <h2>完整操作影片教學</h2>
 
+    <div class="video">
+        <a href="https://youtu.be/X1tW4wx2B-o" target="_blank">
+            <img src="http://img.youtube.com/vi/X1tW4wx2B-o/0.jpg" alt="完整步驟影片">
+        </a>
+    </div>
+</section>
+<script>
+function copyCode(btn) {
+    const code = btn.nextElementSibling.innerText;
+    navigator.clipboard.writeText(code);
+    btn.innerText = "Copied!";
+    setTimeout(() => btn.innerText = "Copy", 1500);
+}
+</script>
 </body>
 </html>
