@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>ESP32-S3 MicroPython｜SG90 伺服馬達教學</title>
+
+<style>
+body {
+    font-family: Arial, "Microsoft JhengHei", sans-serif;
+    background: #f5f7fa;
+    color: #222;
+    line-height: 1.9;
+    max-width: 980px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #555;
+    margin-bottom: 50px;
+}
+
+section {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 40px;
+    margin-bottom: 50px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+h2 {
+    margin-top: 0;
+    border-left: 6px solid #4CAF50;
+    padding-left: 14px;
+}
+
+p {
+    margin: 14px 0;
+}
+
+ul {
+    margin-left: 22px;
+}
+
+.highlight {
+    background: #e8f5e9;
+    border-left: 6px solid #4CAF50;
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    font-size: 16px;
+}
+
+.code-block {
+    background: #0d1117;
+    color: #c9d1d9;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 30px 0;
+    font-family: Consolas, monospace;
+    font-size: 14px;
+    overflow-x: auto;
+}
+
+.copy-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.copy-btn:hover {
+    background: #43a047;
+}
+</style>
+</head>
+
+<body>
+
+<h1>ESP32-S3 MicroPython SG90 伺服馬達教學</h1>
+<div class="subtitle">使用 PWM 控制角度</div>
+
+<section>
+<h2>第一步：模組介紹</h2>
+
+<p>
+SG90 小型伺服馬達可由 PWM 控制角度，常用於機器手臂、舵機控制或簡單旋轉裝置。
+</p>
+
+<div class="highlight">
+📌 注意事項：<br>
+• 不要讓馬達持續轉到極限角度，容易損壞<br>
+• 不要用手直接旋轉齒輪，避免損壞內部馬達
+</div>
+
+<p><strong>接線方式 (Seeed XIAO ESP32-S3)：</strong></p>
+<ul>
+    <li>黃色線 → GPIO 9 (控制訊號)</li>
+    <li>紅色線 → 3V3</li>
+    <li>褐色線 → GND</li>
+</ul>
+</section>
+
+<section>
+<h2>第二步：MicroPython 程式碼</h2>
+
+<p>以下程式碼可在 Thonny 上執行，控制 SG90 轉到指定角度，每個角停 2 秒。</p>
+
+<div class="code-block">
+<button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><code>
+from machine import Pin, PWM        # 匯入 Pin 與 PWM 類別
+import time                         # 匯入時間模組
+
+# === 初始化 PWM ===
+servo = PWM(Pin(9), freq=50)        # 將 GPIO9 設為 PWM 輸出，頻率 50Hz
+
+# === 設定角度函式 ===
+def set_angle(angle):
+    min_duty = 0.025                # 0.5ms 對應 0°
+    max_duty = 0.125                # 2.5ms 對應 180°
+    duty = min_duty + (max_duty - min_duty) * (angle / 180)  # 計算對應 PWM
+    servo.duty_u16(int(65535 * duty))                          # 設定 PWM
+
+# === 控制範例 ===
+print("go 5")                        # 向右轉到 5°
+set_angle(5)
+time.sleep(2)                         # 停留 2 秒
+
+print("go 175")                      # 向左轉到 175°
+set_angle(175)
+time.sleep(2)                         # 停留 2 秒
+
+print("go 90")                       # 回到中間 90°
+set_angle(90)
+time.sleep(2)                         # 停留 2 秒
+
+# === 停止 PWM ===
+servo.deinit()                        # 停止 PWM
+</code></pre>
+</div>
+</section>
+
+<section>
+<h2>執行結果</h2>
+
+<ul>
+    <li>馬達依序轉到 5° → 175° → 90°</li>
+    <li>每個角度停留 2 秒</li>
+    <li>可延伸成旋轉控制、舵機選單或機器手臂控制</li>
+</ul>
+
+<div class="highlight">
+📌 延伸練習建議：<br>
+✔ 加入按鈕控制角度<br>
+✔ 透過滑桿控制連續旋轉<br>
+✔ 結合 LED 做動作提示
+</div>
+</section>
+
+<script>
+function copyCode(btn) {
+    const code = btn.nextElementSibling.innerText;
+    navigator.clipboard.writeText(code);
+    btn.innerText = "Copied!";
+    setTimeout(() => btn.innerText = "Copy", 1500);
+}
+</script>
+
+</body>
+</html>
