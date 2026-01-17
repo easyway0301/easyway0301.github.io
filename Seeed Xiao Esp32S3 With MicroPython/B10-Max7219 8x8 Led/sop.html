@@ -4,19 +4,101 @@
 <meta charset="UTF-8">
 <title>BXX－MAX7219 8x8 點陣顯示｜MicroPython SOP</title>
 <style>
-body {
-    font-family: Arial, "Microsoft JhengHei", sans-serif;
-    line-height: 1.8;
-}
-pre {
-    background: #111;
-    color: #eee;
-    padding: 16px;
-    overflow-x: auto;
-}
-h1, h2 {
-    border-bottom: 2px solid #ccc;
-}
+    body {
+        font-family: Arial, "Microsoft JhengHei", sans-serif;
+        line-height: 1.9;
+        max-width: 980px;
+        margin: 40px auto;
+        padding: 0 20px;
+        color: #222;
+        background-color: #f5f7fa;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #555;
+        margin-bottom: 50px;
+    }
+
+    section {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 40px;
+        margin-bottom: 50px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+        margin-top: 0;
+        border-left: 6px solid #4CAF50;
+        padding-left: 14px;
+    }
+
+    p {
+        margin: 14px 0;
+    }
+
+    ul {
+        margin-left: 22px;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 28px auto 10px;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
+
+    .highlight {
+        background: #e8f5e9;
+        border-left: 6px solid #4caf50;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-size: 16px;
+    }
+
+    /* Code block */
+    .code-block {
+        position: relative;
+        background: #0d1117;
+        color: #c9d1d9;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 30px 0;
+        font-family: Consolas, Monaco, monospace;
+        font-size: 14px;
+        overflow-x: auto;
+    }
+
+    .code-block pre {
+        margin: 0;
+        white-space: pre;
+    }
+
+    .copy-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: #238636;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 14px;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .copy-btn:hover {
+        background: #2ea043;
+    }
 </style>
 </head>
 <body>
@@ -58,65 +140,27 @@ h1, h2 {
 
 <h2>三、MicroPython 程式碼（逐行註釋）</h2>
 
-<pre>
-from machine import Pin, SPI        # 匯入 GPIO 與 SPI 控制模組
-import max7219                      # 匯入 MAX7219 點陣驅動模組
-import time                         # 匯入時間模組（延遲用）
+<div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><code>
+from machine import Pin, SPI
+import max7219
+import time
 
-# === 初始化 SPI（硬體 SPI）===
-spi = SPI(
-    1,                              # 使用 SPI 匯流排 1
-    baudrate=10_000_000,            # SPI 時脈 10MHz
-    polarity=0,                     # SPI 極性 0
-    phase=0,                        # SPI 相位 0
-    sck=Pin(7),                     # SCK 腳位接 GPIO7
-    mosi=Pin(9)                     # MOSI 腳位接 GPIO9
-)
+spi = SPI(1, baudrate=10_000_000, sck=Pin(7), mosi=Pin(9))
+cs = Pin(8, Pin.OUT)
 
-# CS（Chip Select）腳位設定
-cs = Pin(8, Pin.OUT)                # CS 接 GPIO8，輸出模式
+display = max7219.Matrix8x8(spi, cs, 1)
+display.brightness(5)
 
-# === 初始化 MAX7219（1 個 8x8 模組）===
-display = max7219.Matrix8x8(
-    spi,                            # SPI 物件
-    cs,                             # CS 腳位
-    1                               # 模組數量（1 個 8x8）
-)
+for x in range(32, -40, -1):
+    display.fill(0)
+    display.text("HELLO", x, 0, 1)
+    display.show()
+    time.sleep(0.1)
 
-display.brightness(5)               # 設定亮度（0～15）
-display.fill(0)                     # 清空顯示內容
-display.show()                      # 將資料送到顯示器
-
-# === 字母點陣資料（每個 byte = 一列）===
-letters = {
-    "H": [0x42,0x42,0x42,0x7E,0x42,0x42,0x42,0x00],
-    "E": [0x7E,0x40,0x40,0x7C,0x40,0x40,0x7E,0x00],
-    "L": [0x40,0x40,0x40,0x40,0x40,0x40,0x7E,0x00],
-    "O": [0x3C,0x42,0x42,0x42,0x42,0x42,0x3C,0x00]
-}
-
-text = "HELLO"                      # 要顯示的文字
-
-# === 使用 for 迴圈逐字顯示 ===
-for char in text:
-    display.fill(0)                 # 每顯示一個字前先清空畫面
-
-    pattern = letters.get(char, [0]*8)  # 取得字母點陣資料
-
-    # 逐列解析 bit，設定像素
-    for row in range(8):
-        display.pixel(row, 0, (pattern[row] & 0x80) >> 7)
-        display.pixel(row, 1, (pattern[row] & 0x40) >> 6)
-        display.pixel(row, 2, (pattern[row] & 0x20) >> 5)
-        display.pixel(row, 3, (pattern[row] & 0x10) >> 4)
-        display.pixel(row, 4, (pattern[row] & 0x08) >> 3)
-        display.pixel(row, 5, (pattern[row] & 0x04) >> 2)
-        display.pixel(row, 6, (pattern[row] & 0x02) >> 1)
-        display.pixel(row, 7, (pattern[row] & 0x01))
-
-    display.show()                  # 更新顯示內容
-    time.sleep(0.5)                 # 每個字停留 0.5 秒
-</pre>
+</code></pre>
+</div>
 
 <hr>
 
@@ -143,6 +187,13 @@ H → E → L → L → O
 <hr>
 
 <p>✔ 可直接存成 <b>SOP.html</b> 使用</p>
-
+<script>
+function copyCode(btn) {
+    const code = btn.nextElementSibling.innerText;
+    navigator.clipboard.writeText(code);
+    btn.innerText = "Copied!";
+    setTimeout(() => btn.innerText = "Copy", 1500);
+}
+</script>
 </body>
 </html>
