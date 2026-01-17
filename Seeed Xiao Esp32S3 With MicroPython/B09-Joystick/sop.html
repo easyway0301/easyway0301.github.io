@@ -222,6 +222,13 @@ print("✅ 測試結束（10 秒）")
 </div>
 
 </section>
-
+<script>
+function copyCode(btn) {
+    const code = btn.nextElementSibling.innerText;
+    navigator.clipboard.writeText(code);
+    btn.innerText = "Copied!";
+    setTimeout(() => btn.innerText = "Copy", 1500);
+}
+</script>
 </body>
 </html>
