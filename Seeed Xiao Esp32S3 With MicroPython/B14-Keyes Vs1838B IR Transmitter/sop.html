@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>Keyes Vs1838B IR Transmitter</title>
+<style>
+    body {
+        font-family: Arial, "Microsoft JhengHei", sans-serif;
+        line-height: 1.9;
+        max-width: 980px;
+        margin: 40px auto;
+        padding: 0 20px;
+        color: #222;
+        background-color: #f5f7fa;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #555;
+        margin-bottom: 50px;
+    }
+
+    section {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 40px;
+        margin-bottom: 50px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+        margin-top: 0;
+        border-left: 6px solid #4CAF50;
+        padding-left: 14px;
+    }
+
+    p {
+        margin: 14px 0;
+    }
+
+    ul {
+        margin-left: 22px;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 28px auto 10px;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
+
+    .highlight {
+        background: #e8f5e9;
+        border-left: 6px solid #4caf50;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-size: 16px;
+    }
+
+    /* Code block */
+    .code-block {
+        position: relative;
+        background: #0d1117;
+        color: #c9d1d9;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 30px 0;
+        font-family: Consolas, Monaco, monospace;
+        font-size: 14px;
+        overflow-x: auto;
+    }
+
+    .code-block pre {
+        margin: 0;
+        white-space: pre;
+    }
+
+    .copy-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: #238636;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 14px;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .copy-btn:hover {
+        background: #2ea043;
+    }
+</style>
+</head>
+  
+<body>
+
+<h1>Keyes Vs1838B IR Transmitter</h1>
+
+<h2>📌 模組簡介</h2>
+<p>
+Keyes Vs1838B IR Transmitter紅外線發射模組可用來發送 38kHz 紅外線訊號，常見於電視、冷氣遙控器。
+本範例使用 Seeed XIAO ESP32S3 搭配 MicroPython，示範「單次發射紅外線訊號」。
+</p>
+
+<h2>🔌 接線方式</h2>
+<ul>
+    <li>VCC → 3V3</li>
+    <li>GND → GND</li>
+    <li>SIGNAL → GPIO 9</li>
+</ul>
+<img src="Pin-List.png" alt="I2C LCD Pin List">
+
+<div class="source">
+圖片來源：<a href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/" target="_blank">
+Seeed Studio 官方文件
+</a>
+</div>
+    <img src="Transmitter.jpeg" alt="Transmitter.jpeg">
+<h2>📦 使用函式庫</h2>
+<ul>
+    <li>machine</li>
+    <li>time</li>
+</ul>
+
+<h2>🧪 範例程式碼</h2>
+<pre><code>
+from machine import Pin, PWM
+import time
+
+# ========= 紅外線發射設定 =========
+
+# 建立 PWM 物件，GPIO 9 作為紅外線輸出腳位
+# freq=38000 代表 38kHz，為常見紅外線載波頻率
+ir = PWM(Pin(9), freq=38000, duty=0)
+
+def 發射紅外線(duration_ms):
+    # 開啟紅外線輸出（PWM duty 設為非 0）
+    ir.duty(512)            # 啟動 38kHz 紅外線訊號
+    
+    # 維持發射指定的時間（毫秒）
+    time.sleep_ms(duration_ms)
+    
+    # 關閉紅外線輸出
+    ir.duty(0)
+
+# 程式開始執行提示
+print("開始發射紅外線")
+
+# 發射紅外線 500 毫秒（0.5 秒）
+發射紅外線(500)
+
+# 發射完成提示
+print("發射完成")
+</code></pre>
+
+<h2>▶ 執行結果</h2>
+<p>
+執行後，紅外線模組會發射 38kHz 的紅外線訊號約 0.5 秒，
+可用手機相機或紅外線接收模組確認是否有訊號輸出。
+</p>
+
+<h2>⚠ 注意事項</h2>
+<ul>
+    <li>紅外線 LED 建議串接限流電阻，避免過電流。</li>
+    <li>不同設備的紅外線協定不同，本範例僅示範「載波發射」。</li>
+    <li>若要模擬遙控器，需搭配對應的紅外線編碼時序。</li>
+</ul>
+
+</body>
+</html>
