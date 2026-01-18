@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>XIAO ESP32S3 User LED × Button</title>
+<style>
+    body {
+        font-family: Arial, "Microsoft JhengHei", sans-serif;
+        line-height: 1.9;
+        max-width: 980px;
+        margin: 40px auto;
+        padding: 0 20px;
+        color: #222;
+        background-color: #f5f7fa;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #555;
+        margin-bottom: 50px;
+    }
+
+    section {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 40px;
+        margin-bottom: 50px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+        margin-top: 0;
+        border-left: 6px solid #4CAF50;
+        padding-left: 14px;
+    }
+
+    ul {
+        margin-left: 22px;
+    }
+
+    .highlight {
+        background: #e8f5e9;
+        border-left: 6px solid #4caf50;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-size: 16px;
+    }
+
+    .code-block {
+        background: #0d1117;
+        color: #c9d1d9;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 30px 0;
+        font-family: Consolas, Monaco, monospace;
+        font-size: 14px;
+        overflow-x: auto;
+    }
+
+    pre {
+        margin: 0;
+    }
+</style>
+</head>
+
+<body>
+
+<h1>XIAO ESP32S3 User LED × 按鈕</h1>
+<p class="subtitle">Expansion Board Base for XIAO × MicroPython</p>
+
+<section>
+<h2>📌 範例說明</h2>
+<p>
+本範例示範使用 <strong>Expansion Board Base for XIAO</strong> 上的
+<strong>D1 按鈕</strong> 來控制 <strong>XIAO ESP32S3 內建 User LED</strong>。
+</p>
+<p>
+按下按鈕時 LED 亮起，放開按鈕時 LED 熄滅。
+</p>
+</section>
+
+<section>
+<h2>🔌 硬體對應</h2>
+<ul>
+    <li>User LED → GPIO 21（Active LOW）</li>
+    <li>D1 按鈕 → GPIO 2（內建上拉）</li>
+</ul>
+
+<div class="highlight">
+📌 User LED 為「低電位點亮」，<br>
+value(0) = 亮燈，value(1) = 熄滅
+</div>
+</section>
+
+<section>
+<h2>📦 使用函式庫</h2>
+<ul>
+    <li>machine</li>
+    <li>time</li>
+</ul>
+</section>
+
+<section>
+<h2>🧪 範例程式碼</h2>
+
+<div class="code-block">
+<pre>
+from machine import Pin
+import time
+
+# ========= 開發板說明 =========
+# 適用 XIAO ESP32S3 + Expansion Board Base for XIAO
+# User LED 為低電位點亮（Active LOW）
+
+# =====================
+# 設定 User LED（GPIO21）
+# =====================
+UserLed = Pin(21, Pin.OUT)
+
+# =====================
+# 設定 D1 按鈕（GPIO2，使用內建上拉）
+# =====================
+Button_D1 = Pin(2, Pin.IN, Pin.PULL_UP)
+
+def 打開UserLed():
+    # 低電位 → LED 亮
+    UserLed.value(0)
+
+def 關掉UserLed():
+    # 高電位 → LED 滅
+    UserLed.value(1)
+
+# 開機先關燈
+關掉UserLed()
+
+# 主迴圈：持續讀取按鈕狀態
+while True:
+    if Button_D1.value() == 0:   # 按鈕被按下
+        打開UserLed()
+    else:                        # 按鈕放開
+        關掉UserLed()
+
+    time.sleep(0.01)             # 簡單消抖
+</pre>
+</div>
+</section>
+
+<section>
+<h2>▶ 執行結果</h2>
+<p>
+<ul>
+    <li>按下 D1 按鈕 → User LED 亮</li>
+    <li>放開 D1 按鈕 → User LED 滅</li>
+</ul>
+</p>
+</section>
+
+<section>
+<h2>⚠ 注意事項</h2>
+<ul>
+    <li>User LED 為 Active LOW，邏輯與一般 LED 相反。</li>
+    <li>按鈕已使用內建上拉，不需外接電阻。</li>
+    <li>sleep(0.01) 可避免按鈕抖動造成閃爍。</li>
+</ul>
+</section>
+
+</body>
+</html>
