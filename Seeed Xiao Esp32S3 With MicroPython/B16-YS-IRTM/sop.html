@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>Seeed XIAO ESP32-S3｜YS-IRTM 教學</title>
+<style>
+    body {
+        font-family: Arial, "Microsoft JhengHei", sans-serif;
+        line-height: 1.9;
+        max-width: 980px;
+        margin: 40px auto;
+        padding: 0 20px;
+        color: #222;
+        background-color: #f5f7fa;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #555;
+        margin-bottom: 50px;
+    }
+
+    section {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 40px;
+        margin-bottom: 50px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+        margin-top: 0;
+        border-left: 6px solid #4CAF50;
+        padding-left: 14px;
+    }
+
+    p {
+        margin: 14px 0;
+    }
+
+    ul {
+        margin-left: 22px;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 28px auto 10px;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
+
+    .highlight {
+        background: #e8f5e9;
+        border-left: 6px solid #4caf50;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-size: 16px;
+    }
+
+    /* Code block */
+    .code-block {
+        position: relative;
+        background: #0d1117;
+        color: #c9d1d9;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 30px 0;
+        font-family: Consolas, Monaco, monospace;
+        font-size: 14px;
+        overflow-x: auto;
+    }
+
+    .code-block pre {
+        margin: 0;
+        white-space: pre;
+    }
+
+    .copy-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: #238636;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 14px;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .copy-btn:hover {
+        background: #2ea043;
+    }
+</style>
+</head>
+
+<body>
+<h1>YS-IRTM 紅外線接收教學</h1>
+<div class="subtitle">Seeed XIAO ESP32-S3 + MicroPython</div>
+
+<section>
+<h2>📌 模組簡介</h2>
+<p>
+YS-IRTM 是常用的紅外線接收模組，可用 UART 接收紅外線訊號，
+本教學示範如何使用 MicroPython 接收 IR 訊號並重發。
+</p>
+</section>
+
+<section>
+<h2>🔌 接線方式</h2>
+<ul>
+    <li>VCC → 3V3</li>
+    <li>GND → GND</li>
+    <li>RX → GPIO 8</li>
+    <li>TX → GPIO 9</li>
+</ul>
+  <img src="Pin-List.png" alt="XIAO ESP32S3 腳位">
+<img src="YsIrtmReceiver.jpeg" alt="YsIrtmReceiver.jpeg">
+<div class="highlight">
+⚠ 注意：TXD 與 RXD 接線要反過來（TX → RX、RX → TX）
+</div>
+</section>
+
+<section>
+<h2>📦 使用函式庫</h2>
+<ul>
+    <li>machine</li>
+    <li>time</li>
+</ul>
+</section>
+
+<section>
+<h2>🧪 範例程式碼</h2>
+<div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><code>
+from machine import UART, Pin       # 匯入 UART 與 Pin
+import time                         # 匯入時間模組
+
+# ======== UART 設定 (TX=9, RX=8, 9600 bps) ========
+uart = UART(2, baudrate=9600, tx=9, rx=8)  
+
+# 儲存接收到的 IR 訊號
+ir_codes = []
+
+print("開始接收紅外線訊號...按 Ctrl+C 停止接收")
+
+try:
+    while True:
+        if uart.any():                # UART 緩衝區有資料
+            data = uart.read()        # 讀取資料
+            if data:
+                code = data.hex()     # 將 bytes 轉成 hex 字串
+                print("接收到 IR code:", code)
+                ir_codes.append(code) # 儲存訊號
+        time.sleep(0.05)              # 延遲 50ms
+
+except KeyboardInterrupt:             # 按 Ctrl+C 停止
+    print("接收結束，共儲存", len(ir_codes), "筆訊號")
+
+# ======== 發射儲存的 IR 訊號 ========
+print("開始發射儲存的紅外線訊號...")
+for code in ir_codes:
+    uart.write(bytes.fromhex(code))    # 將 hex 字串轉回 bytes 並發射
+    print("已發射:", code)
+    time.sleep(0.5)                    # 每筆訊號間隔 0.5 秒
+
+print("全部訊號發射完成")
+</code></pre>
+</div>
+</section>
+
+<section>
+<h2>▶ 執行結果</h2>
+<ul>
+    <li>接收時，終端機會顯示每筆紅外線訊號的 hex code</li>
+    <li>按 Ctrl+C 結束接收</li>
+    <li>程式會將接收的訊號依序發射</li>
+</ul>
+</section>
+
+<section>
+<h2>⚠ 注意事項</h2>
+<ul>
+    <li>TX/RX 接線一定要反過來，否則無法收發</li>
+    <li>不同遙控器的訊號編碼不同，本範例只示範重發已接收訊號</li>
+    <li>發射紅外線時請勿對著眼睛</li>
+</ul>
+</section>
+<section>
+    <h2>完整操作影片教學</h2>
+
+    <div class="video">
+        <a href="https://youtu.be/lfYzGQivvEg" target="_blank">
+            <img src="http://img.youtube.com/vi/lfYzGQivvEg/0.jpg" alt="完整步驟影片">
+        </a>
+    </div>
+</section>
+<script>
+function copyCode(btn) {
+    const code = btn.nextElementSibling.innerText;
+    navigator.clipboard.writeText(code);
+    btn.innerText = "Copied!";
+    setTimeout(() => btn.innerText = "Copy", 1500);
+}
+</script>
+</body>
+</html>
