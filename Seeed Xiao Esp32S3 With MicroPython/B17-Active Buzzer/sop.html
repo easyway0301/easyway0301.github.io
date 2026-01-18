@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>Active Buzzer（有源蜂鳴器）</title>
+<style>
+    body {
+        font-family: Arial, "Microsoft JhengHei", sans-serif;
+        line-height: 1.9;
+        max-width: 980px;
+        margin: 40px auto;
+        padding: 0 20px;
+        color: #222;
+        background-color: #f5f7fa;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #555;
+        margin-bottom: 50px;
+    }
+
+    section {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 40px;
+        margin-bottom: 50px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+        margin-top: 0;
+        border-left: 6px solid #4CAF50;
+        padding-left: 14px;
+    }
+
+    ul {
+        margin-left: 22px;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 28px auto 10px;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
+
+    .highlight {
+        background: #e8f5e9;
+        border-left: 6px solid #4caf50;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-size: 16px;
+    }
+
+    .code-block {
+        background: #0d1117;
+        color: #c9d1d9;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 30px 0;
+        font-family: Consolas, Monaco, monospace;
+        font-size: 14px;
+        overflow-x: auto;
+    }
+
+    pre {
+        margin: 0;
+    }
+</style>
+</head>
+
+<body>
+
+<h1>Active Buzzer 有源蜂鳴器</h1>
+<p class="subtitle">Seeed XIAO ESP32-S3 × MicroPython</p>
+
+<section>
+<h2>📌 模組簡介</h2>
+<p>
+有源蜂鳴器（Active Buzzer）內部已內建震盪電路，
+只要給予 <strong>高電位</strong> 即可發出聲音，
+不需要 PWM 或指定頻率，適合初學者使用。
+</p>
+</section>
+
+<section>
+<h2>🔌 接線方式</h2>
+<ul>
+    <li>蜂鳴器「＋」 → GPIO 9</li>
+    <li>蜂鳴器「－」 → GND</li>
+</ul>
+
+<div class="highlight">
+📌 有源蜂鳴器與無源蜂鳴器不同，<br>
+只要 <strong>HIGH / LOW</strong> 控制即可發聲。
+</div>
+</section>
+
+<section>
+<h2>📦 使用函式庫</h2>
+<ul>
+    <li>machine</li>
+    <li>time</li>
+</ul>
+</section>
+
+<section>
+<h2>🧪 範例程式碼</h2>
+
+<div class="code-block">
+<pre>
+from machine import Pin
+import time
+
+# ========= 有源蜂鳴器設定 =========
+# 蜂鳴器正極接 GPIO 9，負極接 GND
+buzzer = Pin(9, Pin.OUT)
+
+# 重複鳴叫 10 次
+for i in range(10):
+    buzzer.value(1)      # 開啟蜂鳴器（發聲）
+    time.sleep(0.2)      # 發聲 0.2 秒
+    buzzer.value(0)      # 關閉蜂鳴器
+    time.sleep(0.2)      # 停止 0.2 秒
+</pre>
+</div>
+</section>
+
+<section>
+<h2>▶ 執行結果</h2>
+<p>
+蜂鳴器會以「嗶－嗶－」的方式響 10 次，
+每次發聲 0.2 秒、停止 0.2 秒。
+</p>
+</section>
+
+<section>
+<h2>⚠ 注意事項</h2>
+<ul>
+    <li>此範例僅適用於「有源蜂鳴器」。</li>
+    <li>若使用無源蜂鳴器，需改用 PWM 控制頻率。</li>
+    <li>請確認接線極性，避免長時間高電位造成損壞。</li>
+</ul>
+</section>
+
+</body>
+</html>
