@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>XIAO ESP32S3 無源蜂鳴器（PWM 音樂播放）</title>
+<style>
+    body {
+        font-family: Arial, "Microsoft JhengHei", sans-serif;
+        line-height: 1.9;
+        max-width: 980px;
+        margin: 40px auto;
+        padding: 0 20px;
+        color: #222;
+        background-color: #f5f7fa;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #555;
+        margin-bottom: 50px;
+    }
+
+    section {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 40px;
+        margin-bottom: 50px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+        margin-top: 0;
+        border-left: 6px solid #4CAF50;
+        padding-left: 14px;
+    }
+
+    p {
+        margin: 14px 0;
+    }
+
+    ul {
+        margin-left: 22px;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 28px auto 10px;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
+
+    .highlight {
+        background: #e8f5e9;
+        border-left: 6px solid #4caf50;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-size: 16px;
+    }
+
+    /* Code block */
+    .code-block {
+        position: relative;
+        background: #0d1117;
+        color: #c9d1d9;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 30px 0;
+        font-family: Consolas, Monaco, monospace;
+        font-size: 14px;
+        overflow-x: auto;
+    }
+
+    .code-block pre {
+        margin: 0;
+        white-space: pre;
+    }
+
+    .copy-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: #238636;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 14px;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .copy-btn:hover {
+        background: #2ea043;
+    }
+</style>
+</head>
+
+<body>
+
+<h1>XIAO ESP32S3 無源蜂鳴器</h1>
+<p class="subtitle">PWM 播放音符（少女的祈禱）</p>
+
+<section>
+<h2>📌 範例說明</h2>
+<p>
+本範例示範使用 <strong>XIAO ESP32S3</strong> 搭配
+<strong>Expansion Board Base for XIAO</strong> 上的
+<strong>無源蜂鳴器</strong>，
+透過 <strong>PWM</strong> 輸出不同頻率來播放旋律。
+</p>
+<p>
+此範例為《少女的祈禱》簡化版旋律示範。
+</p>
+</section>
+
+<section>
+<h2>🔌 接線方式</h2>
+<ul>
+    <li>無源蜂鳴器正極 → GPIO 4</li>
+    <li>無源蜂鳴器負極 → GND</li>
+</ul>
+
+<div class="highlight">
+📌 無源蜂鳴器需使用 PWM 控制頻率，<br>
+無法像有源蜂鳴器直接輸出 HIGH / LOW。
+</div>
+<img src="Pin-List(EB).png" alt="Pin-List(EB).png">
+<img src="PassiveBuzzer.jpg" alt="PassiveBuzzer.jpg">   
+</section>
+
+<section>
+<h2>📦 使用函式庫</h2>
+<ul>
+    <li>machine</li>
+    <li>time</li>
+</ul>
+</section>
+
+<section>
+<h2>🧪 範例程式碼</h2>
+
+<div class="code-block">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre>
+from machine import Pin, PWM
+import time
+
+# =====================
+# 設定無源蜂鳴器腳位
+# =====================
+# Expansion Board 上的無源蜂鳴器（GPIO4）
+buzzer = PWM(Pin(4))
+
+# =====================
+# 定義音符頻率（Hz）
+# =====================
+Do  = 262     # C
+Re  = 294     # D
+Mi  = 330     # E
+Fa  = 349     # F
+So  = 392     # G
+La  = 440     # A
+Si  = 494     # B
+Do2 = 523     # 高音 Do
+REST = 0      # 休止符（不發聲）
+
+# =====================
+# 播放單一音符的函式
+# =====================
+def play(note, duration):
+    if note == REST:
+        buzzer.duty(0)          # 休止（不發聲）
+    else:
+        buzzer.freq(note)       # 設定 PWM 頻率
+        buzzer.duty(512)        # 約 50% 占空比（音量適中）
+
+    time.sleep(duration)        # 音符持續時間
+    buzzer.duty(0)              # 音符結束，關閉輸出
+    time.sleep(0.02)            # 音符間短暫間隔
+
+# =====================
+# 《少女的祈禱》簡化旋律
+# =====================
+song = [
+    Mi, So, La, So, Mi, Re,
+    Mi, So, La, So, Mi, Re,
+    Mi, So, La, Do2, La, So,
+    Mi, Re, Do, REST,
+
+    Mi, So, La, So, Mi, Re,
+    Mi, So, La, So, Mi, Re,
+    Mi, So, La, Do2, La, So,
+    Mi, Re, Do
+]
+
+# =====================
+# 播放旋律
+# =====================
+for note in song:
+    play(note, 0.35)
+
+# 播放完畢後關閉 PWM
+buzzer.deinit()
+</pre>
+</div>
+</section>
+
+<section>
+<h2>▶ 執行結果</h2>
+<p>
+蜂鳴器會依序播放旋律音符，完成後自動停止發聲。
+</p>
+</section>
+
+<section>
+<h2>⚠ 注意事項</h2>
+<ul>
+    <li>無源蜂鳴器一定要使用 PWM，否則不會發聲。</li>
+    <li>duty 值可調整音量大小（0～1023）。</li>
+    <li>長時間播放請注意蜂鳴器與電源溫度。</li>
+</ul>
+</section>
+<script>
+function copyCode(btn) {
+    const code = btn.nextElementSibling.innerText;
+    navigator.clipboard.writeText(code);
+    btn.innerText = "Copied!";
+    setTimeout(() => btn.innerText = "Copy", 1500);
+}
+</script>
+</body>
+</html>
