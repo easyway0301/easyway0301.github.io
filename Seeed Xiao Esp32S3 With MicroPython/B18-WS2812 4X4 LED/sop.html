@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>WS2812 RGB LED</title>
+<style>
+    body {
+        font-family: Arial, "Microsoft JhengHei", sans-serif;
+        line-height: 1.9;
+        max-width: 980px;
+        margin: 40px auto;
+        padding: 0 20px;
+        color: #222;
+        background-color: #f5f7fa;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #555;
+        margin-bottom: 50px;
+    }
+
+    section {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 40px;
+        margin-bottom: 50px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+        margin-top: 0;
+        border-left: 6px solid #4CAF50;
+        padding-left: 14px;
+    }
+
+    ul {
+        margin-left: 22px;
+    }
+
+    .highlight {
+        background: #e8f5e9;
+        border-left: 6px solid #4caf50;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-size: 16px;
+    }
+
+    .code-block {
+        background: #0d1117;
+        color: #c9d1d9;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 30px 0;
+        font-family: Consolas, Monaco, monospace;
+        font-size: 14px;
+        overflow-x: auto;
+    }
+
+    pre {
+        margin: 0;
+    }
+</style>
+</head>
+
+<body>
+
+<h1>WS2812 RGB LED</h1>
+<p class="subtitle">Seeed XIAO ESP32-S3 × MicroPython</p>
+
+<section>
+<h2>📌 模組簡介</h2>
+<p>
+WS2812 是可程式控制的全彩 RGB LED，
+每一顆 LED 內含控制晶片，
+只需要 <strong>一條資料線</strong> 即可控制多顆燈珠。
+</p>
+</section>
+
+<section>
+<h2>🔌 接線方式</h2>
+<ul>
+    <li>VCC → 5V（部分模組可用 3V3）</li>
+    <li>GND → GND</li>
+    <li>DIN → GPIO 9</li>
+</ul>
+
+<div class="highlight">
+📌 建議 LED 顆數不多時可直接使用 GPIO，<br>
+顆數多或亮度高時請使用外接電源。
+</div>
+</section>
+
+<section>
+<h2>📦 使用函式庫</h2>
+<ul>
+    <li>machine</li>
+    <li>neopixel</li>
+    <li>time</li>
+</ul>
+</section>
+
+<section>
+<h2>🧪 範例程式碼</h2>
+
+<div class="code-block">
+<pre>
+from machine import Pin
+import neopixel
+import time
+
+# ========= WS2812 設定 =========
+# 資料線接在 GPIO 9
+pin = Pin(9, Pin.OUT)
+
+# 建立 NeoPixel 物件（4 顆 LED）
+np = neopixel.NeoPixel(pin, 4)
+
+# 逐顆點亮藍色 LED
+for i in range(4):
+    np.fill((0, 0, 0))    # 全部熄滅
+    np[i] = (0, 0, 255)  # 第 i 顆顯示藍色
+    np.write()           # 將資料送出
+    time.sleep(0.3)      # 停留 0.3 秒
+
+# 全部關閉
+np.fill((0, 0, 0))
+np.write()
+</pre>
+</div>
+</section>
+
+<section>
+<h2>▶ 執行結果</h2>
+<p>
+4 顆 WS2812 LED 會依序亮起藍色燈，
+最後全部熄滅。
+</p>
+</section>
+
+<section>
+<h2>⚠ 注意事項</h2>
+<ul>
+    <li>WS2812 對電壓與訊號品質較敏感，請確保接線穩定。</li>
+    <li>資料腳位不可與其他高速訊號共用。</li>
+    <li>若 LED 不亮，請確認顆數設定是否正確。</li>
+</ul>
+</section>
+
+</body>
+</html>
