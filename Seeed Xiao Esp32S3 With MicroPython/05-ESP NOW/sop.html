@@ -1,0 +1,355 @@
+<meta charset="UTF-8">
+<title>XIAO ESP32-S3 ESP‑NOW 通訊教學</title>
+
+<style>
+    body {
+        font-family: Arial, "Microsoft JhengHei", sans-serif;
+        line-height: 1.9;
+        max-width: 980px;
+        margin: 40px auto;
+        padding: 0 20px;
+        color: #222;
+        background-color: #f5f7fa;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #555;
+        margin-bottom: 50px;
+    }
+
+    section {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 40px;
+        margin-bottom: 50px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+        margin-top: 0;
+        border-left: 6px solid #4CAF50;
+        padding-left: 14px;
+    }
+
+    p {
+        margin: 14px 0;
+    }
+
+    ul {
+        margin-left: 22px;
+    }
+
+    img {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 28px auto 10px;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
+
+
+    .highlight {
+        background: #e8f5e9;
+        border-left: 6px solid #4caf50;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-size: 16px;
+    }
+
+    .warning {
+        background: #fff3e0;
+        border-left: 6px solid #ff9800;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+    }
+
+    /* Code block (GitHub style) */
+    .code-block {
+        position: relative;
+        background: #0d1117;
+        color: #c9d1d9;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 30px 0;
+        font-family: Consolas, Monaco, monospace;
+        font-size: 14px;
+        overflow-x: auto;
+    }
+
+    .code-block pre {
+        margin: 0;
+        white-space: pre;
+    }
+
+    .copy-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: #238636;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 14px;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .copy-btn:hover {
+        background: #2ea043;
+    }
+
+    a {
+        color: #2e7d32;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+
+
+
+<h3>XIAO ESP32‑S3 ESP‑NOW 通訊教學</h3>
+<div class="subtitle">MicroPython ESP‑NOW（點對點 / 多節點）</div>
+
+<section>
+<h2>📌 模組簡介</h2>
+<p>
+ESP‑NOW 是 Espressif（ESP32 / ESP32‑S3）支援的低延遲無線通訊協定，可實現
+<strong>無 Wi‑Fi 配對 / 低功耗點對點或廣播</strong>的數據傳輸，適合物聯網感測器、遙控與裝置間通訊。
+</p>
+<p>
+MicroPython 內建了「espnow」模組，可直接建立通訊，不需 Wi‑Fi 連線設定。</p>
+</section>
+
+<section>
+<h2>🔌 硬體要求</h2>
+<ul>
+    <li>至少兩塊 XIAO ESP32‑S3 開發板，<span style="color: rgb(31, 35, 40); font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, &quot;Noto Sans&quot;, Helvetica, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;; font-size: 16px; background-color: rgb(255, 255, 255);">務必裝上天線。</span></li>
+    <li>USB 傳輸線各一條</li>
+</ul>
+</section>
+
+<section>
+<h2>📦 使用函式庫</h2>
+<ul>
+    <li>network</li>
+    <li>espnow</li>
+    <li>time</li>
+</ul>
+</section>
+
+<section>
+<h2>🧪 範例程式碼（GetMac.py）</h2><div><span style="color: rgb(31, 35, 40); font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, &quot;Noto Sans&quot;, Helvetica, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;; font-size: 16px; background-color: rgb(255, 255, 255);">先在接收端的那片ESP32執行GetMac.py，取得Mac位址後，再貼到要做為發射端的那片Esp32</span></div>
+
+<div class="code-block">
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre>import network
+# 匯入 network 模組，用來控制 ESP32 的 Wi-Fi 功能
+
+wlan = network.WLAN(network.STA_IF)
+# 建立一個 Wi-Fi 物件，並設定為「STA（Station，用戶端）」模式
+
+wlan.active(True)
+# 啟用 Wi-Fi（一定要先啟用，才能使用 Wi-Fi / ESP-NOW 等功能）
+
+print(wlan.config('mac'))
+# 讀取並印出目前 Wi-Fi 介面的 MAC 位址（bytes 格式）
+# 這個 MAC 位址常用在 ESP-NOW 當作 peer_mac
+</pre>
+</div>
+</section>
+
+<section>
+<h2>🧪 範例程式碼（主機：Sender）</h2>
+<div class="code-block">
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre>
+import network
+# 匯入 network 模組，用來控制 ESP32 的 Wi-Fi 功能
+
+import espnow
+# 匯入 ESP-NOW 模組，用來做 ESP32 之間的無線點對點通訊
+
+import time
+# 匯入 time 模組，用來做延遲（sleep）
+
+# -------------------------------------------------
+# 啟動 Wi-Fi STA（Station，用戶端）模式
+# -------------------------------------------------
+sta = network.WLAN(network.STA_IF)
+# 建立 Wi-Fi 物件，設定為 STA 模式（ESP-NOW 需要）
+
+sta.active(True)
+# 啟用 Wi-Fi（不需要連上基地台）
+
+sta.disconnect()
+# 中斷任何自動連線的 Wi-Fi AP
+# 避免被 AP 綁定 Channel，導致 ESP-NOW 收不到資料
+
+# -------------------------------------------------
+# 初始化 ESP-NOW
+# -------------------------------------------------
+espSender = espnow.ESPNow()
+# 建立 ESP-NOW 物件
+
+espSender.active(True)
+# 啟用 ESP-NOW 功能
+
+# -------------------------------------------------
+# 設定接收端（對方）ESP32 的 MAC 位址
+# -------------------------------------------------
+peer_mac = b'\x90pi\x0b\xe28'
+# 對方 ESP32 的 MAC 位址（bytes 格式）
+# 可用 wlan.config('mac') 在對方板子上查詢
+
+espSender.add_peer(peer_mac)
+# 將對方加入 ESP-NOW 的通訊對象（peer）
+
+# -------------------------------------------------
+# 開始傳送資料
+# -------------------------------------------------
+print("Start sending...")
+# 顯示開始傳送訊息
+
+# -------------------------------------------------
+# 傳送「打開 User LED」指令
+# -------------------------------------------------
+espSender.send(peer_mac, "打開UserLed".encode("utf-8"))
+# 將中文字串轉成 UTF-8 bytes 後送出
+# ESP-NOW 只能傳送 bytes 資料
+
+time.sleep(2)
+# 等待 2 秒，讓接收端有時間處理第一個指令
+
+# -------------------------------------------------
+# 傳送「關掉 User LED」指令
+# -------------------------------------------------
+espSender.send(peer_mac, "關掉UserLed".encode("utf-8"))
+# 再次送出 UTF-8 編碼的中文指令
+
+print("傳送完成")
+# 傳送完成
+
+</pre>
+</div>
+</section>
+
+<section>
+<h2>🧪 範例程式碼（從機：Receiver）</h2>
+<div class="code-block">
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre># https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/02-TurnOn UserLed/sop.html
+# 以下為02-TurnOn UserLed範例
+from machine import Pin
+import time
+
+# 本範例適用Seeed XIAO Esp32S3開發板
+# TYPEC插頭朝上，UserLed燈在右邊，打開是黃燈。
+
+# 設定 LED 腳位
+# 貼片式LED燈焊在GPIO 21 
+UserLed = Pin(21, Pin.OUT)
+
+def 打開UserLed():
+    print("打開UserLed")
+    # LED 亮燈
+    UserLed.value(0)
+    #UserLed.off() # 注意如果要用off，它會亮燈
+
+def 關掉UserLed():
+    print("關掉UserLed")
+    # LED 熄燈
+    UserLed.value(1)
+    #UserLed.on() # 注意如果要用on，它會關燈
+# 以上為02-TurnOn UserLed範例
+
+import network
+# 匯入 network 模組，用來控制 ESP32 的 Wi-Fi 功能
+
+import espnow
+# 匯入 ESP-NOW 模組，用來進行點對點無線通訊
+
+# -------------------------------------------------
+# 啟動 Wi-Fi STA（Station，用戶端）模式
+# -------------------------------------------------
+sta = network.WLAN(network.STA_IF)
+# 建立 Wi-Fi 物件，設定為 STA 模式
+
+sta.active(True)
+# 啟用 Wi-Fi 功能（ESP-NOW 需要 Wi-Fi 介面 active）
+
+sta.disconnect()
+# 避免自動連線到 Wi-Fi AP，確保 ESP-NOW 收發穩定
+
+# -------------------------------------------------
+# 初始化 ESP-NOW
+# -------------------------------------------------
+espReceiver = espnow.ESPNow()
+# 建立 ESP-NOW 物件
+
+espReceiver.active(True)
+# 啟用 ESP-NOW 功能
+
+# -------------------------------------------------
+# 等待接收資料
+# -------------------------------------------------
+print("等待接收資料...")
+while True:
+    host, msg = espReceiver.recv()  # 阻塞等待接收 ESP-NOW 資料
+
+    if msg:
+        text = msg.decode("utf-8")  # 將 bytes 轉成 UTF-8 字串
+        # 中文指令必須 decode 才能比對
+
+        if text == "打開UserLed":
+            print("收到開燈指令")
+            打開UserLed()  # 呼叫函式開啟 User LED
+
+        elif text == "關掉UserLed":
+            print("收到關燈指令")
+            關掉UserLed()  # 呼叫函式關閉 User LED
+</pre>
+</div>
+</section>
+
+<section>
+<h2>▶ 執行結果</h2>
+<ul>
+    <li>Sender 端訊息</li>
+    <li>Receiver 端點亮Led2秒後熄滅。</li>
+    <li>無需 Wi‑Fi 配對即可傳輸資料</li>
+</ul>
+</section>
+
+<section>
+<h2>⚠ 注意事項</h2>
+<ul>
+    <li>ESP‑NOW 需啟用 Wi‑Fi 介面才可運作（不需真正連網）。</li>
+    <li>傳輸資料前需先加入對等設備 MAC，否則會無法送達。</li>
+    <li>若無收到資料，請確認固件版本是否支援 espnow 模組。:contentReference[oaicite:1]{index=1}</li>
+</ul>
+</section>
+
+<script>
+function copyCode(btn) {
+    const code = btn.nextElementSibling.innerText;
+    navigator.clipboard.writeText(code);
+    btn.innerText = "Copied!";
+    setTimeout(() => btn.innerText = "Copy", 1500);
+}
+</script>
+
