@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
-<head>
-<meta charset="UTF-8">
-<title>ESP32-S3 MicroPython｜SC8002B 蜂鳴器教學</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>從零開始學Esp32</title>
 
-<style>
-    body {
+    <style>
+      body {
         font-family: Arial, "Microsoft JhengHei", sans-serif;
         line-height: 1.9;
         max-width: 980px;
@@ -13,61 +13,97 @@
         padding: 0 20px;
         color: #222;
         background-color: #f5f7fa;
-    }
+      }
 
-    h1 {
+      h1 {
         text-align: center;
         margin-bottom: 10px;
-    }
+      }
 
-    .subtitle {
+      .subtitle {
         text-align: center;
         color: #555;
         margin-bottom: 50px;
-    }
+      }
 
-    section {
+      section {
         background: #ffffff;
         border-radius: 14px;
         padding: 40px;
         margin-bottom: 50px;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-    }
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      }
 
-    h2 {
+      h2 {
         margin-top: 0;
-        border-left: 6px solid #4CAF50;
+        border-left: 6px solid #4caf50;
         padding-left: 14px;
-    }
+      }
 
-    p {
+      p {
         margin: 14px 0;
-    }
+      }
 
-    ul {
+      ul {
         margin-left: 22px;
-    }
+      }
 
-    img {
+      img {
         max-width: 100%;
         height: auto;
         display: block;
         margin: 28px auto 10px;
         border-radius: 12px;
-        box-shadow: 0 6px 16px rgba(0,0,0,0.12);
-    }
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+      }
 
-    .highlight {
+      .highlight-yellow {
+        background-color: #ffff00; /* 螢光黃背景 */
+        color: #000000; /* 黑色文字，比較清楚 */
+        padding: 2px 4px; /* 可選：讓背景有點空間 */
+        border-radius: 2px; /* 可選：圓角 */
+        font-weight: bold; /* 可選：文字加粗更醒目 */
+      }
+
+      .redbackground {
+        background: #ff8e90;
+        border-left: 6px solid #ff1a00;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-size: 16px;
+      }
+
+      .greenbackground {
         background: #e8f5e9;
         border-left: 6px solid #4caf50;
         padding: 16px 20px;
         border-radius: 8px;
         margin: 20px 0;
         font-size: 16px;
-    }
+      }
 
-    /* Code block */
-    .code-block {
+      .orangebackground {
+        background: #fff3e0;
+        border-left: 6px solid #ff9800;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-size: 16px;
+      }
+
+      a {
+        color: #2e7d32;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      /* Code block */
+      .code-block {
         position: relative;
         background: #0d1117;
         color: #c9d1d9;
@@ -77,78 +113,124 @@
         font-family: Consolas, Monaco, monospace;
         font-size: 14px;
         overflow-x: auto;
-    }
+      }
 
-    .code-block pre {
+      .code-block pre {
         margin: 0;
         white-space: pre;
-    }
+      }
 
-    .copy-btn {
+      .copy-btn {
         position: absolute;
         top: 12px;
         right: 12px;
-        background: #238636;
+        background: #1f6feb; /* GitHub 藍 */
         color: white;
         border: none;
         border-radius: 6px;
         padding: 6px 14px;
         cursor: pointer;
         font-size: 13px;
-    }
+      }
 
-    .copy-btn:hover {
-        background: #2ea043;
-    }
-</style>
-</head>
+      .copy-btn:hover {
+        background: #388bfd;
+      }
 
-<body>
+      .link-icons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-top: 20px;
+      }
 
-<h1>ESP32-S3 MicroPython SC8002B 蜂鳴器教學</h1>
-<div class="subtitle">簡單播放旋律示範</div>
+      .link-icons a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 18px;
+        border-radius: 12px;
+        background: #f1f3f6;
+        color: #222;
+        text-decoration: none;
+        font-size: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
+      }
 
-<section>
-<h2>第一步：模組介紹</h2>
+      .link-icons a:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      }
 
-<p>
-SC8002B 蜂鳴器是一種可由 PWM 控制音高的模組，
-可播放音符與簡單旋律，但無法直接唸中文。
-</p>
+      /* ⭐ 關鍵：圖示等寬 */
+      .link-icons .icon {
+        width: 28px; /* 固定寬度 */
+        text-align: center; /* 置中 emoji */
+        font-size: 20px;
+        line-height: 1;
+      }
 
-<div class="highlight">
-📌 注意事項：<br>
-• MicroPython 官方不支援直接播放 MP3<br>
-• 若要播放 MP3，需要使用 uPyAudio 或 mp3dec<br>
-• 本範例示範最簡單的音符播放
-</div>
+      .link-icons .text {
+        font-weight: 500;
+      }
+    </style>
+  </head>
 
-<p><strong>接線方式 (Seeed XIAO ESP32-S3)：</strong></p>
-<ul>
-    <li>Buzzer IN → GPIO 9</li>
-    <li>VCC → 3V3</li>
-    <li>GND → GND</li>
-</ul>
+  <body>
+    <h1>SC8002B 蜂鳴器</h1>
 
-<img src="../00-Assets/Pin-List.png" alt="I2C LCD Pin List">
+    <section>
+      <h2>第一步：模組介紹</h2>
 
-<div class="source">
-圖片來源：<a href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/" target="_blank">
-Seeed Studio 官方文件
-</a>
-</div>
-    <img src="../00-Assets/B11-KeyesSC8002B.jpeg" alt="B11-KeyesSC8002B.jpeg">
-    
-</section>
+      <p>
+        SC8002B 蜂鳴器是一種可由 PWM 控制音高的模組，
+        可播放音符與簡單旋律，但無法直接唸中文。
+      </p>
 
-<section>
-<h2>第二步：MicroPython 程式碼</h2>
+      <div class="greenbackground">
+        📌 注意事項：<br />
+        • MicroPython 官方不支援直接播放 MP3<br />
+        • 若要播放 MP3，需要使用 uPyAudio 或 mp3dec<br />
+        • 本範例示範最簡單的音符播放
+      </div>
 
-<p>以下程式碼可在 Thonny 上執行，播放簡單旋律。</p>
+      <p><strong>接線方式 (Seeed XIAO ESP32-S3)：</strong></p>
+      <ul>
+        <li>Buzzer IN → GPIO 9</li>
+        <li>VCC → 3V3</li>
+        <li>GND → GND</li>
+      </ul>
+    </section>
+    <!-- 腳位圖 -->
+    <section>
+      <img
+        src="../00-Assets/B11-KeyesSC8002B.jpeg"
+        alt="B11-KeyesSC8002B.jpeg"
+      />
+      <img src="../00-Assets/Pin-List.png" alt="Pin-List.png" />
 
-<div class="code-block">
-<button class="copy-btn" onclick="copyCode(this)">Copy</button>
-<pre><code>
+      <div class="source">
+        圖片來源：
+        <a
+          href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/"
+          target="_blank"
+        >
+          Seeed Studio 官方文件
+        </a>
+      </div>
+    </section>
+
+    <section>
+      <h2>第二步：MicroPython 程式碼</h2>
+
+      <p>以下程式碼可在 Thonny 上執行，播放簡單旋律。</p>
+
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code>
 from machine import Pin, PWM        # 匯入 Pin 與 PWM 類別
 import time                         # 匯入時間模組
 
@@ -185,42 +267,64 @@ for note in melody:                   # 遍歷旋律中的每個音符
 # === 停止 PWM ===
 buzzer.deinit()                       # 釋放 PWM，停止發聲
 </code></pre>
-</div>
-</section>
+      </div>
+    </section>
 
-<section>
-<h2>執行結果</h2>
+    <section>
+      <h2>執行結果</h2>
 
-<ul>
-    <li>蜂鳴器播放簡單旋律</li>
-    <li>音量可透過 <code>duty_u16</code> 調整</li>
-    <li>可延伸成多音符播放或簡單音樂播放程式</li>
-</ul>
+      <ul>
+        <li>蜂鳴器播放簡單旋律</li>
+        <li>音量可透過 <code>duty_u16</code> 調整</li>
+        <li>可延伸成多音符播放或簡單音樂播放程式</li>
+      </ul>
 
-<div class="highlight">
-📌 延伸練習建議：<br>
-✔ 播放其他旋律<br>
-✔ 加入按鈕控制播放<br>
-✔ 結合 LED 做音樂燈效
-</div>
-</section>
-<section>
-    <h2>完整操作影片教學</h2>
+      <div class="greenbackground">
+        📌 延伸練習建議：<br />
+        ✔ 播放其他旋律<br />
+        ✔ 加入按鈕控制播放<br />
+        ✔ 結合 LED 做音樂燈效
+      </div>
+    </section>
 
-    <div class="video">
+    <!-- youtube的section -->
+    <section>
+      <h2>完整操作影片教學</h2>
+
+      <div class="video">
         <a href="https://youtu.be/joe9dCsNczE" target="_blank">
-            <img src="http://img.youtube.com/vi/joe9dCsNczE/0.jpg" alt="完整步驟影片">
+          <img
+            src="http://img.youtube.com/vi/joe9dCsNczE/0.jpg"
+            alt="完整步驟影片"
+          />
         </a>
-    </div>
-</section>
-<script>
-function copyCode(btn) {
-    const code = btn.nextElementSibling.innerText;
-    navigator.clipboard.writeText(code);
-    btn.innerText = "Copied!";
-    setTimeout(() => btn.innerText = "Copy", 1500);
-}
-</script>
+      </div>
+    </section>
 
-</body>
+    <!-- 相關連結的section -->
+    <section>
+      <h2>🔗 相關連結</h2>
+
+      <div class="link-icons">
+        <a href="https://easyway0301.github.io/" target="_blank">
+          <span class="icon">🏠</span>
+          <span class="text">主頁</span>
+        </a>
+
+        <a href="mailto:easyway0301@gmail.com">
+          <span class="icon">✉️</span>
+          <span class="text">Email</span>
+        </a>
+      </div>
+    </section>
+
+    <script>
+      function copyCode(btn) {
+          const code = btn.nextElementSibling.innerText;
+          navigator.clipboard.writeText(code);
+          btn.innerText = "Copied!";
+          setTimeout(() => btn.innerText = "Copy", 1500);
+      }
+    </script>
+  </body>
 </html>
