@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
-<head>
-<meta charset="UTF-8">
-<title>Seeed XIAO ESP32-S3｜YS-IRTM 教學</title>
-<style>
-    body {
+  <head>
+    <meta charset="UTF-8" />
+    <title>從零開始學Esp32</title>
+
+    <style>
+      body {
         font-family: Arial, "Microsoft JhengHei", sans-serif;
         line-height: 1.9;
         max-width: 980px;
@@ -12,61 +13,97 @@
         padding: 0 20px;
         color: #222;
         background-color: #f5f7fa;
-    }
+      }
 
-    h1 {
+      h1 {
         text-align: center;
         margin-bottom: 10px;
-    }
+      }
 
-    .subtitle {
+      .subtitle {
         text-align: center;
         color: #555;
         margin-bottom: 50px;
-    }
+      }
 
-    section {
+      section {
         background: #ffffff;
         border-radius: 14px;
         padding: 40px;
         margin-bottom: 50px;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-    }
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      }
 
-    h2 {
+      h2 {
         margin-top: 0;
-        border-left: 6px solid #4CAF50;
+        border-left: 6px solid #4caf50;
         padding-left: 14px;
-    }
+      }
 
-    p {
+      p {
         margin: 14px 0;
-    }
+      }
 
-    ul {
+      ul {
         margin-left: 22px;
-    }
+      }
 
-    img {
+      img {
         max-width: 100%;
         height: auto;
         display: block;
         margin: 28px auto 10px;
         border-radius: 12px;
-        box-shadow: 0 6px 16px rgba(0,0,0,0.12);
-    }
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+      }
 
-    .highlight {
+      .highlight-yellow {
+        background-color: #ffff00; /* 螢光黃背景 */
+        color: #000000; /* 黑色文字，比較清楚 */
+        padding: 2px 4px; /* 可選：讓背景有點空間 */
+        border-radius: 2px; /* 可選：圓角 */
+        font-weight: bold; /* 可選：文字加粗更醒目 */
+      }
+
+      .redbackground {
+        background: #ff8e90;
+        border-left: 6px solid #ff1a00;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-size: 16px;
+      }
+
+      .greenbackground {
         background: #e8f5e9;
         border-left: 6px solid #4caf50;
         padding: 16px 20px;
         border-radius: 8px;
         margin: 20px 0;
         font-size: 16px;
-    }
+      }
 
-    /* Code block */
-    .code-block {
+      .orangebackground {
+        background: #fff3e0;
+        border-left: 6px solid #ff9800;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-size: 16px;
+      }
+
+      a {
+        color: #2e7d32;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      /* Code block */
+      .code-block {
         position: relative;
         background: #0d1117;
         color: #c9d1d9;
@@ -76,73 +113,131 @@
         font-family: Consolas, Monaco, monospace;
         font-size: 14px;
         overflow-x: auto;
-    }
+      }
 
-    .code-block pre {
+      .code-block pre {
         margin: 0;
         white-space: pre;
-    }
+      }
 
-    .copy-btn {
+      .copy-btn {
         position: absolute;
         top: 12px;
         right: 12px;
-        background: #238636;
+        background: #1f6feb; /* GitHub 藍 */
         color: white;
         border: none;
         border-radius: 6px;
         padding: 6px 14px;
         cursor: pointer;
         font-size: 13px;
-    }
+      }
 
-    .copy-btn:hover {
-        background: #2ea043;
-    }
-</style>
-</head>
+      .copy-btn:hover {
+        background: #388bfd;
+      }
 
-<body>
-<h1>YS-IRTM 紅外線接收、發射教學</h1>
-<div class="subtitle">Seeed XIAO ESP32-S3 + MicroPython</div>
+      .link-icons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-top: 20px;
+      }
 
-<section>
-<h2>📌 模組簡介</h2>
-<p>
-YS-IRTM 是常用的紅外線接收、發射模組，可用 UART 接收及發射紅外線訊號，
-本教學示範如何使用 MicroPython 接收 IR 訊號並重發。
-該模組主要用在NEC協議的遙控。
-</p>
-</section>
+      .link-icons a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 18px;
+        border-radius: 12px;
+        background: #f1f3f6;
+        color: #222;
+        text-decoration: none;
+        font-size: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
+      }
 
-<section>
-<h2>🔌 接線方式</h2>
-<ul>
-    <li>VCC → 3V3</li>
-    <li>GND → GND</li>
-    <li>RX → GPIO 8(接到YS-IRTM的TXD)</li>
-    <li>TX → GPIO 9(接到YS-IRTM的RXD)</li>
-</ul>
-  <img src="../00-Assets/Pin-List.png" alt="XIAO ESP32S3 腳位">
-<img src="../00-Assets/B16-YsIrtmReceiver.jpeg" alt="B16-YsIrtmReceiver.jpeg">
-<div class="highlight">
-⚠ 注意：TXD 與 RXD 接線要反過來（TX → RXD、RX → TXD）
-</div>
-</section>
+      .link-icons a:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      }
 
-<section>
-<h2>📦 使用函式庫</h2>
-<ul>
-    <li>machine</li>
-    <li>time</li>
-</ul>
-</section>
+      /* ⭐ 關鍵：圖示等寬 */
+      .link-icons .icon {
+        width: 28px; /* 固定寬度 */
+        text-align: center; /* 置中 emoji */
+        font-size: 20px;
+        line-height: 1;
+      }
 
-<section>
-<h2>🧪 範例程式碼</h2>
-<div class="code-block">
-    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-<pre><code>
+      .link-icons .text {
+        font-weight: 500;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>YS-IRTM 紅外線接收、發射教學</h1>
+
+    <section>
+      <h2>📌 模組簡介</h2>
+      <p>
+        YS-IRTM 是常用的紅外線接收、發射模組，可用 UART 接收及發射紅外線訊號，
+        本教學示範如何使用 MicroPython 接收 IR 訊號並重發。
+        該模組主要用在NEC協議的遙控。
+      </p>
+    </section>
+
+    <section>
+      <h2>🔌 接線方式</h2>
+      <ul>
+        <li>VCC → 3V3</li>
+        <li>GND → GND</li>
+        <li>RX → GPIO 8(接到YS-IRTM的TXD)</li>
+        <li>TX → GPIO 9(接到YS-IRTM的RXD)</li>
+      </ul>
+    </section>
+
+    <!-- 腳位圖 -->
+    <section>
+      <img
+        src="../00-Assets/B16-YsIrtmReceiver.jpeg"
+        alt="B16-YsIrtmReceiver.jpeg"
+      />
+
+      <div class="redbackground">
+        ⚠ 注意：TXD 與 RXD 接線要反過來（TX → RXD、RX → TXD）
+      </div>
+
+      <img src="../00-Assets/Pin-List.png" alt="Pin-List.png" />
+
+      <div class="source">
+        圖片來源：
+        <a
+          href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/"
+          target="_blank"
+        >
+          Seeed Studio 官方文件
+        </a>
+      </div>
+    </section>
+
+    <section>
+      <h2>📦 使用函式庫</h2>
+      <ul>
+        <li>machine</li>
+        <li>time</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>🧪 範例程式碼</h2>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code>
 from machine import UART, Pin       # 匯入 UART 與 Pin
 import time                         # 匯入時間模組
 
@@ -177,42 +272,68 @@ for code in ir_codes:
 
 print("全部訊號發射完成")
 </code></pre>
-</div>
-</section>
+      </div>
+    </section>
 
-<section>
-<h2>▶ 執行結果</h2>
-<ul>
-    <li>接收時，終端機會顯示每筆紅外線訊號的 hex code，例：09f645，不足6碼的都不正確。</li>
-    <li>按 Ctrl+C 結束接收</li>
-    <li>程式會將接收的訊號依序發射</li>
-</ul>
-</section>
+    <section>
+      <h2>▶ 執行結果</h2>
+      <ul>
+        <li>
+          接收時，終端機會顯示每筆紅外線訊號的 hex
+          code，例：09f645，不足6碼的都不正確。
+        </li>
+        <li>按 Ctrl+C 結束接收</li>
+        <li>程式會將接收的訊號依序發射</li>
+      </ul>
+    </section>
 
-<section>
-<h2>⚠ 注意事項</h2>
-<ul>
-    <li>TX/RX 接線一定要反過來，否則無法收發</li>
-    <li>不同遙控器的訊號編碼不同，本範例只示範重發已接收訊號</li>
-    <li>發射紅外線時請勿對著眼睛</li>
-</ul>
-</section>
-<section>
-    <h2>完整操作影片教學</h2>
+    <section>
+      <h2>⚠ 注意事項</h2>
+      <ul>
+        <li>TX/RX 接線一定要反過來，否則無法收發</li>
+        <li>不同遙控器的訊號編碼不同，本範例只示範重發已接收訊號</li>
+        <li>發射紅外線時請勿對著眼睛</li>
+      </ul>
+    </section>
 
-    <div class="video">
+    <!-- youtube的section -->
+    <section>
+      <h2>完整操作影片教學</h2>
+
+      <div class="video">
         <a href="https://youtu.be/sspvOQc3UDc" target="_blank">
-            <img src="http://img.youtube.com/vi/sspvOQc3UDc/0.jpg" alt="完整步驟影片">
+          <img
+            src="http://img.youtube.com/vi/sspvOQc3UDc/0.jpg"
+            alt="完整步驟影片"
+          />
         </a>
-    </div>
-</section>
-<script>
-function copyCode(btn) {
-    const code = btn.nextElementSibling.innerText;
-    navigator.clipboard.writeText(code);
-    btn.innerText = "Copied!";
-    setTimeout(() => btn.innerText = "Copy", 1500);
-}
-</script>
-</body>
+      </div>
+    </section>
+
+    <!-- 相關連結的section -->
+    <section>
+      <h2>🔗 相關連結</h2>
+
+      <div class="link-icons">
+        <a href="https://easyway0301.github.io/" target="_blank">
+          <span class="icon">🏠</span>
+          <span class="text">主頁</span>
+        </a>
+
+        <a href="mailto:easyway0301@gmail.com">
+          <span class="icon">✉️</span>
+          <span class="text">Email</span>
+        </a>
+      </div>
+    </section>
+
+    <script>
+      function copyCode(btn) {
+          const code = btn.nextElementSibling.innerText;
+          navigator.clipboard.writeText(code);
+          btn.innerText = "Copied!";
+          setTimeout(() => btn.innerText = "Copy", 1500);
+      }
+    </script>
+  </body>
 </html>
