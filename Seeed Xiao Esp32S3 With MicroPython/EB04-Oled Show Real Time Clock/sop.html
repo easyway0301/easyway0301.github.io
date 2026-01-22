@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <title>從零開始學Esp32</title>
+
+    <style>
+      body {
+        font-family: Arial, "Microsoft JhengHei", sans-serif;
+        line-height: 1.9;
+        max-width: 980px;
+        margin: 40px auto;
+        padding: 0 20px;
+        color: #222;
+        background-color: #f5f7fa;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      .subtitle {
+        text-align: center;
+        color: #555;
+        margin-bottom: 50px;
+      }
+
+      section {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 40px;
+        margin-bottom: 50px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      }
+
+      h2 {
+        margin-top: 0;
+        border-left: 6px solid #4caf50;
+        padding-left: 14px;
+      }
+
+      p {
+        margin: 14px 0;
+      }
+
+      ul {
+        margin-left: 22px;
+      }
+
+      img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 28px auto 10px;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+      }
+
+      .highlight-yellow {
+        background-color: #ffff00; /* 螢光黃背景 */
+        color: #000000; /* 黑色文字，比較清楚 */
+        padding: 2px 4px; /* 可選：讓背景有點空間 */
+        border-radius: 2px; /* 可選：圓角 */
+        font-weight: bold; /* 可選：文字加粗更醒目 */
+      }
+
+      .redbackground {
+        background: #ff8e90;
+        border-left: 6px solid #ff1a00;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-size: 16px;
+      }
+
+      .greenbackground {
+        background: #e8f5e9;
+        border-left: 6px solid #4caf50;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-size: 16px;
+      }
+
+      .orangebackground {
+        background: #fff3e0;
+        border-left: 6px solid #ff9800;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-size: 16px;
+      }
+
+      a {
+        color: #2e7d32;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      /* Code block */
+      .code-block {
+        position: relative;
+        background: #0d1117;
+        color: #c9d1d9;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 30px 0;
+        font-family: Consolas, Monaco, monospace;
+        font-size: 14px;
+        overflow-x: auto;
+      }
+
+      .code-block pre {
+        margin: 0;
+        white-space: pre;
+      }
+
+      .copy-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: #1f6feb; /* GitHub 藍 */
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 14px;
+        cursor: pointer;
+        font-size: 13px;
+      }
+
+      .copy-btn:hover {
+        background: #388bfd;
+      }
+
+      .link-icons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      .link-icons a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 18px;
+        border-radius: 12px;
+        background: #f1f3f6;
+        color: #222;
+        text-decoration: none;
+        font-size: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
+      }
+
+      .link-icons a:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      }
+
+      /* ⭐ 關鍵：圖示等寬 */
+      .link-icons .icon {
+        width: 28px; /* 固定寬度 */
+        text-align: center; /* 置中 emoji */
+        font-size: 20px;
+        line-height: 1;
+      }
+
+      .link-icons .text {
+        font-weight: 500;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>OLED 顯示即時時鐘（RTC）</h1>
+
+    <section>
+      <h2>📘 教學說明</h2>
+      <p>
+        本教學示範如何使用128×64 OLED（SSD1306）， 在
+        <strong>不使用網路</strong> 的情況下顯示即時日期與時間。
+      </p>
+      <p>時間由 RTC 晶片自行計時，即使斷電，只要 RTC 有電池即可持續走時。</p>
+    </section>
+
+    <section>
+      <h2>📦 使用模組</h2>
+      <ul>
+        <li>machine（Pin / I2C）</li>
+        <li>ssd1306</li>
+        <li>time</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>🧪 MicroPython 範例程式</h2>
+
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+from machine import Pin, I2C
+import ssd1306
+import time
+
+# =====================
+# I2C 設定
+# =====================
+i2c = I2C(0, sda=Pin(5), scl=Pin(6), freq=400000)
+
+# =====================
+# OLED 設定
+# =====================
+oled = ssd1306.SSD1306_I2C(128, 64, i2c, addr=0x3C)
+
+# =====================
+# RTC（PCF8563）位址
+# =====================
+RTC_ADDR = 0x51
+
+# =====================
+# BCD 轉十進位
+# =====================
+def bcd_to_dec(b):
+    return (b >> 4) * 10 + (b & 0x0F)
+
+# =====================
+# 從 RTC 讀取時間
+# =====================
+def read_rtc():
+    data = i2c.readfrom_mem(RTC_ADDR, 0x02, 7)
+
+    second = bcd_to_dec(data[0] & 0x7F)
+    minute = bcd_to_dec(data[1] & 0x7F)
+    hour   = bcd_to_dec(data[2] & 0x3F)
+    day    = bcd_to_dec(data[3] & 0x3F)
+    month  = bcd_to_dec(data[5] & 0x1F)
+    year   = 2000 + bcd_to_dec(data[6])
+
+    return year, month, day, hour, minute, second
+
+# =====================
+# 校時（只執行一次）
+# =====================
+def dec_to_bcd(d):
+    return ((d // 10) << 4) | (d % 10)
+
+def set_rtc(year, month, day, hour, minute, second):
+    i2c.writeto_mem(RTC_ADDR, 0x02, bytes([
+        dec_to_bcd(second),
+        dec_to_bcd(minute),
+        dec_to_bcd(hour),
+        dec_to_bcd(day),
+        0,
+        dec_to_bcd(month),
+        dec_to_bcd(year - 2000)
+    ]))
+
+# ⚠ 設定時間後請註解掉
+# set_rtc(2026, 1, 13, 19, 0, 0)
+
+# =====================
+# 主迴圈
+# =====================
+while True:
+    year, month, day, hour, minute, second = read_rtc()
+
+    oled.fill(0)
+    oled.text("{:04d}-{:02d}-{:02d}".format(year, month, day), 0, 0)
+    oled.text("{:02d}:{:02d}:{:02d}".format(hour, minute, second), 0, 16)
+    oled.show()
+
+    time.sleep(1)
+</code></pre>
+      </div>
+    </section>
+
+    <section>
+      <h2>⚠ 注意事項</h2>
+      <ul>
+        <li>RTC 校時只需要執行一次，完成後請註解。</li>
+        <li>需接上鈕扣電池才能斷電走時。</li>
+      </ul>
+    </section>
+
+    <!-- 相關連結的section -->
+    <section>
+      <h2>🔗 相關連結</h2>
+
+      <div class="link-icons">
+        <a href="https://easyway0301.github.io/" target="_blank">
+          <span class="icon">🏠</span>
+          <span class="text">主頁</span>
+        </a>
+
+        <a href="mailto:easyway0301@gmail.com">
+          <span class="icon">✉️</span>
+          <span class="text">Email</span>
+        </a>
+      </div>
+    </section>
+
+    <script>
+      function copyCode(btn) {
+        const code = btn.nextElementSibling.innerText;
+        navigator.clipboard.writeText(code);
+        btn.innerText = "Copied!";
+        setTimeout(() => btn.innerText = "Copy", 1500);
+      }
+    </script>
+  </body>
+</html>
