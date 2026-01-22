@@ -57,20 +57,29 @@
         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
       }
 
-      .zoom-img {
-        max-width: 100%;
-        cursor: zoom-in;
-        transition:
-          transform 0.25s ease,
-          box-shadow 0.25s ease;
+      .img-wrapper {
+        display: inline-block;
+        position: relative;
       }
 
-      /* 滑鼠移上放大 */
-      .zoom-img:hover {
-        transform: scale(1.8);
-        z-index: 999;
-        position: relative;
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+      .img-wrapper img {
+        max-width: 100%;
+        cursor: zoom-in;
+        transition: transform 0.25s ease;
+      }
+
+      /* hover 放大並浮在最上層 */
+      .img-wrapper:hover img {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(1.6);
+        z-index: 1000;
+        max-width: 90vw;
+        max-height: 90vh;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        background: #fff;
+        border-radius: 12px;
       }
 
       .redbackground {
@@ -214,7 +223,9 @@
         <li>🟢 綠燈：GPIO 7</li>
       </ul>
 
-      <img src="../00-Assets/Pin-List.png" alt="Pin-List.png" />
+      <div class="img-wrapper">
+        <img src="../00-Assets/Pin-List.png" alt="Pin List" />
+      </div>
 
       <div class="source">
         圖片來源：
