@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
-<head>
-<meta charset="UTF-8">
-<title>WS2812 RGB LED</title>
-<style>
-    body {
+  <head>
+    <meta charset="UTF-8" />
+    <title>從零開始學Esp32</title>
+
+    <style>
+      body {
         font-family: Arial, "Microsoft JhengHei", sans-serif;
         line-height: 1.9;
         max-width: 980px;
@@ -12,61 +13,97 @@
         padding: 0 20px;
         color: #222;
         background-color: #f5f7fa;
-    }
+      }
 
-    h1 {
+      h1 {
         text-align: center;
         margin-bottom: 10px;
-    }
+      }
 
-    .subtitle {
+      .subtitle {
         text-align: center;
         color: #555;
         margin-bottom: 50px;
-    }
+      }
 
-    section {
+      section {
         background: #ffffff;
         border-radius: 14px;
         padding: 40px;
         margin-bottom: 50px;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-    }
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      }
 
-    h2 {
+      h2 {
         margin-top: 0;
-        border-left: 6px solid #4CAF50;
+        border-left: 6px solid #4caf50;
         padding-left: 14px;
-    }
+      }
 
-    p {
+      p {
         margin: 14px 0;
-    }
+      }
 
-    ul {
+      ul {
         margin-left: 22px;
-    }
+      }
 
-    img {
+      img {
         max-width: 100%;
         height: auto;
         display: block;
         margin: 28px auto 10px;
         border-radius: 12px;
-        box-shadow: 0 6px 16px rgba(0,0,0,0.12);
-    }
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+      }
 
-    .highlight {
+      .highlight-yellow {
+        background-color: #ffff00; /* 螢光黃背景 */
+        color: #000000; /* 黑色文字，比較清楚 */
+        padding: 2px 4px; /* 可選：讓背景有點空間 */
+        border-radius: 2px; /* 可選：圓角 */
+        font-weight: bold; /* 可選：文字加粗更醒目 */
+      }
+
+      .redbackground {
+        background: #ff8e90;
+        border-left: 6px solid #ff1a00;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-size: 16px;
+      }
+
+      .greenbackground {
         background: #e8f5e9;
         border-left: 6px solid #4caf50;
         padding: 16px 20px;
         border-radius: 8px;
         margin: 20px 0;
         font-size: 16px;
-    }
+      }
 
-    /* Code block */
-    .code-block {
+      .orangebackground {
+        background: #fff3e0;
+        border-left: 6px solid #ff9800;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-size: 16px;
+      }
+
+      a {
+        color: #2e7d32;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      /* Code block */
+      .code-block {
         position: relative;
         background: #0d1117;
         color: #c9d1d9;
@@ -76,77 +113,132 @@
         font-family: Consolas, Monaco, monospace;
         font-size: 14px;
         overflow-x: auto;
-    }
+      }
 
-    .code-block pre {
+      .code-block pre {
         margin: 0;
         white-space: pre;
-    }
+      }
 
-    .copy-btn {
+      .copy-btn {
         position: absolute;
         top: 12px;
         right: 12px;
-        background: #238636;
+        background: #1f6feb; /* GitHub 藍 */
         color: white;
         border: none;
         border-radius: 6px;
         padding: 6px 14px;
         cursor: pointer;
         font-size: 13px;
-    }
+      }
 
-    .copy-btn:hover {
-        background: #2ea043;
-    }
-</style>
-</head>
+      .copy-btn:hover {
+        background: #388bfd;
+      }
 
-<body>
+      .link-icons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-top: 20px;
+      }
 
-<h1>WS2812 RGB LED</h1>
-<p class="subtitle">Seeed XIAO ESP32-S3 × MicroPython</p>
+      .link-icons a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 18px;
+        border-radius: 12px;
+        background: #f1f3f6;
+        color: #222;
+        text-decoration: none;
+        font-size: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
+      }
 
-<section>
-<h2>📌 模組簡介</h2>
-<p>
-WS2812 是可程式控制的全彩 RGB LED，
-每一顆 LED 內含控制晶片，
-只需要 <strong>一條資料線</strong> 即可控制多顆燈珠。
-</p>
-</section>
+      .link-icons a:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      }
 
-<section>
-<h2>🔌 接線方式</h2>
-<ul>
-    <li>VCC → 3V</li>
-    <li>GND → GND</li>
-    <li>DIN → GPIO 9</li>
-</ul>
-<img src="../00-Assets/Pin-List.png" alt="XIAO ESP32S3 腳位">
-<img src="../00-Assets/B18-Ws2812Led4x4.jpeg" alt="B18-Ws2812Led4x4.jpeg">
+      /* ⭐ 關鍵：圖示等寬 */
+      .link-icons .icon {
+        width: 28px; /* 固定寬度 */
+        text-align: center; /* 置中 emoji */
+        font-size: 20px;
+        line-height: 1;
+      }
 
-<div class="highlight">
-📌 建議 LED 顆數不多時可直接使用 GPIO，<br>
-顆數多或亮度高時請使用外接電源。
-</div>
-</section>
+      .link-icons .text {
+        font-weight: 500;
+      }
+    </style>
+  </head>
 
-<section>
-<h2>📦 使用函式庫</h2>
-<ul>
-    <li>machine</li>
-    <li>neopixel</li>
-    <li>time</li>
-</ul>
-</section>
+  <body>
+    <h1>WS2812 RGB LED</h1>
 
-<section>
-<h2>🧪 範例程式碼</h2>
+    <section>
+      <h2>📌 模組簡介</h2>
+      <p>
+        WS2812 是可程式控制的全彩 RGB LED， 每一顆 LED 內含控制晶片， 只需要
+        <strong>一條資料線</strong> 即可控制多顆燈珠。
+      </p>
 
-<div class="code-block">
+      <div class="greenbackground">
+        📌 建議 LED 顆數不多時可直接使用 GPIO，<br />
+        顆數多或亮度高時請使用外接電源。
+      </div>
+    </section>
+
+    <section>
+      <h2>🔌 接線方式</h2>
+      <ul>
+        <li>VCC → 3V</li>
+        <li>GND → GND</li>
+        <li>DIN → GPIO 9</li>
+      </ul>
+    </section>
+
+    <!-- 腳位圖 -->
+    <section>
+      <img
+        src="../00-Assets/B18-Ws2812Led4x4.jpeg"
+        alt="B18-Ws2812Led4x4.jpeg"
+      />
+
+      <img src="../00-Assets/Pin-List.png" alt="Pin-List.png" />
+
+      <div class="source">
+        圖片來源：
+        <a
+          href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/"
+          target="_blank"
+        >
+          Seeed Studio 官方文件
+        </a>
+      </div>
+    </section>
+
+    <section>
+      <h2>📦 使用函式庫</h2>
+      <ul>
+        <li>machine</li>
+        <li>neopixel</li>
+        <li>time</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>🧪 範例程式碼</h2>
+
+      <div class="code-block">
         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-<pre>
+        <pre>
 from machine import Pin
 import neopixel
 import time
@@ -168,42 +260,63 @@ for i in range(4):
 # 全部關閉
 np.fill((0, 0, 0))
 np.write()
-</pre>
-</div>
-</section>
+</pre
+        >
+      </div>
+    </section>
 
-<section>
-<h2>▶ 執行結果</h2>
-<p>
-4 顆 WS2812 LED 會依序亮起藍色燈，
-最後全部熄滅。
-</p>
-</section>
+    <section>
+      <h2>▶ 執行結果</h2>
+      <p>4 顆 WS2812 LED 會依序亮起藍色燈， 最後全部熄滅。</p>
+    </section>
 
-<section>
-<h2>⚠ 注意事項</h2>
-<ul>
-    <li>WS2812 對電壓與訊號品質較敏感，請確保接線穩定。</li>
-    <li>資料腳位不可與其他高速訊號共用。</li>
-    <li>若 LED 不亮，請確認顆數設定是否正確。</li>
-</ul>
-</section>
-<section>
-    <h2>完整操作影片教學</h2>
+    <section>
+      <h2>⚠ 注意事項</h2>
+      <ul>
+        <li>WS2812 對電壓與訊號品質較敏感，請確保接線穩定。</li>
+        <li>資料腳位不可與其他高速訊號共用。</li>
+        <li>若 LED 不亮，請確認顆數設定是否正確。</li>
+      </ul>
+    </section>
 
-    <div class="video">
+    <!-- youtube的section -->
+    <section>
+      <h2>完整操作影片教學</h2>
+
+      <div class="video">
         <a href="https://youtu.be/vLIWm17o434" target="_blank">
-            <img src="http://img.youtube.com/vi/vLIWm17o434/0.jpg" alt="完整步驟影片">
+          <img
+            src="http://img.youtube.com/vi/vLIWm17o434/0.jpg"
+            alt="完整步驟影片"
+          />
         </a>
-    </div>
-</section>
-<script>
-function copyCode(btn) {
-    const code = btn.nextElementSibling.innerText;
-    navigator.clipboard.writeText(code);
-    btn.innerText = "Copied!";
-    setTimeout(() => btn.innerText = "Copy", 1500);
-}
-</script>
-</body>
+      </div>
+    </section>
+
+    <!-- 相關連結的section -->
+    <section>
+      <h2>🔗 相關連結</h2>
+
+      <div class="link-icons">
+        <a href="https://easyway0301.github.io/" target="_blank">
+          <span class="icon">🏠</span>
+          <span class="text">主頁</span>
+        </a>
+
+        <a href="mailto:easyway0301@gmail.com">
+          <span class="icon">✉️</span>
+          <span class="text">Email</span>
+        </a>
+      </div>
+    </section>
+
+    <script>
+      function copyCode(btn) {
+          const code = btn.nextElementSibling.innerText;
+          navigator.clipboard.writeText(code);
+          btn.innerText = "Copied!";
+          setTimeout(() => btn.innerText = "Copy", 1500);
+      }
+    </script>
+  </body>
 </html>
