@@ -1,192 +1,209 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
-<head>
-<meta charset="UTF-8">
-<title>ESP32-S3 MicroPython 紅綠燈（Timer 定時器）教學</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>從零開始學Esp32</title>
 
-<style>
-body {
-    font-family: Arial, "Microsoft JhengHei", sans-serif;
-    line-height: 1.9;
-    max-width: 980px;
-    margin: 40px auto;
-    padding: 0 20px;
-    color: #222;
-    background-color: #f5f7fa;
-}
+    <style>
+      body {
+        font-family: Arial, "Microsoft JhengHei", sans-serif;
+        line-height: 1.9;
+        max-width: 980px;
+        margin: 40px auto;
+        padding: 0 20px;
+        color: #222;
+        background-color: #f5f7fa;
+      }
 
-h1 {
-    text-align: center;
-    margin-bottom: 10px;
-}
+      h1 {
+        text-align: center;
+        margin-bottom: 10px;
+      }
 
-.subtitle {
-    text-align: center;
-    color: #555;
-    margin-bottom: 50px;
-}
+      .subtitle {
+        text-align: center;
+        color: #555;
+        margin-bottom: 50px;
+      }
 
-section {
-    background: #ffffff;
-    border-radius: 14px;
-    padding: 40px;
-    margin-bottom: 50px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-}
+      section {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 40px;
+        margin-bottom: 50px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      }
 
-h2 {
-    margin-top: 0;
-    border-left: 6px solid #4CAF50;
-    padding-left: 14px;
-}
+      h2 {
+        margin-top: 0;
+        border-left: 6px solid #4caf50;
+        padding-left: 14px;
+      }
 
-p {
-    margin: 14px 0;
-}
+      p {
+        margin: 14px 0;
+      }
 
-ul {
-    margin-left: 22px;
-}
+      ul {
+        margin-left: 22px;
+      }
 
-img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 28px auto 10px;
-    border-radius: 12px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
-}
+      img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 28px auto 10px;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+      }
 
-.highlight {
-    background: #e8f5e9;
-    border-left: 6px solid #4caf50;
-    padding: 16px 20px;
-    border-radius: 8px;
-    margin: 20px 0;
-    font-size: 16px;
-}
+      .redbackground {
+        background: #ff6250;
+        border-left: 6px solid #ff1a00;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-size: 16px;
+      }
 
-.warning {
-    background: #fff3e0;
-    border-left: 6px solid #ff9800;
-    padding: 16px 20px;
-    border-radius: 8px;
-    margin: 20px 0;
-}
+      .greenbackground {
+        background: #e8f5e9;
+        border-left: 6px solid #4caf50;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-size: 16px;
+      }
 
-a {
-    color: #2e7d32;
-    text-decoration: none;
-    font-weight: bold;
-}
+      .orangebackground {
+        background: #fff3e0;
+        border-left: 6px solid #ff9800;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-size: 16px;
+      }
 
-a:hover {
-    text-decoration: underline;
-}
+      a {
+        color: #2e7d32;
+        text-decoration: none;
+        font-weight: bold;
+      }
 
-/* Code block */
-.code-block {
-    position: relative;
-    background: #0d1117;
-    color: #c9d1d9;
-    border-radius: 12px;
-    padding: 20px;
-    margin: 30px 0;
-    font-family: Consolas, Monaco, monospace;
-    font-size: 14px;
-    overflow-x: auto;
-}
+      a:hover {
+        text-decoration: underline;
+      }
 
-.code-block pre {
-    margin: 0;
-    white-space: pre;
-}
+      /* Code block */
+      .code-block {
+        position: relative;
+        background: #0d1117;
+        color: #c9d1d9;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 30px 0;
+        font-family: Consolas, Monaco, monospace;
+        font-size: 14px;
+        overflow-x: auto;
+      }
 
-.copy-btn {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: #238636;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 6px 14px;
-    cursor: pointer;
-    font-size: 13px;
-}
+      .code-block pre {
+        margin: 0;
+        white-space: pre;
+      }
 
-.copy-btn:hover {
-    background: #2ea043;
-}
-</style>
-</head>
+      .copy-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: #1f6feb; /* GitHub 藍 */
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 14px;
+        cursor: pointer;
+        font-size: 13px;
+      }
 
-<body>
+      .copy-btn:hover {
+        background: #388bfd;
+      }
+    </style>
+  </head>
 
-<h1>ESP32-S3 MicroPython 紅綠燈教學</h1>
-<div class="subtitle">使用 Timer 定時器實作交通號誌（共陰極 LED）</div>
+  <body>
+    <!-- 主標題 -->
+    <h1>ESP32-S3 MicroPython 紅綠燈教學</h1>
+    <div class="subtitle">使用 Timer 定時器實作交通號誌（共陰極 LED）</div>
 
-<section>
-<h2>第一步：硬體與原理說明</h2>
+    <section>
+      <h2>第一步：硬體與原理說明</h2>
 
-<p>
-本教學使用 <strong>Seeed XIAO ESP32-S3</strong> 搭配三顆 LED，
-模擬「紅、綠、黃」交通號誌。
-</p>
+      <p>
+        本教學使用 <strong>Seeed XIAO ESP32-S3</strong> 搭配三顆 LED，
+        模擬「紅、綠、黃」交通號誌。
+      </p>
 
-<div class="highlight">
-<strong>LED 類型：</strong> 共陰極（Common Cathode）<br>
-<strong>控制邏輯：</strong><br>
-GPIO = <strong>1</strong> → LED 亮<br>
-GPIO = <strong>0</strong> → LED 滅
-</div>
+      <div class="greenbackground">
+        <strong>LED 類型：</strong> 共陰極（Common Cathode）<br />
+        <strong>控制邏輯：</strong><br />
+        GPIO = <strong>1</strong> → LED 亮<br />
+        GPIO = <strong>0</strong> → LED 滅
+      </div>
 
-<p><strong>GPIO 腳位配置：</strong></p>
-<ul>
-    <li>🔴 紅燈：GPIO 9</li>
-    <li>🟡 黃燈：GPIO 8</li>
-    <li>🟢 綠燈：GPIO 7</li>
-</ul>
-<img src="../00-Assets/Pin-List.png" alt="Pin-List.png">
+      <p><strong>GPIO 腳位配置：</strong></p>
+      <ul>
+        <li>🔴 紅燈：GPIO 9</li>
+        <li>🟡 黃燈：GPIO 8</li>
+        <li>🟢 綠燈：GPIO 7</li>
+      </ul>
+      <img src="../00-Assets/Pin-List.png" alt="Pin-List.png" />
 
-    <div class="source">
+      <div class="source">
         圖片來源：
-        <a href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/" target="_blank">
-            Seeed Studio 官方文件
+        <a
+          href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/"
+          target="_blank"
+        >
+          Seeed Studio 官方文件
         </a>
-    </div>
+      </div>
 
-<img src="../00-Assets/B02-TrafficLightLEDModule.jpeg" alt="B02-TrafficLightLEDModule.jpeg">
-</section>
+      <img
+        src="../00-Assets/B02-TrafficLightLEDModule.jpeg"
+        alt="B02-TrafficLightLEDModule.jpeg"
+      />
+    </section>
 
-<section>
-<h2>第二步：Timer 定時器概念</h2>
+    <section>
+      <h2>第二步：Timer 定時器概念</h2>
 
-<p>
-MicroPython 的 <code>Timer</code> 可以在背景定時執行程式，
-不需要使用 <code>while True</code> 搭配 <code>sleep()</code>。
-</p>
+      <p>
+        MicroPython 的 <code>Timer</code> 可以在背景定時執行程式， 不需要使用
+        <code>while True</code> 搭配 <code>sleep()</code>。
+      </p>
 
-<ul>
-    <li>本範例使用 <strong>每 1 秒</strong> 切換一次燈號</li>
-    <li>燈號順序：紅 → 綠 → 黃 → 重複</li>
-</ul>
+      <ul>
+        <li>本範例使用 <strong>每 1 秒</strong> 切換一次燈號</li>
+        <li>燈號順序：紅 → 綠 → 黃 → 重複</li>
+      </ul>
 
-<div class="warning">
-<strong>注意：</strong><br>
-Timer 的 callback 函式中請避免使用 <code>sleep()</code>，
-否則可能造成系統不穩定。
-</div>
-</section>
+      <div class="orangebackground">
+        <strong>注意：</strong><br />
+        Timer 的 callback 函式中請避免使用 <code>sleep()</code>，
+        否則可能造成系統不穩定。
+      </div>
+    </section>
 
-<section>
-<h2>第三步：MicroPython 程式碼</h2>
+    <section>
+      <h2>第三步：MicroPython 程式碼</h2>
 
-<p>將以下程式碼貼到 Thonny，並上傳到 ESP32-S3 執行：</p>
+      <p>將以下程式碼貼到 Thonny，並上傳到 ESP32-S3 執行：</p>
 
-<div class="code-block">
-<button class="copy-btn" onclick="copyCode(this)">Copy</button>
-<pre><code>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre>
+          <code>
 from machine import Pin, Timer
 # 從 machine 模組匯入 Pin（控制腳位）與 Timer（定時器）
 
@@ -224,44 +241,50 @@ tim.init(
     mode=Timer.PERIODIC,
     callback=update_led
 )
-</code></pre>
-</div>
-</section>
+</code>
+        </pre>
+      </div>
+    </section>
 
-<section>
-<h2>執行結果</h2>
+    <section>
+      <h2>執行結果</h2>
 
-<ul>
-    <li>🔴 紅燈亮 1 秒</li>
-    <li>🟢 綠燈亮 1 秒</li>
-    <li>🟡 黃燈亮 1 秒</li>
-    <li>循環不停止（Timer 週期執行）</li>
-</ul>
+      <ul>
+        <li>🔴 紅燈亮 1 秒</li>
+        <li>🟢 綠燈亮 1 秒</li>
+        <li>🟡 黃燈亮 1 秒</li>
+        <li>循環不停止（Timer 週期執行）</li>
+      </ul>
 
-<div class="highlight">
-這個範例非常適合延伸成：<br>
-✔ 交通號誌模擬<br>
-✔ 狀態機（State Machine）教學<br>
-✔ 非阻塞式程式設計示範
-</div>
-</section>
-<section>
-    <h2>完整操作影片教學</h2>
+      <div class="greenbackground">
+        這個範例非常適合延伸成：<br />
+        ✔ 交通號誌模擬<br />
+        ✔ 狀態機（State Machine）教學<br />
+        ✔ 非阻塞式程式設計示範
+      </div>
+    </section>
+    
+    <section>
+      <h2>完整操作影片教學</h2>
 
-    <div class="video">
+      <div class="video">
         <a href="https://youtu.be/XiF4OPEbo3w" target="_blank">
-            <img src="http://img.youtube.com/vi/XiF4OPEbo3w/0.jpg" alt="完整步驟影片">
+          <img
+            src="http://img.youtube.com/vi/XiF4OPEbo3w/0.jpg"
+            alt="完整步驟影片"
+          />
         </a>
-    </div>
-</section>
-<script>
-function copyCode(btn) {
-    const code = btn.nextElementSibling.innerText;
-    navigator.clipboard.writeText(code);
-    btn.innerText = "Copied!";
-    setTimeout(() => btn.innerText = "Copy", 1500);
-}
-</script>
-
-</body>
+      </div>
+    </section>
+    
+    <script>
+      function copyCode(btn) {
+          const code = btn.nextElementSibling.innerText;
+          navigator.clipboard.writeText(code);
+          btn.innerText = "Copied!";
+          setTimeout(() => btn.innerText = "Copy", 1500);
+      }
+    </script>
+    
+  </body>
 </html>
