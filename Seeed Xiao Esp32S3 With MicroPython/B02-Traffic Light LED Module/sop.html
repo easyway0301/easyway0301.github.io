@@ -157,6 +157,7 @@
         <li>🟡 黃燈：GPIO 8</li>
         <li>🟢 綠燈：GPIO 7</li>
       </ul>
+
       <img src="../00-Assets/Pin-List.png" alt="Pin-List.png" />
 
       <div class="source">
@@ -241,7 +242,7 @@ tim.init(
     mode=Timer.PERIODIC,
     callback=update_led
 )
-</code>
+            </code>
         </pre>
       </div>
     </section>
@@ -263,7 +264,7 @@ tim.init(
         ✔ 非阻塞式程式設計示範
       </div>
     </section>
-    
+
     <section>
       <h2>完整操作影片教學</h2>
 
@@ -276,7 +277,7 @@ tim.init(
         </a>
       </div>
     </section>
-    
+
     <script>
       function copyCode(btn) {
           const code = btn.nextElementSibling.innerText;
@@ -285,6 +286,5 @@ tim.init(
           setTimeout(() => btn.innerText = "Copy", 1500);
       }
     </script>
-    
   </body>
 </html>
