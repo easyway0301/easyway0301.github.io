@@ -58,23 +58,31 @@
       }
 
       .img-wrapper {
-        display: inline-block;
         position: relative;
+        display: inline-block;
       }
 
-      .img-wrapper img {
+      /* hover 判斷區域 */
+      .img-hover-zone {
+        display: inline-block;
+      }
+
+      /* 原圖 */
+      .img-hover-zone img {
         max-width: 100%;
         cursor: zoom-in;
-        transition: transform 0.25s ease;
+        transition:
+          transform 0.25s ease,
+          box-shadow 0.25s ease;
       }
 
-      /* hover 放大並浮在最上層 */
-      .img-wrapper:hover img {
+      /* hover 只判斷 hover-zone，不會消失 */
+      .img-hover-zone:hover img {
         position: fixed;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%) scale(1.6);
-        z-index: 1000;
+        z-index: 9999;
         max-width: 90vw;
         max-height: 90vh;
         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
@@ -224,7 +232,9 @@
       </ul>
 
       <div class="img-wrapper">
-        <img src="../00-Assets/Pin-List.png" alt="Pin List" />
+        <div class="img-hover-zone">
+          <img src="../00-Assets/Pin-List.png" alt="Pin List" />
+        </div>
       </div>
 
       <div class="source">
