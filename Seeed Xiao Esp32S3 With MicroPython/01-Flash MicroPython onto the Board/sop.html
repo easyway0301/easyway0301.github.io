@@ -1,296 +1,323 @@
 <!doctype html>
 <html lang="zh-Hant">
-  <head>
-    <meta charset="UTF-8" />
-    <title>從零開始學Esp32</title>
 
-    <style>
-      body {
-        font-family: Arial, "Microsoft JhengHei", sans-serif;
-        line-height: 1.9;
-        max-width: 980px;
-        margin: 40px auto;
-        padding: 0 20px;
-        color: #222;
-        background-color: #f5f7fa;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <title>從零開始學Esp32</title>
 
-      h1 {
-        text-align: center;
-        margin-bottom: 10px;
-      }
+  <style>
+    body {
+      font-family: Arial, "Microsoft JhengHei", sans-serif;
+      line-height: 1.9;
+      max-width: 980px;
+      margin: 40px auto;
+      padding: 0 20px;
+      color: #222;
+      background-color: #f5f7fa;
+    }
 
-      .subtitle {
-        text-align: center;
-        color: #555;
-        margin-bottom: 50px;
-      }
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
 
-      section {
-        background: #ffffff;
-        border-radius: 14px;
-        padding: 40px;
-        margin-bottom: 50px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-      }
+    .subtitle {
+      text-align: center;
+      color: #555;
+      margin-bottom: 50px;
+    }
 
-      h2 {
-        margin-top: 0;
-        border-left: 6px solid #4caf50;
-        padding-left: 14px;
-      }
+    section {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 40px;
+      margin-bottom: 50px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
 
-      p {
-        margin: 14px 0;
-      }
+    h2 {
+      margin-top: 0;
+      border-left: 6px solid #4caf50;
+      padding-left: 14px;
+    }
 
-      ul {
-        margin-left: 22px;
-      }
+    p {
+      margin: 14px 0;
+    }
 
-      img {
-        max-width: 100%;
-        height: auto;
-        display: block;
-        margin: 28px auto 10px;
-        border-radius: 12px;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-      }
+    ul {
+      margin-left: 22px;
+    }
 
-      .highlight-yellow {
-        background-color: #ffff00;   /* 螢光黃背景 */
-        color: #000000;              /* 黑色文字，比較清楚 */
-        padding: 2px 4px;            /* 可選：讓背景有點空間 */
-        border-radius: 2px;          /* 可選：圓角 */
-        font-weight: bold;           /* 可選：文字加粗更醒目 */
-      }
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 28px auto 10px;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    }
 
-      .redbackground {
-        background: #FF8E90;
-        border-left: 6px solid #ff1a00;
-        padding: 16px 20px;
-        border-radius: 8px;
-        margin: 20px 0;
-        font-size: 16px;
-      }
+    .highlight-yellow {
+      background-color: #ffff00;
+      /* 螢光黃背景 */
+      color: #000000;
+      /* 黑色文字，比較清楚 */
+      padding: 2px 4px;
+      /* 可選：讓背景有點空間 */
+      border-radius: 2px;
+      /* 可選：圓角 */
+      font-weight: bold;
+      /* 可選：文字加粗更醒目 */
+    }
 
-      .greenbackground {
-        background: #e8f5e9;
-        border-left: 6px solid #4caf50;
-        padding: 16px 20px;
-        border-radius: 8px;
-        margin: 20px 0;
-        font-size: 16px;
-      }
+    .redbackground {
+      background: #FF8E90;
+      border-left: 6px solid #ff1a00;
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 16px;
+    }
 
-      .orangebackground {
-        background: #fff3e0;
-        border-left: 6px solid #ff9800;
-        padding: 16px 20px;
-        border-radius: 8px;
-        margin: 20px 0;
-        font-size: 16px;
-      }
+    .greenbackground {
+      background: #e8f5e9;
+      border-left: 6px solid #4caf50;
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 16px;
+    }
 
-      a {
-        color: #2e7d32;
-        text-decoration: none;
-        font-weight: bold;
-      }
+    .orangebackground {
+      background: #fff3e0;
+      border-left: 6px solid #ff9800;
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 16px;
+    }
 
-      a:hover {
-        text-decoration: underline;
-      }
+    a {
+      color: #2e7d32;
+      text-decoration: none;
+      font-weight: bold;
+    }
 
-      /* Code block */
-      .code-block {
-        position: relative;
-        background: #0d1117;
-        color: #c9d1d9;
-        border-radius: 12px;
-        padding: 20px;
-        margin: 30px 0;
-        font-family: Consolas, Monaco, monospace;
-        font-size: 14px;
-        overflow-x: auto;
-      }
+    a:hover {
+      text-decoration: underline;
+    }
 
-      .code-block pre {
-        margin: 0;
-        white-space: pre;
-      }
+    /* Code block */
+    .code-block {
+      position: relative;
+      background: #0d1117;
+      color: #c9d1d9;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 30px 0;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 14px;
+      overflow-x: auto;
+    }
 
-      .copy-btn {
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        background: #1f6feb; /* GitHub 藍 */
-        color: white;
-        border: none;
-        border-radius: 6px;
-        padding: 6px 14px;
-        cursor: pointer;
-        font-size: 13px;
-      }
+    .code-block pre {
+      margin: 0;
+      white-space: pre;
+    }
 
-      .copy-btn:hover {
-        background: #388bfd;
-      }
+    .copy-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #1f6feb;
+      /* GitHub 藍 */
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-size: 13px;
+    }
 
-      .link-icons {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        margin-top: 20px;
-      }
+    .copy-btn:hover {
+      background: #388bfd;
+    }
 
-      .link-icons a {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 14px 18px;
-        border-radius: 12px;
-        background: #f1f3f6;
-        color: #222;
-        text-decoration: none;
-        font-size: 16px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        transition:
-          transform 0.15s ease,
-          box-shadow 0.15s ease;
-      }
+    .link-icons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 20px;
+    }
 
-      .link-icons a:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-      }
+    .link-icons a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: #f1f3f6;
+      color: #222;
+      text-decoration: none;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+    }
 
-      /* ⭐ 關鍵：圖示等寬 */
-      .link-icons .icon {
-        width: 28px; /* 固定寬度 */
-        text-align: center; /* 置中 emoji */
-        font-size: 20px;
-        line-height: 1;
-      }
+    .link-icons a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    }
 
-      .link-icons .text {
-        font-weight: 500;
-      }
-    </style>
-  </head>
+    /* ⭐ 關鍵：圖示等寬 */
+    .link-icons .icon {
+      width: 28px;
+      /* 固定寬度 */
+      text-align: center;
+      /* 置中 emoji */
+      font-size: 20px;
+      line-height: 1;
+    }
 
-  <body>
-    <!-- 主標題 -->
-    <h1>Seeed Xiao Esp32S3下載Thonny及燒錄韌體</h1>
+    .link-icons .text {
+      font-weight: 500;
+    }
+  </style>
+</head>
 
-    <section>
-      <h2>第一步：認識 ESP32-S3 開發板</h2>
-      <p>在開始之前，先來認識這塊 ESP32-S3 開發板上的兩個重要按鈕。</p>
+<body>
+  <!-- 主標題 -->
+  <h1>下載Thonny及燒錄韌體</h1>
 
+  <section>
+    <h2>需要的材料</h2>
+    <div class="orangebackground">
+      <ul>
+        <li>Seeed XIAO Esp32-S3 開發板1片。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>認識 Seeed XIAO Esp32-S3 開發板</h2>
+
+    <div class="greenbackground">
+      <p>先來認識這塊開發板上的兩個重要按鈕。</p>
       <p><strong>面向板子正面（USB 接口朝上）時：</strong></p>
       <ul>
-        <li><strong>左邊為 RESET（重開機）按鈕</strong>：用來重新啟動板子。</li>
-        <li>
-          <strong>右邊為 BOOT 按鈕</strong
-          >：主要用於進入燒錄（bootloader）模式。
-        </li>
+        <li>左邊為 REST（重開機）按鈕：重新啟動。</li>
+        <li>右邊為 BOOT 按鈕：主要用於進入燒錄（bootloader）模式。 </li>
       </ul>
-    </section>
+    </div>
+  </section>
 
-    <!-- 腳位圖 -->
-    <section>
-      <img
-        src="../00-Assets/front-indication.png"
-        alt="XIAO ESP32-S3 Front Indication"
-      />
+  <!-- 腳位圖 -->
+  <section>
+    <h2>正面圖</h2>
+    <img src="../00-Assets/front-indication.png" alt="XIAO ESP32-S3 Front Indication" />
 
-      <div class="source">
-        圖片來源：
-        <a
-          href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/"
-          target="_blank"
-        >
-          Seeed Studio 官方文件
-        </a>
-      </div>
+    <div class="source">
+      圖片來源：
+      <a href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/" target="_blank">
+        Seeed Studio 官方文件
+      </a>
+    </div>
+  </section>
 
-    </section>
+  <section>
+    <h2>下載並安裝 Thonny</h2>
+    <div class="greenbackground">
+      <ul>
+        <li>Thonny 是一款非常適合初學者的 MicroPython 開發環境。</li>
+        <li>請前往官方網站下載並安裝：<a href="https://thonny.org" target="_blank">https://thonny.org</a></li>
+      </ul>
+    </div>
+  </section>
 
-    <section>
-      <h2>第二步：下載並安裝 Thonny</h2>
-      <p>Thonny 是一款非常適合初學者的 MicroPython 開發環境。</p>
+  <section>
+    <h2>ESP32-S3 連接電腦</h2>
 
-      <p>
-        請前往官方網站下載並安裝：
-        <a href="https://thonny.org" target="_blank">https://thonny.org</a>
-      </p>
-
-      <img src="../00-Assets/01-thonny.png" alt="Thonny IDE" />
-    </section>
-    <section>
-      <h2>第三步：將 ESP32-S3 連接電腦</h2>
+    <div class="greenbackground">
       <p>使用 USB 傳輸線將 ESP32-S3 開發板連接到電腦。</p>
+      <strong>Thonny 設定路徑：</strong><br />
+      工具 → 選項 → 直譯器 → Thonny應該要用哪一種直譯器執行你的程式? → 選擇
+      <strong>MicroPython (ESP32)</strong>
+    </div>
 
-      <div class="tip">
-        <strong>Thonny 設定路徑：</strong><br />
-        執行 → 設定直譯器 → Thonny應該要用哪一種直譯器執行你的程式? → 選擇
-        <strong>MicroPython (ESP32)</strong>
-      </div>
-
+    <div class="redbackground">
       <p>請注意「選擇連接埠或是 WebREPL」的顯示狀態：</p>
-
-      <div class="warning">
-        如果顯示為 <strong>Board CDC</strong>，代表目前不是燒錄模式。(如下圖)
-      </div>
+      如果顯示為 <span class="highlight-yellow"><strong>Board CDC</strong></span>，代表目前不是燒錄模式。(如下圖)
       <img src="../00-Assets/01-normal.png" alt="正常模式" />
 
-      <div class="warning">
-        如果顯示為 <strong>Serial debug unit</strong>，才是燒錄模式。(如下圖)
-      </div>
+      <ul>
+        <li>要進入燒錄模式，可依以下步驟操作： </li>
+
+        <ol>
+          <li>第一種，官網寫的方式是按住 BOOT 按鈕不放，然後接上USB線。</li>
+          <li>第二種，右手按住 BOOT 按鈕不放，左手再按一下 RESET 按鈕後放開，最後放開 BOOT 按鈕。</li>
+        </ol>
+
+        <li>按鈕會有清楚的「喀」一聲，正常使用不會按壞</li>
+
+      </ul>
+    </div>
+
+    <div class="greenbackground">
+      顯示為 <strong>Serial debug unit</strong>，才是燒錄模式。(如下圖)
       <img src="../00-Assets/01-bootloader.png" alt="燒錄模式" />
-      要進入燒錄模式，可依以下步驟操作： 按住 BOOT 按鈕不放 按一下 RESET 按鈕
-      最後放開 BOOT 按鈕 （按鈕會有清楚的「喀」一聲，正常使用不會按壞）
-    </section>
+    </div>
 
-    <section>
-      <h2>第四步：燒錄 MicroPython 韌體</h2>
-      <p>依照下圖的設定，將 MicroPython 韌體燒錄至開發板中。</p>
+  </section>
 
-      <img src="../00-Assets/01-install.png" alt="燒錄設定畫面" />
+  <section>
+    <h2>第四步：燒錄 MicroPython 韌體</h2>
+    <p>依照下圖的設定，將 MicroPython 韌體燒錄至開發板中。</p>
 
-      <div class="redbackground">
-        燒錄完成， <span class="highlight-yellow"><strong>務必注意，要按一下Rest按鈕</strong></span>才能回到正常模式。
-      </div>
-    </section>
+    <img src="../00-Assets/01-install.png" alt="燒錄設定畫面" />
 
-    <!-- youtube的section -->
-    <section>
-      <div class="video">
-        <p><strong>完整操作影片教學</strong></p>
-        <a href="https://youtu.be/c7OXmXeBEP4" target="_blank">
-          <img
-            src="http://img.youtube.com/vi/c7OXmXeBEP4/0.jpg"
-            alt="完整步驟影片"
-          />
-        </a>
-      </div>
-    </section>
+    <div class="redbackground">
+      燒錄完成， <span class="highlight-yellow"><strong>務必要</strong>回到正常模式</span>。
+      <ol>
+        <li>可以按一下Esp32板子上的Rest按鈕或是按一下Thonny紅色那顆按鈕。</li>
+        <li>工具列的執行 → 設定直譯器 → 直譯器 → 選擇連接埠或是WebREPL → 選擇Board CDC @ COM → 按下確認。</li>
+        <li>如果Thonny左下窗格沒出現MicroPython設備跟boot.py，再按一下重新啟動。</li>
+      </ol>
+    </div>
 
-    <!-- 相關連結的section -->
-    <section>
-      <h2>🔗 相關連結</h2>
+    <p>安裝好Thonny的畫面如下圖</p>
 
-      <div class="link-icons">
-        <a href="https://easyway0301.github.io/" target="_blank">
-          <span class="icon">🏠</span>
-          <span class="text">主頁</span>
-        </a>
+    <img src="../00-Assets/01-thonny.png" alt="安裝好Thonny的畫面" />
+  </section>
 
-        <a href="mailto:easyway0301@gmail.com">
-          <span class="icon">✉️</span>
-          <span class="text">Email</span>
-        </a>
-      </div>
-    </section>
-  </body>
+  <!-- youtube的section -->
+  <section>
+    <div class="video">
+      <p><strong>完整操作影片教學</strong></p>
+      <a href="https://youtu.be/c7OXmXeBEP4" target="_blank">
+        <img src="http://img.youtube.com/vi/c7OXmXeBEP4/0.jpg" alt="完整步驟影片" />
+      </a>
+    </div>
+  </section>
+
+  <!-- 相關連結的section -->
+  <section>
+    <h2>🔗 相關連結</h2>
+
+    <div class="link-icons">
+      <a href="https://easyway0301.github.io/" target="_blank">
+        <span class="icon">🏠</span>
+        <span class="text">主頁</span>
+      </a>
+
+      <a href="mailto:easyway0301@gmail.com">
+        <span class="icon">✉️</span>
+        <span class="text">Email</span>
+      </a>
+    </div>
+  </section>
+</body>
+
 </html>
