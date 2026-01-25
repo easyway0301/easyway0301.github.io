@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>EB05-OLED 顯示文字 SOP</title>
+    <style>
+        body {
+            font-family: Arial, "Microsoft JhengHei", sans-serif;
+            line-height: 1.9;
+            max-width: 980px;
+            margin: 40px auto;
+            padding: 0 20px;
+            color: #222;
+            background-color: #f5f7fa;
+        }
+        h1 { text-align: center; margin-bottom: 10px; }
+        .subtitle { text-align: center; color: #555; margin-bottom: 50px; }
+        section { background: #fff; border-radius: 14px; padding: 40px; margin-bottom: 50px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+        h2 { margin-top: 0; border-left: 6px solid #4caf50; padding-left: 14px; }
+        p { margin: 14px 0; }
+        ul { margin-left: 22px; }
+        .code-block {
+            position: relative;
+            background: #0d1117;
+            color: #c9d1d9;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        .code-block pre { margin: 0; white-space: pre; }
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #1f6feb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 14px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .copy-btn:hover { background: #388bfd; }
+    </style>
+    <script>
+        function copyCode(btn) {
+            const code = btn.nextElementSibling.innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                btn.innerText = "Copied!";
+                setTimeout(() => btn.innerText = "Copy", 1200);
+            });
+        }
+    </script>
+</head>
+<body>
+
+<h1>EB05 - OLED 顯示文字 SOP</h1>
+<p class="subtitle">使用 SSD1306 與 I2C，在 OLED 顯示文字</p>
+
+<section>
+    <h2>程式說明</h2>
+    <p>本範例示範如何在 XIAO ESP32S3 搭配 SSD1306 OLED 顯示文字，並使用波特律動網站提供的 FONT16 字型。</p>
+    <ul>
+        <li>建立 I2C 物件並掃描裝置</li>
+        <li>建立 OLED 物件並清空畫面</li>
+        <li>使用 <code>text16</code> 顯示文字</li>
+        <li>使用 <code>show()</code> 將緩衝區內容顯示</li>
+    </ul>
+</section>
+
+<section>
+    <h2>範例程式碼</h2>
+    <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+# 從 machine 模組匯入 Pin（腳位控制）與 I2C
+from machine import Pin, I2C
+
+# 匯入 SSD1306 OLED 顯示器的驅動程式
+import ssd1306
+
+# 匯入波特律動網站做的文字
+from font16 import FONT16
+
+# 建立 I2C 物件
+i2c = I2C(0, sda=Pin(5), scl=Pin(6), freq=400000)
+
+# 掃描 I2C 匯流排
+print(i2c.scan())
+
+# 建立 SSD1306 OLED 物件
+oled = ssd1306.SSD1306_I2C(128, 64, i2c, addr=0x3C)
+
+# 清空畫面
+oled.fill(0)
+
+# 顯示文字
+oled.text16("你好嗎", 0, 0)
+
+# 將內容顯示到 OLED
+oled.show()
+        </code></pre>
+    </div>
+</section>
+
+</body>
+</html>
