@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>S01-MicroSD SOP | ESP32-S3 MicroPython</title>
+    <style>
+        body {
+            font-family: Arial, "Microsoft JhengHei", sans-serif;
+            line-height: 1.9;
+            max-width: 980px;
+            margin: 40px auto;
+            padding: 0 20px;
+            color: #222;
+            background-color: #f5f7fa;
+        }
+
+        h1 { text-align: center; margin-bottom: 10px; }
+        .subtitle { text-align: center; color: #555; margin-bottom: 50px; }
+        section { background: #ffffff; border-radius: 14px; padding: 40px; margin-bottom: 50px; box-shadow: 0 8px 24px rgba(0,0,0,0.08);}
+        h2 { margin-top: 0; border-left: 6px solid #4caf50; padding-left: 14px; }
+        p { margin: 14px 0; }
+        ul { margin-left: 22px; }
+        img { max-width: 100%; height: auto; display: block; margin: 28px auto 10px; border-radius: 12px; box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+
+        .highlight-yellow { background-color: #ffff00; color:#000; padding:2px 4px; border-radius:2px; font-weight:bold; }
+        .redbackground { background: #FF8E90; border-left:6px solid #ff1a00; padding:16px 20px; border-radius:8px; margin:20px 0; font-size:16px; }
+        .greenbackground { background: #e8f5e9; border-left:6px solid #4caf50; padding:16px 20px; border-radius:8px; margin:20px 0; font-size:16px; }
+        .orangebackground { background: #fff3e0; border-left:6px solid #ff9800; padding:16px 20px; border-radius:8px; margin:20px 0; font-size:16px; }
+
+        a { color: #2e7d32; text-decoration:none; font-weight:bold; }
+        a:hover { text-decoration:underline; }
+
+        /* Code block */
+        .code-block { position: relative; background: #0d1117; color: #c9d1d9; border-radius:12px; padding:20px; margin:30px 0; font-family: Consolas, Monaco, monospace; font-size:14px; overflow-x:auto; }
+        .code-block pre { margin:0; white-space: pre; }
+        .copy-btn { position:absolute; top:12px; right:12px; background:#1f6feb; color:white; border:none; border-radius:6px; padding:6px 14px; cursor:pointer; font-size:13px; }
+        .copy-btn:hover { background:#388bfd; }
+    </style>
+</head>
+<body>
+
+<h1>S01-MicroSD 教學 | ESP32-S3 MicroPython</h1>
+<p class="subtitle">從初始化到讀寫 MicroSD 的完整 SOP</p>
+
+<!-- Section 1：硬體接線 -->
+<section>
+    <h2>📌 硬體接線</h2>
+    <div class="greenbackground">
+        使用 Seeed XIAO ESP32-S3 擴充板的 SPI 腳位：
+        <ul>
+            <li>SCK → GPIO7</li>
+            <li>MOSI → GPIO9</li>
+            <li>MISO → GPIO8</li>
+            <li>CS → GPIO3（預設 D2）</li>
+        </ul>
+    </div>
+    <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+SCK_PIN  = 7
+MOSI_PIN = 9
+MISO_PIN = 8
+CS_PIN   = 3
+        </code></pre>
+    </div>
+</section>
+
+<!-- Section 2：掛載 MicroSD -->
+<section>
+    <h2>📌 掛載 MicroSD</h2>
+    <p>使用 MicroPython SDCard 套件初始化並掛載 MicroSD 到 <span class="highlight-yellow">/sd</span></p>
+    <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+import machine, os, sdcard
+
+spi = machine.SPI(2,
+    baudrate=10_000_000,
+    polarity=0, phase=0,
+    sck=machine.Pin(7),
+    mosi=machine.Pin(9),
+    miso=machine.Pin(8)
+)
+cs = machine.Pin(3, machine.Pin.OUT)
+sd = sdcard.SDCard(spi, cs)
+vfs = os.VfsFat(sd)
+os.mount(vfs, "/sd")
+print("📦 MicroSD 已掛載")
+print(os.listdir("/sd"))
+        </code></pre>
+    </div>
+</section>
+
+<!-- Section 3：寫入檔案 -->
+<section>
+    <h2>✍️ 寫入檔案</h2>
+    <p>將文字寫入 MicroSD：</p>
+    <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+with open("/sd/hello.txt", "w") as f:
+    f.write("Hello from XIAO ESP32-S3!\n")
+        </code></pre>
+    </div>
+</section>
+
+<!-- Section 4：讀取檔案 -->
+<section>
+    <h2>📖 讀取檔案</h2>
+    <p>讀取 MicroSD 上的檔案內容：</p>
+    <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+with open("/sd/hello.txt", "r") as f:
+    data = f.read()
+    print(data)
+        </code></pre>
+    </div>
+</section>
+
+<!-- Section 5：刪除檔案 -->
+<section>
+    <h2>🗑 刪除檔案</h2>
+    <p>若需要刪除檔案：</p>
+    <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+import os
+os.remove("/sd/hello.txt")
+        </code></pre>
+    </div>
+</section>
+
+<script>
+function copyCode(btn) {
+    const code = btn.nextElementSibling.innerText;
+    navigator.clipboard.writeText(code).then(() => {
+        btn.innerText = "Copied!";
+        setTimeout(()=>{ btn.innerText="Copy"; }, 1000);
+    });
+}
+</script>
+
+</body>
+</html>
