@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>S04-CameraStream SOP</title>
+    <style>
+        body {
+            font-family: Arial, "Microsoft JhengHei", sans-serif;
+            line-height: 1.8;
+            max-width: 980px;
+            margin: 40px auto;
+            padding: 0 20px;
+            color: #222;
+            background-color: #f5f7fa;
+        }
+        h1 { text-align: center; margin-bottom: 10px; }
+        .subtitle { text-align: center; color: #555; margin-bottom: 50px; }
+        section {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 40px;
+            margin-bottom: 50px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+        h2 { margin-top: 0; border-left: 6px solid #4caf50; padding-left: 14px; }
+        p { margin: 14px 0; }
+        ul { margin-left: 22px; }
+        a { color: #2e7d32; text-decoration: none; font-weight: bold; }
+        a:hover { text-decoration: underline; }
+        .redbackground { background: #FF8E90; border-left: 6px solid #ff1a00; padding: 16px 20px; border-radius: 8px; margin: 20px 0; font-size: 16px; }
+        .greenbackground { background: #e8f5e9; border-left: 6px solid #4caf50; padding: 16px 20px; border-radius: 8px; margin: 20px 0; font-size: 16px; }
+        .orangebackground { background: #fff3e0; border-left: 6px solid #ff9800; padding: 16px 20px; border-radius: 8px; margin: 20px 0; font-size: 16px; }
+        .code-block {
+            position: relative;
+            background: #0d1117;
+            color: #c9d1d9;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        .code-block pre { margin: 0; white-space: pre; }
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #1f6feb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 14px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .copy-btn:hover { background: #388bfd; }
+    </style>
+</head>
+<body>
+
+<h1>S04-CameraStream SOP</h1>
+<p class="subtitle">ESP32 Camera MJPEG Stream 範例教學</p>
+
+<section>
+    <h2>1️⃣ 匯入模組</h2>
+    <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code>import network
+import socket
+import time
+from camera import Camera, FrameSize, PixelFormat, GrabMode</code></pre>
+    </div>
+</section>
+
+<section>
+    <h2>2️⃣ Wi-Fi 設定</h2>
+    <p class="orangebackground">請修改第 33 行 SSID 與第 36 行 PASSWORD 為你的 Wi-Fi 資訊</p>
+    <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code>SSID = '你的SSID'
+PASSWORD = '你的WIFI密碼'</code></pre>
+    </div>
+</section>
+
+<section>
+    <h2>3️⃣ 連線 Wi-Fi</h2>
+    <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code>def connect_wifi():
+    station = network.WLAN(network.STA_IF)
+    station.active(False)
+    station.active(True)
+    station.connect(SSID, PASSWORD)
+    while not station.isconnected():
+        time.sleep(1)
+    ip = station.ifconfig()[0]
+    print(f'Wi-Fi 已連線，IP 位址：{ip}')
+    print(f'請在瀏覽器輸入：http://{ip}/stream')
+    return ip</code></pre>
+    </div>
+</section>
+
+<section>
+    <h2>4️⃣ 初始化 Camera</h2>
+    <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code>def init_camera():
+    cam = Camera(
+        pixel_format=PixelFormat.JPEG,
+        frame_size=FrameSize.HD,
+        jpeg_quality=70,
+        fb_count=2,
+        grab_mode=GrabMode.WHEN_EMPTY,
+        init=False
+    )
+    return cam</code></pre>
+    </div>
+</section>
+
+<section>
+    <h2>5️⃣ HTML 網頁</h2>
+    <p class="greenbackground">這是串流頁面，瀏覽器會顯示 Camera 影像</p>
+    <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code>HTML_PAGE = """&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;ESP32 Camera Stream&lt;/title&gt;
+    &lt;style&gt;
+        body { display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f0f0f0; }
+        .video-container { text-align: center; width: 100%; max-width: 1000px; }
+        img { width: 100%; height: auto; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="video-container"&gt;
+        &lt;h1&gt;ESP32 Camera Stream&lt;/h1&gt;
+        &lt;img src="/stream"&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;"""</code></pre>
+    </div>
+</section>
+
+<section>
+    <h2>6️⃣ HTTP Server 與 Client 處理</h2>
+    <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code>def handle_client(client, cam):
+    try:
+        request = client.recv(1024).decode()
+        if 'GET /stream' in request:
+            client.send(
+                b'HTTP/1.1 200 OK\r\n'
+                b'Content-Type: multipart/x-mixed-replace; boundary=frame\r\n\r\n'
+            )
+            cam.init()
+            while True:
+                frame = cam.capture()
+                if not frame: break
+                client.send(
+                    b'--frame\r\n'
+                    b'Content-Type: image/jpeg\r\n'
+                    b'Content-Length: ' + str(len(frame)).encode() + b'\r\n\r\n' + frame + b'\r\n'
+                )
+                cam.free_buffer()
+        else:
+            response = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n' + HTML_PAGE
+            client.send(response.encode())
+    except Exception as e:
+        print('Client 錯誤：', e)
+    finally:
+        client.close()</code></pre>
+    </div>
+</section>
+
+<section>
+    <h2>7️⃣ 啟動 HTTP Server</h2>
+    <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code>def start_server(cam):
+    addr = socket.getaddrinfo('0.0.0.0', 80)[0][-1]
+    s = socket.socket()
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    s.bind(addr)
+    s.listen(1)
+    print('HTTP Server 啟動，等待連線中...')
+    while True:
+        client, addr = s.accept()
+        print('連線來源：', addr)
+        handle_client(client, cam)</code></pre>
+    </div>
+</section>
+
+<section>
+    <h2>8️⃣ 主程式</h2>
+    <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code>def main():
+    connect_wifi()
+    cam = init_camera()
+    start_server(cam)
+
+main()</code></pre>
+    </div>
+</section>
+
+<script>
+function copyCode(btn){
+    const code = btn.nextElementSibling.innerText;
+    navigator.clipboard.writeText(code).then(()=>{
+        btn.innerText = "Copied!";
+        setTimeout(()=>{ btn.innerText = "Copy"; }, 1200);
+    });
+}
+</script>
+
+</body>
+</html>
