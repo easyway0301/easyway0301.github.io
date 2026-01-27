@@ -1,8 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
+
 <head>
   <meta charset="UTF-8" />
-  <title>ESP32 AP + HTTP Server SOP</title>
+  <title>從零開始學Esp32</title>
 
   <style>
     body {
@@ -40,11 +41,6 @@
       padding-left: 14px;
     }
 
-    h3 {
-      margin-top: 30px;
-      color: #2e7d32;
-    }
-
     p {
       margin: 14px 0;
     }
@@ -53,13 +49,44 @@
       margin-left: 22px;
     }
 
-    /* 提示框 */
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 28px auto 10px;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    }
+
+    .highlight-yellow {
+      background-color: #ffff00;
+      /* 螢光黃背景 */
+      color: #000000;
+      /* 黑色文字，比較清楚 */
+      padding: 2px 4px;
+      /* 可選：讓背景有點空間 */
+      border-radius: 2px;
+      /* 可選：圓角 */
+      font-weight: bold;
+      /* 可選：文字加粗更醒目 */
+    }
+
+    .redbackground {
+      background: #ff8e90;
+      border-left: 6px solid #ff1a00;
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 16px;
+    }
+
     .greenbackground {
       background: #e8f5e9;
       border-left: 6px solid #4caf50;
       padding: 16px 20px;
       border-radius: 8px;
       margin: 20px 0;
+      font-size: 16px;
     }
 
     .orangebackground {
@@ -68,14 +95,17 @@
       padding: 16px 20px;
       border-radius: 8px;
       margin: 20px 0;
+      font-size: 16px;
     }
 
-    .redbackground {
-      background: #ffebee;
-      border-left: 6px solid #f44336;
-      padding: 16px 20px;
-      border-radius: 8px;
-      margin: 20px 0;
+    a {
+      color: #2e7d32;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    a:hover {
+      text-decoration: underline;
     }
 
     /* Code block */
@@ -101,6 +131,7 @@
       top: 12px;
       right: 12px;
       background: #1f6feb;
+      /* GitHub 藍 */
       color: white;
       border: none;
       border-radius: 6px;
@@ -112,65 +143,100 @@
     .copy-btn:hover {
       background: #388bfd;
     }
-  </style>
 
-  <script>
-    function copyCode(btn) {
-      const code = btn.nextElementSibling.innerText;
-      navigator.clipboard.writeText(code).then(() => {
-        btn.innerText = "Copied!";
-        setTimeout(() => btn.innerText = "Copy", 1200);
-      });
+    .link-icons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 20px;
     }
-  </script>
+
+    .link-icons a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: #f1f3f6;
+      color: #222;
+      text-decoration: none;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+    }
+
+    .link-icons a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    }
+
+    /* ⭐ 關鍵：圖示等寬 */
+    .link-icons .icon {
+      width: 28px;
+      /* 固定寬度 */
+      text-align: center;
+      /* 置中 emoji */
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .link-icons .text {
+      font-weight: 500;
+    }
+  </style>
 </head>
 
 <body>
 
-<h1>ESP32 AP + HTTP Server</h1>
-<p class="subtitle">使用 MicroPython 建立 Wi-Fi 熱點與簡易網頁伺服器</p>
+  <h1>ESP32 AP模式</h1>
 
-<!-- 說明 -->
-<section>
-  <h2>📘 教學說明</h2>
-  <p>
-    本範例示範如何讓 ESP32 啟動 <b>AP 模式（基地台）</b>，
-    並建立一個簡單的 <b>HTTP Server</b>。
-  </p>
+  <section>
+    <h2>需要的材料</h2>
+    <div class="orangebackground">
+      <ul>
+        <li>Seeed XIAO Esp32-S3 開發板1片。</li>
+      </ul>
+    </div>
+  </section>
 
-  <ul>
-    <li>ESP32 自行開 Wi-Fi 熱點</li>
-    <li>手機 / 電腦可直接連線</li>
-    <li>瀏覽器輸入 IP 即可看到回應</li>
-  </ul>
+  <!-- 說明 -->
+  <section>
+    <h2>認識 ESP32-S3 開發板</h2>
+    <p>
+      讓 ESP32 啟動 <b>AP 模式（基地台）</b>，
+      並建立一個簡單的 <b>HTTP Server</b>。
+    </p>
 
-  <div class="greenbackground">
-    ✔ 不需要外部路由器，也能直接連 ESP32
-  </div>
-</section>
+    <ul>
+      <li>ESP32 自行開 Wi-Fi 熱點</li>
+      <li>手機 / 電腦可直接連線</li>
+      <li>瀏覽器輸入 IP 即可看到回應</li>
+    </ul>
 
-<!-- 連線資訊 -->
-<section>
-  <h2>📡 AP 連線資訊</h2>
+    <div class="greenbackground">
+      ✔ 不需要外部路由器，也能直接連 ESP32
+    </div>
 
-  <ul>
-    <li><b>SSID：</b>ESP32_AP</li>
-    <li><b>密碼：</b>12345678</li>
-    <li><b>連線後 IP：</b>通常為 <code>192.168.4.1</code></li>
-  </ul>
+    <ul>
+      <li><b>SSID：</b>ESP32_AP</li>
+      <li><b>密碼：</b>12345678</li>
+      <li><b>連線後 IP：</b>通常為192.168.4.1</li>
+    </ul>
 
-  <div class="orangebackground">
-    📌 密碼長度必須至少 8 個字元，否則 AP 會啟動失敗
-  </div>
-</section>
+    <div class="orangebackground">
+      📌 密碼長度必須至少 8 個字元，否則 AP 會啟動失敗
+    </div>
+  </section>
 
-<!-- 程式碼 -->
-<section>
-  <h2>💻 完整程式碼</h2>
+  <!-- 程式碼 -->
+  <section>
+    <h2>開啟 Thonny 並執行範例程式</h2>
 
-  <div class="code-block">
-    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-    <pre><code>
+    <div class="code-block">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code>
 import network
 import socket
 import time
@@ -218,26 +284,36 @@ finally:
     s.close()
     ap.active(False)
     </code></pre>
-  </div>
-</section>
+    </div>
+  </section>
 
-<!-- 測試方式 -->
-<section>
-  <h2>🧪 測試方式</h2>
+  <!-- 測試方式 -->
+  <section>
+    <h2>🧪 測試方式</h2>
 
-  <ol>
-    <li>燒錄程式到 ESP32</li>
-    <li>手機 / 電腦連線到 <b>ESP32_AP</b></li>
-    <li>打開瀏覽器，輸入：
-      <code>http://192.168.4.1</code>
-    </li>
-    <li>畫面出現 <b>Hello ESP32</b> 即成功</li>
-  </ol>
+    <ol>
+      <li>燒錄程式到 ESP32</li>
+      <li>手機 / 電腦連線到 <b>ESP32_AP</b></li>
+      <li>打開瀏覽器，輸入：
+        http://192.168.4.1
+      </li>
+      <li>畫面出現 <b>Hello ESP32</b> 即成功</li>
+    </ol>
 
-  <div class="redbackground">
-    ⚠ 若重新燒錄失敗，請確認 Port 80 是否被其他程式佔用
-  </div>
-</section>
+    <div class="redbackground">
+      ⚠ 若重新燒錄失敗，請確認 Port 80 是否被其他程式佔用
+    </div>
+  </section>
+
+  <script>
+    function copyCode(btn) {
+      const code = btn.nextElementSibling.innerText;
+      navigator.clipboard.writeText(code);
+      btn.innerText = "Copied!";
+      setTimeout(() => btn.innerText = "Copy", 1500);
+    }
+  </script>
 
 </body>
+
 </html>
