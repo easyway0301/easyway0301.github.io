@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<title>ESP32 StaMode HTTP Server SOP</title>
+
+<style>
+  body {
+      font-family: Arial, "Microsoft JhengHei", sans-serif;
+      line-height: 1.9;
+      max-width: 980px;
+      margin: 40px auto;
+      padding: 0 20px;
+      color: #222;
+      background-color: #f5f7fa;
+  }
+  h1 { text-align: center; margin-bottom: 10px; }
+  .subtitle { text-align: center; color: #555; margin-bottom: 40px; }
+  section {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 36px;
+      margin-bottom: 50px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+  h2 { margin-top: 0; border-left: 6px solid #4caf50; padding-left: 14px; }
+  p { margin: 14px 0; }
+  ul { margin-left: 22px; }
+  .greenbackground {
+      background: #e8f5e9;
+      border-left: 6px solid #4caf50;
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+  }
+  .orangebackground {
+      background: #fff3e0;
+      border-left: 6px solid #ff9800;
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+  }
+  .redbackground {
+      background: #ffebee;
+      border-left: 6px solid #f44336;
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+  }
+  .code-block {
+      position: relative;
+      background: #0d1117;
+      color: #c9d1d9;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 30px 0;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 14px;
+      overflow-x: auto;
+  }
+  .code-block pre {
+      margin: 0;
+      white-space: pre;
+  }
+  .copy-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #1f6feb;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-size: 13px;
+  }
+  .copy-btn:hover { background: #388bfd; }
+</style>
+
+<script>
+function copyCode(btn) {
+    const code = btn.nextElementSibling.innerText;
+    navigator.clipboard.writeText(code).then(() => {
+        btn.innerText = "Copied!";
+        setTimeout(() => btn.innerText = "Copy", 1200);
+    });
+}
+</script>
+</head>
+<body>
+
+<h1>ESP32 StaMode HTTP Server</h1>
+<p class="subtitle">使用 MicroPython 在 Station 模式下建立 HTTP 伺服器</p>
+
+<section>
+  <h2>📌 說明</h2>
+  <p>
+    本範例示範如何讓 ESP32-S3 以 Station（STA）模式連接既有 Wi-Fi，並啟動簡易 HTTP Server。
+  </p>
+  <ul>
+    <li>連接家庭或辦公無線網路（SSID + Password）</li>
+    <li>建立 socket 伺服器等待 TCP 連線</li>
+    <li>收到請求後回傳簡單的 HTTP 回應</li>
+  </ul>
+  <div class="orangebackground">
+    📌 注意：確保 SSID 與密碼填寫正確，且設備能接收到 Wi-Fi 訊號。
+  </div>
+</section>
+
+<section>
+  <h2>📶 Station 連線設定</h2>
+  <p>請修改下面變數以配合你的 Wi-Fi 網路：</p>
+  <ul>
+    <li><code>SSID</code> → 無線網路名稱</li>
+    <li><code>PASSWORD</code> → 該網路密碼</li>
+  </ul>
+</section>
+
+<section>
+  <h2>💻 完整程式碼</h2>
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code>
+import network          # 匯入 Wi-Fi 模組
+import socket           # 匯入 socket 模組
+import time             # 匯入時間延遲模組
+
+# ===== Wi-Fi SSID / 密碼 =====
+SSID = "你的WiFi名稱"
+PASSWORD = "你的WiFi密碼"
+
+# 建立 Station 介面
+sta = network.WLAN(network.STA_IF)
+sta.active(True)
+print("開始連線至 Wi-Fi:", SSID)
+
+# 連線
+sta.connect(SSID, PASSWORD)
+while not sta.isconnected():
+    print("連線中...")
+    time.sleep(1)
+
+print("已連線！IP:", sta.ifconfig()[0])
+
+# ===== 建立 HTTP Server =====
+addr = socket.getaddrinfo("0.0.0.0", 80)[0][-1]
+s = socket.socket()
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+s.bind(addr)
+s.listen(1)
+print("HTTP Server 已啟動，監聽 port 80")
+
+try:
+    while True:
+        client, addr = s.accept()
+        print("Client 連線:", addr)
+        request = client.recv(1024).decode()
+        print("收到:", request)
+
+        # 回傳 HTTP Response
+        response = "HTTP/1.1 200 OK\r\n\r\nHello from ESP32"
+        client.send(response.encode())
+        client.close()
+
+except KeyboardInterrupt:
+    print("停止伺服器")
+
+finally:
+    s.close()
+    sta.active(False)
+    </code></pre>
+  </div>
+</section>
+
+<section>
+  <h2>🧪 測試方式</h2>
+  <ol>
+    <li>上傳程式到 ESP32-S3 並重新啟動</li>
+    <li>等待連上你的 Wi-Fi</li>
+    <li>在瀏覽器中輸入顯示出的 IP</li>
+    <li>顯示 “Hello from ESP32” 即表示成功</li>
+  </ol>
+  <div class="greenbackground">
+    ✔ 若成功連線，ESP32 將會在序列埠印出 IP 位址
+  </div>
+</section>
+
+<section>
+  <h2>⚠ 注意事項</h2>
+  <ul>
+    <li>請確保網路密碼正確無誤</li>
+    <li>Wi-Fi 熱點不能設置成隱藏 SSID</li>
+    <li>Server 需等待並處理 client 的 TCP 請求</li>
+  </ul>
+</section>
+
+</body>
+</html>
