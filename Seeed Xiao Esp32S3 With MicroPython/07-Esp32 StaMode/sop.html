@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<title>ESP32-S3 MicroPython Wi-Fi Station 模式教學</title>
+
+<style>
+  body {
+      font-family: Arial, "Microsoft JhengHei", sans-serif;
+      line-height: 1.9;
+      max-width: 980px;
+      margin: 40px auto;
+      padding: 0 20px;
+      color: #222;
+      background-color: #f5f7fa;
+  }
+  h1 { text-align: center; margin-bottom: 10px; }
+  .subtitle { text-align: center; color: #555; margin-bottom: 30px; }
+  section { background: #fff; border-radius: 12px; padding: 30px; margin-bottom: 40px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+  h2 { margin-top: 0; border-left: 6px solid #2196F3; padding-left: 12px; }
+  .highlight { background: #e3f2fd; border-left: 6px solid #2196F3; padding: 16px 20px; border-radius: 8px; margin: 20px 0; }
+  .code-block { background: #0d1117; color: #c9d1d9; border-radius: 12px; padding: 20px; margin: 30px 0; font-family: Consolas, monospace; font-size: 14px; overflow-x: auto; position: relative; }
+  .copy-btn { position: absolute; top: 12px; right: 12px; background: #1f6feb; color: white; border: none; border-radius: 6px; padding: 6px 14px; cursor: pointer; font-size: 13px; }
+  .copy-btn:hover { background: #388bfd; }
+</style>
+
+</head>
+<body>
+
+<h1>ESP32-S3 MicroPython Wi-Fi Station 模式</h1>
+<div class="subtitle">連接至既有無線網路熱點（Wi-Fi AP）</div>
+
+<section>
+  <h2>📌 目標說明</h2>
+  <p>本 SOP 示範如何使用 MicroPython 讓 ESP32-S3 作為 Wi-Fi Station（STA）模式，連接到既有的無線網路。</p>
+  <div class="highlight">
+    ⚠️ 你需要知道要連接的 SSID（熱點名稱）與密碼<br>
+    📌 若無法連線，可確保 Wi-Fi SSID 及密碼正確、Wi-Fi 訊號良好。
+  </div>
+</section>
+
+<section>
+  <h2>📶 Wi-Fi 設定參數</h2>
+  <ul>
+    <li><strong>SSID：</strong>你的無線網路名稱</li>
+    <li><strong>Password：</strong>你的 Wi-Fi 密碼</li>
+  </ul>
+</section>
+
+<section>
+  <h2>🧪 MicroPython 範例程式</h2>
+
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code>
+import network        # 引用 Wi-Fi 模組
+import time
+
+# 你的熱點 SSID 與密碼
+SSID = "YourSSID"
+PASSWORD = "YourPassword"
+
+# 建立 Station 介面
+sta = network.WLAN(network.STA_IF)
+
+# 啟動 Station
+sta.active(True)
+
+# 連接 Wi-Fi
+print("📶 開始連線到 Wi-Fi:", SSID)
+sta.connect(SSID, PASSWORD)
+
+# 等待連線結果，最多等 10 秒
+timeout = 10
+while timeout > 0 and not sta.isconnected():
+    print("⏳ 連線中…", timeout)
+    time.sleep(1)
+    timeout -= 1
+
+# 判斷是否連線成功
+if sta.isconnected():
+    print("✅ Wi-Fi 連線成功！")
+    print("📍 IP 位址:", sta.ifconfig()[0])
+else:
+    print("❌ Wi-Fi 連線失敗")
+
+    </code></pre>
+  </div>
+</section>
+
+<section>
+  <h2>▶ 執行結果</h2>
+  <p>
+    若成功連上 Wi-Fi，你會在串列埠看到類似：</p>
+  <ul>
+    <li>📶 開始連線…</li>
+    <li>✅ Wi-Fi 連線成功！</li>
+    <li>📍 IP 位址: 192.168.1.xxx</li>
+  </ul>
+  <p>若沒成功連線會顯示 <strong>❌ Wi-Fi 連線失敗</strong>。</p>
+</section>
+
+<script>
+function copyCode(btn) {
+    const code = btn.nextElementSibling.innerText;
+    navigator.clipboard.writeText(code);
+    btn.innerText = "Copied!";
+    setTimeout(() => btn.innerText = "Copy", 1500);
+}
+</script>
+
+</body>
+</html>
