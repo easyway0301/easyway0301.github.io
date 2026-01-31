@@ -1,109 +1,398 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
+<!doctype html>
+<html lang="zh-Hant">
+
 <head>
-<meta charset="UTF-8">
-<title>ESP32S3 Camera Single Shot SOP</title>
-<style>
-body {
-    font-family: Arial, "Microsoft JhengHei", sans-serif;
-    line-height: 1.9;
-    max-width: 980px;
-    margin: 40px auto;
-    padding: 0 20px;
-    color: #222;
-    background-color: #f5f7fa;
-}
-h1 { text-align: center; margin-bottom: 10px; }
-.subtitle { text-align: center; color: #555; margin-bottom: 50px; }
-section { background: #ffffff; border-radius: 14px; padding: 40px; margin-bottom: 50px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
-h2 { margin-top: 0; border-left: 6px solid #4caf50; padding-left: 14px; }
-p { margin: 14px 0; }
-ul { margin-left: 22px; }
-img { max-width: 100%; height: auto; display: block; margin: 28px auto 10px; border-radius: 12px; box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
-.highlight-yellow { background-color: #ffff00; color: #000; padding:2px 4px; border-radius:2px; font-weight:bold; }
-.redbackground { background:#FF8E90; border-left:6px solid #ff1a00; padding:16px 20px; border-radius:8px; margin:20px 0; font-size:16px; }
-.greenbackground { background:#e8f5e9; border-left:6px solid #4caf50; padding:16px 20px; border-radius:8px; margin:20px 0; font-size:16px; }
-.orangebackground { background:#fff3e0; border-left:6px solid #ff9800; padding:16px 20px; border-radius:8px; margin:20px 0; font-size:16px; }
-a { color:#2e7d32; text-decoration:none; font-weight:bold; }
-a:hover { text-decoration:underline; }
-.code-block { position: relative; background:#0d1117; color:#c9d1d9; border-radius:12px; padding:20px; margin:30px 0; font-family:Consolas, Monaco, monospace; font-size:14px; overflow-x:auto; }
-.code-block pre { margin:0; white-space:pre; }
-.copy-btn { position:absolute; top:12px; right:12px; background:#1f6feb; color:white; border:none; border-radius:6px; padding:6px 14px; cursor:pointer; font-size:13px; }
-.copy-btn:hover { background:#388bfd; }
-</style>
-<script>
-function copyCode(btn){
-    const code = btn.nextElementSibling.querySelector('code');
-    navigator.clipboard.writeText(code.innerText).then(()=>{ btn.innerText='Copied!'; setTimeout(()=>{btn.innerText='Copy';},1000); });
-}
-</script>
+    <meta charset="UTF-8" />
+    <title>從零開始學Esp32</title>
+
+    <style>
+        body {
+            font-family: Arial, "Microsoft JhengHei", sans-serif;
+            line-height: 1.9;
+            max-width: 980px;
+            margin: 40px auto;
+            padding: 0 20px;
+            color: #222;
+            background-color: #f5f7fa;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #555;
+            margin-bottom: 50px;
+        }
+
+        section {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 40px;
+            margin-bottom: 50px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        h2 {
+            margin-top: 0;
+            border-left: 6px solid #4caf50;
+            padding-left: 14px;
+        }
+
+        p {
+            margin: 14px 0;
+        }
+
+        ul {
+            margin-left: 22px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 28px auto 10px;
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .highlight-yellow {
+            background-color: #ffff00;
+            /* 螢光黃背景 */
+            color: #000000;
+            /* 黑色文字，比較清楚 */
+            padding: 2px 4px;
+            /* 可選：讓背景有點空間 */
+            border-radius: 2px;
+            /* 可選：圓角 */
+            font-weight: bold;
+            /* 可選：文字加粗更醒目 */
+        }
+
+        .redbackground {
+            background: #ff8e90;
+            border-left: 6px solid #ff1a00;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+
+        .greenbackground {
+            background: #e8f5e9;
+            border-left: 6px solid #4caf50;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+
+        .orangebackground {
+            background: #fff3e0;
+            border-left: 6px solid #ff9800;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+
+        a {
+            color: #2e7d32;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Code block */
+        .code-block {
+            position: relative;
+            background: #0d1117;
+            color: #c9d1d9;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            margin: 0;
+            white-space: pre;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #1f6feb;
+            /* GitHub 藍 */
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 14px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .copy-btn:hover {
+            background: #388bfd;
+        }
+
+        .link-icons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .link-icons a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            background: #f1f3f6;
+            color: #222;
+            text-decoration: none;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition:
+                transform 0.15s ease,
+                box-shadow 0.15s ease;
+        }
+
+        .link-icons a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        }
+
+        /* ⭐ 關鍵：圖示等寬 */
+        .link-icons .icon {
+            width: 28px;
+            /* 固定寬度 */
+            text-align: center;
+            /* 置中 emoji */
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .link-icons .text {
+            font-weight: 500;
+        }
+    </style>
 </head>
+
 <body>
 
-<h1>ESP32S3 Camera Single Shot 教學</h1>
-<p class="subtitle">快速拍攝單張照片，存成 JPEG</p>
+    <h1>拍攝單張照片</h1>
 
-<section>
-<h2>1️⃣ 韌體下載與注意事項</h2>
-<div class="orangebackground">
-請務必下載 <strong>v0.6.0 (mpy 1.27.x)</strong> 的 <a href="https://github.com/cnadler86/micropython-camera-API/releases" target="_blank">mpy_cam-v1.27.0-XIAO_ESP32S3.zip</a>，不要使用最新版。
-</div>
-</section>
+    <section>
+        <h2>需要的材料</h2>
+        <div class="orangebackground">
+            <ul>
+                <li>Seeed XIAO Esp32-S3 <strong>Sense</strong>開發板1片。</li>
+            </ul>
+        </div>
+    </section>
 
-<section>
-<h2>2️⃣ Single Shot 拍照程式碼</h2>
-<div class="code-block">
-    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-    <pre><code># 建立 Camera 物件
+    <section>
+        <h2>認識 ESP32-S3 Sense開發板</h2>
+
+        <p>
+            在開始撰寫程式之前，先來認識這塊開發板上的
+            <strong>B2B-Connector</strong>。
+        </p>
+
+        <div class="greenbackground">
+            <strong>方向說明：</strong><br />
+            面向板子正面（USB Type-C 接口朝上）時，<br />
+            <ul>
+                <li>B2B-Connector 位於 開發板右下角。</li>
+                <li>裝上去會有一個Sd插槽，跟一個OV3660鏡頭。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 腳位圖 -->
+    <section>
+        <h2>正面圖</h2>
+        <img src="../00-Assets/front-indication.png" alt="XIAO ESP32-S3 Front Indication" />
+
+        <div class="source">
+            圖片來源：
+            <a href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/" target="_blank">
+                Seeed Studio 官方文件
+            </a>
+        </div>
+        <br>
+        <h2>腳位圖</h2>
+        <img src="../00-Assets/Pin-List(Sense).jpg" alt="Pin-List(Sense).jpg" />
+
+        <div class="source">
+            圖片來源：
+            <a href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/" target="_blank">
+                Seeed Studio 官方文件
+            </a>
+        </div>
+    </section>
+
+    <section>
+        <h2>提醒～韌體需使用以下版本</h2>
+        <div class="orangebackground">
+            <ul>
+                <li>Esp32 Sense需要下載OV3660鏡頭的韌體安裝。</li>
+                <li>請前往cnadler86的Github下載並安裝：<a href="https://github.com/cnadler86/micropython-camera-API/releases"
+                        target="_blank">cnadler86的Github</a></li>
+                <li><span class="highlight-yellow">務必下載v0.6.0 (mpy 1.27.x)的mpy_cam-v1.27.0-XIAO_ESP32S3.zip
+                        ，不要用最新版。</span>(最新版語法有點修改)</li>
+                <li>找到v0.6.0 (mpy 1.27.x)後，點一下<strong>Assets</strong>，mpy_cam-v1.27.0-XIAO_ESP32S3.zip在最下面。</li>
+                <li>解壓縮後，會有檔案<strong>firmware.bin</strong>。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+        <h2>開啟 Thonny 並執行範例程式</h2>
+        <p>SingleShot.py</p>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>
+# 韌體下載https://github.com/cnadler86/micropython-camera-API/releases
+# 務必下載v0.6.0 (mpy 1.27.x)的mpy_cam-v1.27.0-XIAO_ESP32S3.zip ，不要用最新版
+
 from camera import Camera, GrabMode, PixelFormat, FrameSize, GainCeiling
 
-cam = Camera(
-    pixel_format=PixelFormat.JPEG,
-    frame_size=FrameSize.WQXGA,
-    jpeg_quality=99,
-    fb_count=2,
-    grab_mode=GrabMode.WHEN_EMPTY
-)
-cam.init()
-
-# 拍攝單張照片
-img = cam.capture()
-
-# 儲存為 JPEG
-with open("snapshot.jpg", "wb") as f:
-    f.write(img)
-
-print("影像已存成 snapshot.jpg")
-
-# 釋放影像記憶體
-cam.free_buffer()</code></pre>
-</div>
-<div class="greenbackground">程式碼簡單示範如何拍攝單張 JPEG 照片並存檔。</div>
-</section>
-
-<section>
-<h2>3️⃣ 解析度選擇參考</h2>
-<div class="code-block">
-    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-    <pre><code>FrameSize    長     寬    品質
+'''
+FrameSize    長     寬    品質
 R128x128    128   128    偏綠
 QQVGA       160   120    偏綠
 HQVGA       240   176    偏綠
 R240X240    240   240    偏綠
-QVGA        320   240
-WQXGA      2048  1536</code></pre>
-</div>
-<div class="orangebackground">依不同解析度可能會偏綠或影像失真，選擇合適解析度以取得最佳畫質。</div>
-</section>
+QVGA        320   240 
+R320X320    320   320    偏綠
+CIF         400   296
+HVGA        480   320
+VGA         640   480    偏綠
+P_HD        720  1280
+QCIF        720  1280
+SVGA        800   600    偏綠
+P_3MP       864  1536
+XGA        1024   768    偏綠
+HD         1280   720
+SXGA       1280  1024
+UXGA       1600  1200
+FHD        1920  1080
+P_FHD      2048  1536
+QHD        2048  1536
+QSXGA      2048  1536
+QXGA       2048  1536
+WQXGA      2048  1536
+R96X96   會出錯  會出錯
+'''
+# ==============================
+# 建立 Camera 物件，設定拍照參數
+# ==============================
+# 設定影像格式為 JPEG，解析度 XGA，JPEG 品質 90，FB 數量 2，抓取模式為 WHEN_EMPTY
+cam = Camera(
+    pixel_format=PixelFormat.JPEG,  # JPEG 格式
+    frame_size=FrameSize.WQXGA,       # 解析度 WQXGA (2048X1536)
+    jpeg_quality=90,                # JPEG 壓縮品質
+    fb_count=1,                      # frame buffer 數量
+    grab_mode=GrabMode.WHEN_EMPTY   # 抓取模式，當 buffer 空時才抓
+)
 
-<section>
-<h2>4️⃣ 重要提示</h2>
-<div class="redbackground">
-- 拍攝前務必先下載指定韌體版本 <br>
-- 避免使用過高解析度導致 RAM 不足 <br>
-- 每次拍攝完成後，請釋放影像 buffer
-</div>
-</section>
+# ==============================
+# 初始化攝影機
+# ==============================
+cam.init()  # 啟動攝影機硬體
+
+# ==============================
+# 印出 Camera 物件資訊（方便 debug）
+# ==============================
+print(cam)  # 顯示 Camera 物件資訊
+
+# ==============================
+# 拍一張照片
+# ==============================
+img = cam.capture()  # 擷取影像，回傳 memoryview 物件
+
+# ==============================
+# 將拍到的影像存成 JPEG 檔
+# ==============================
+with open("snapshot.jpg", "wb") as f:  # 以寫入二進位方式開啟檔案
+    f.write(img)  # 將 memoryview 寫入檔案
+
+# ==============================
+# 提示使用者已成功存檔
+# ==============================
+print("影像已存成 snapshot.jpg")  # 印出提示訊息
+
+# ==============================
+# 釋放影像記憶體
+# ==============================
+cam.free_buffer()  # 釋放剛剛抓到的影像 memoryview，以免佔用 RAM
+            </code></pre>
+        </div>
+    </section>
+
+    <section>
+        <h2>重要提示</h2>
+        <div class="redbackground">
+            <ul>
+                <li>拍攝前務必先下載指定韌體版本</li>
+                <li>避免使用過高解析度導致 RAM 不足</li>
+                <li>每次拍攝完成後，請釋放影像 buffer</li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+        <h2>▶ 執行結果</h2>
+        <div class="greenbackground">
+            <ul>
+                <li>Camera with sensor OV3660</li>
+                <li>影像已存成 snapshot.jpg</li>
+                <li>重新整理即可看到影像。</li>
+                <img src="../00-Assets/S02-SingleShot.png" alt="S02-SingleShot.png" />
+
+            </ul>
+        </div>
+    </section>
+
+    <!-- 相關連結的section -->
+    <section>
+        <h2>🔗 相關連結</h2>
+
+        <div class="link-icons">
+            <a href="https://easyway0301.github.io/" target="_blank">
+                <span class="icon">🏠</span>
+                <span class="text">主頁</span>
+            </a>
+
+            <a href="mailto:easyway0301@gmail.com">
+                <span class="icon">✉️</span>
+                <span class="text">Email</span>
+            </a>
+        </div>
+    </section>
+
+    <script>
+        function copyCode(btn) {
+            const code = btn.nextElementSibling.innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                btn.innerText = "Copied!";
+                setTimeout(() => { btn.innerText = "Copy"; }, 1000);
+            });
+        }
+    </script>
 
 </body>
+
 </html>
