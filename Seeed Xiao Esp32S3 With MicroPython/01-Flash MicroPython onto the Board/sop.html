@@ -225,6 +225,18 @@
         Seeed Studio 官方文件
       </a>
     </div>
+
+    <br>
+    <h2>腳位圖</h2>
+    <img src="../00-Assets/Pin-List.png" alt="Pin-List.jpg" />
+
+    <div class="source">
+      圖片來源：
+      <a href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/" target="_blank">
+        Seeed Studio 官方文件
+      </a>
+    </div>
+
   </section>
 
   <section>
@@ -276,20 +288,28 @@
     <h2>燒錄 MicroPython 韌體</h2>
     <p>依照下圖的設定，將 MicroPython 韌體燒錄至開發板中。</p>
 
-    <img src="../00-Assets/01-install.png" alt="燒錄設定畫面" />
+    <ol>
+      <li>安裝或是更新MicroPython。</li>
+      <img src="../00-Assets/01-install(sense).png" alt="安裝或是更新MicroPython" />
+      <br>
+      <li>MicroPython family選擇<strong>ESP32-S3</strong></li>
+      <li>variant選擇<strong>Espressif ESP32-S3</strong></li>
+      <li>version選擇<strong>1.27.0</strong></li>
+      <img src="../00-Assets/01-install.png" alt="燒錄設定畫面" />
+      <div class="redbackground">
+        燒錄完成， <span class="highlight-yellow"><strong>務必要</strong>回到正常模式</span>。
+        <ol>
+          <li>可以按一下Esp32板子上的Rest按鈕。</li>
+          <li>工具列的執行 → 設定直譯器 → 直譯器 → 選擇連接埠或是WebREPL → 選擇Board CDC @ COM → 按下確認。</li>
+          <li>如果Thonny左下窗格沒出現MicroPython設備跟boot.py，再按一下重新啟動。</li>
+        </ol>
+      </div>
 
-    <div class="redbackground">
-      燒錄完成， <span class="highlight-yellow"><strong>務必要</strong>回到正常模式</span>。
-      <ol>
-        <li>可以按一下Esp32板子上的Rest按鈕。</li>
-        <li>工具列的執行 → 設定直譯器 → 直譯器 → 選擇連接埠或是WebREPL → 選擇Board CDC @ COM → 按下確認。</li>
-        <li>如果Thonny左下窗格沒出現MicroPython設備跟boot.py，再按一下重新啟動。</li>
-      </ol>
-    </div>
+      <br>
+      <li>安裝好Thonny的畫面如下圖</li>
+      <img src="../00-Assets/01-thonny.png" alt="安裝好Thonny的畫面" />
+    </ol>
 
-    <p>安裝好Thonny的畫面如下圖</p>
-
-    <img src="../00-Assets/01-thonny.png" alt="安裝好Thonny的畫面" />
   </section>
 
   <!-- youtube的section -->
