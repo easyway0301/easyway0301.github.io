@@ -1,8 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
+
 <head>
-    <meta charset="UTF-8">
-    <title>S03-CaptureSaveToSd SOP</title>
+    <meta charset="UTF-8" />
+    <title>從零開始學Esp32</title>
+
     <style>
         body {
             font-family: Arial, "Microsoft JhengHei", sans-serif;
@@ -13,8 +15,18 @@
             color: #222;
             background-color: #f5f7fa;
         }
-        h1 { text-align: center; margin-bottom: 10px; }
-        .subtitle { text-align: center; color: #555; margin-bottom: 50px; }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #555;
+            margin-bottom: 50px;
+        }
+
         section {
             background: #ffffff;
             border-radius: 14px;
@@ -22,9 +34,21 @@
             margin-bottom: 50px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
         }
-        h2 { margin-top: 0; border-left: 6px solid #4caf50; padding-left: 14px; }
-        p { margin: 14px 0; }
-        ul { margin-left: 22px; }
+
+        h2 {
+            margin-top: 0;
+            border-left: 6px solid #4caf50;
+            padding-left: 14px;
+        }
+
+        p {
+            margin: 14px 0;
+        }
+
+        ul {
+            margin-left: 22px;
+        }
+
         img {
             max-width: 100%;
             height: auto;
@@ -33,12 +57,58 @@
             border-radius: 12px;
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
         }
-        .highlight-yellow { background-color: #ffff00; color: #000; padding: 2px 4px; border-radius: 2px; font-weight: bold; }
-        .redbackground { background: #FF8E90; border-left: 6px solid #ff1a00; padding: 16px 20px; border-radius: 8px; margin: 20px 0; font-size: 16px; }
-        .greenbackground { background: #e8f5e9; border-left: 6px solid #4caf50; padding: 16px 20px; border-radius: 8px; margin: 20px 0; font-size: 16px; }
-        .orangebackground { background: #fff3e0; border-left: 6px solid #ff9800; padding: 16px 20px; border-radius: 8px; margin: 20px 0; font-size: 16px; }
-        a { color: #2e7d32; text-decoration: none; font-weight: bold; }
-        a:hover { text-decoration: underline; }
+
+        .highlight-yellow {
+            background-color: #ffff00;
+            /* 螢光黃背景 */
+            color: #000000;
+            /* 黑色文字，比較清楚 */
+            padding: 2px 4px;
+            /* 可選：讓背景有點空間 */
+            border-radius: 2px;
+            /* 可選：圓角 */
+            font-weight: bold;
+            /* 可選：文字加粗更醒目 */
+        }
+
+        .redbackground {
+            background: #ff8e90;
+            border-left: 6px solid #ff1a00;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+
+        .greenbackground {
+            background: #e8f5e9;
+            border-left: 6px solid #4caf50;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+
+        .orangebackground {
+            background: #fff3e0;
+            border-left: 6px solid #ff9800;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+
+        a {
+            color: #2e7d32;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Code block */
         .code-block {
             position: relative;
             background: #0d1117;
@@ -50,12 +120,18 @@
             font-size: 14px;
             overflow-x: auto;
         }
-        .code-block pre { margin: 0; white-space: pre; }
+
+        .code-block pre {
+            margin: 0;
+            white-space: pre;
+        }
+
         .copy-btn {
             position: absolute;
             top: 12px;
             right: 12px;
             background: #1f6feb;
+            /* GitHub 藍 */
             color: white;
             border: none;
             border-radius: 6px;
@@ -63,101 +139,634 @@
             cursor: pointer;
             font-size: 13px;
         }
-        .copy-btn:hover { background: #388bfd; }
+
+        .copy-btn:hover {
+            background: #388bfd;
+        }
+
+        .link-icons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .link-icons a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            background: #f1f3f6;
+            color: #222;
+            text-decoration: none;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition:
+                transform 0.15s ease,
+                box-shadow 0.15s ease;
+        }
+
+        .link-icons a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        }
+
+        /* ⭐ 關鍵：圖示等寬 */
+        .link-icons .icon {
+            width: 28px;
+            /* 固定寬度 */
+            text-align: center;
+            /* 置中 emoji */
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .link-icons .text {
+            font-weight: 500;
+        }
     </style>
 </head>
+
 <body>
 
-<h1>S03-CaptureSaveToSd SOP</h1>
-<p class="subtitle">使用 Seeed XIAO ESP32S3 拍照並存到 MicroSD</p>
+    <h1>拍照存到MicroSD卡</h1>
 
-<section>
-    <h2>1️⃣ 匯入模組</h2>
-    <div class="code-block">
-        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-        <pre><code>import machine, os, sdcard, uos
+    <section>
+        <h2>需要的材料</h2>
+        <div class="orangebackground">
+            <ul>
+                <li>Seeed XIAO Esp32-S3 <strong>Sense</strong>開發板1片。</li>
+                <li>MicroSD 1片</li>
+            </ul>
+        </div>
+
+        <h2>MicroSD 注意事項</h2>
+        <div class="redbackground">
+            <ul>
+                <li>MicroSD 卡需先格式化為<span class="highlight-yellow">FAT32</span>。</li>
+                <li>32GB 以上MicroSD片，建議使用<span class="highlight-yellow">guiformat</span>工具格式化。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 腳位圖 -->
+    <section>
+        <h2>正面圖</h2>
+        <img src="../00-Assets/front-indication.png" alt="XIAO ESP32-S3 Front Indication" />
+
+        <div class="source">
+            圖片來源：
+            <a href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/" target="_blank">
+                Seeed Studio 官方文件
+            </a>
+        </div>
+        <br>
+        <h2>腳位圖</h2>
+        <img src="../00-Assets/Pin-List(Sense).jpg" alt="Pin-List(Sense).jpg" />
+
+        <div class="source">
+            圖片來源：
+            <a href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/" target="_blank">
+                Seeed Studio 官方文件
+            </a>
+        </div>
+
+        <br>
+        <h2>MicroSD安裝圖</h2>
+        <img src="../00-Assets/S01-MicroSD.jpeg" alt="S01-MicroSD.jpeg" />
+    </section>
+
+    <section>
+        <h2>提醒～韌體需使用以下版本</h2>
+        <div class="orangebackground">
+            <ul>
+                <li>Esp32 Sense需要下載OV3660鏡頭的韌體安裝。</li>
+                <li>請前往cnadler86的Github下載並安裝：<a href="https://github.com/cnadler86/micropython-camera-API/releases"
+                        target="_blank">cnadler86的Github</a></li>
+                <li><span class="highlight-yellow">務必下載v0.6.0 (mpy 1.27.x)的mpy_cam-v1.27.0-XIAO_ESP32S3.zip
+                        ，不要用最新版。</span>(最新版語法有點修改)</li>
+                <li>找到v0.6.0 (mpy 1.27.x)後，點一下<strong>Assets</strong>，mpy_cam-v1.27.0-XIAO_ESP32S3.zip在最下面。</li>
+                <li>解壓縮後，會有檔案<strong>firmware.bin</strong>。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+        <h2>開啟 Thonny 並執行範例程式</h2>
+        <p>CaptureSaveToSd.py</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>
+import machine, os, sdcard, uos
 from camera import Camera, PixelFormat, FrameSize, GrabMode
-import time</code></pre>
-    </div>
-</section>
+import time
 
-<section>
-    <h2>2️⃣ 初始化 MicroSD</h2>
-    <p class="greenbackground">請先將 MicroSD 格式化為 FAT32（32G 以上用 guiformat）</p>
-    <div class="code-block">
-        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-        <pre><code># 設定硬體腳位
+# 韌體下載https://github.com/cnadler86/micropython-camera-API/releases
+# 務必下載v0.6.0 (mpy 1.27.x)的mpy_cam-v1.27.0-XIAO_ESP32S3.zip ，不要用最新版
+
+'''
+FrameSize    長     寬    品質
+R128x128    128   128    偏綠
+QQVGA       160   120    偏綠
+HQVGA       240   176    偏綠
+R240X240    240   240    偏綠
+QVGA        320   240 
+R320X320    320   320    偏綠
+CIF         400   296
+HVGA        480   320
+VGA         640   480    偏綠
+P_HD        720  1280
+QCIF        720  1280
+SVGA        800   600    偏綠
+P_3MP       864  1536
+XGA        1024   768    偏綠
+HD         1280   720
+SXGA       1280  1024
+UXGA       1600  1200
+FHD        1920  1080
+P_FHD      2048  1536
+QHD        2048  1536
+QSXGA      2048  1536
+QXGA       2048  1536
+WQXGA      2048  1536
+R96X96   會出錯  會出錯
+'''
+
+# MicroSD格式化Fat32，32G以上用guiformat來做格式化。
+# =====================================================
+# SD 卡硬體腳位設定（Seeed Studio XIAO ESP32S3 Sense）
+# =====================================================
+# SCK  -> GPIO 7  （SPI 時脈）
 SCK_PIN  = 7
+# MOSI -> GPIO 9  （主機送資料）
 MOSI_PIN = 9
+# MISO -> GPIO 8  （主機收資料）
 MISO_PIN = 8
+# CS   -> GPIO 3  （MicroSD 卡片預設 21）
 CS_PIN   = 21
 
-# 掛載點
+# MicroSD 卡掛載點（掛載後 /sd 就是 MicroSD 卡根目錄）
 MOUNT_POINT = "/sd"
 
-# 初始化 SPI 與 SD 卡
-spi = machine.SPI(2, baudrate=10_000_000, polarity=0, phase=0,
-                  sck=machine.Pin(SCK_PIN),
-                  mosi=machine.Pin(MOSI_PIN),
-                  miso=machine.Pin(MISO_PIN))
+# =====================================================
+# 初始化並掛載 MicroSD 卡
+# =====================================================
+"""
+初始化 SPI，並將 MicroSD 卡掛載到 /sd
+"""
+# 建立 SPI 物件（使用 SPI(2)）
+spi = machine.SPI(
+    2,
+    baudrate=10_000_000,     # SPI 速度，10MHz（可視穩定度調低）
+    polarity=0,
+    phase=0,
+    sck=machine.Pin(SCK_PIN),
+    mosi=machine.Pin(MOSI_PIN),
+    miso=machine.Pin(MISO_PIN)
+)
+
+# MicroSD 卡 CS 腳位
 cs = machine.Pin(CS_PIN, machine.Pin.OUT)
+
+# 初始化 MicroSD 卡（SPI 模式）
 sd = sdcard.SDCard(spi, cs)
+
+# 使用 FAT 檔案系統
 vfs = uos.VfsFat(sd)
+
+# 掛載到 /sd
 uos.mount(vfs, MOUNT_POINT)
 
-print("✅ MicroSD 卡掛載成功（/sd）")</code></pre>
-    </div>
-</section>
+print("✅ MicroSD 卡掛載成功（/sd）")
 
-<section>
-    <h2>3️⃣ 初始化 Camera</h2>
-    <div class="code-block">
-        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-        <pre><code>cam = Camera(
+# ------------ Camera 初始化 ------------
+cam = Camera(
     pixel_format=PixelFormat.JPEG,
-    frame_size=FrameSize.QVGA,
+    # 穩定尺寸
+    frame_size=FrameSize.QVGA,   
     jpeg_quality=90,
-    fb_count=1,
+    # 一定用 1 才穩定
+    fb_count=1,                  
     grab_mode=GrabMode.WHEN_EMPTY
 )
 cam.init()
-print("📷 Camera 初始化完成")</code></pre>
-    </div>
-</section>
+print("📷 Camera 初始化完成")
 
-<section>
-    <h2>4️⃣ 拍照並存檔</h2>
-    <div class="code-block">
-        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-        <pre><code>img = cam.capture()
-if img:
-    t = time.localtime()
+# ------------ 拍照並存檔 ------------
+
+# 透過 Camera 物件抓取一張影像，回傳 memoryview 物件
+img = cam.capture()  
+
+if img:  # 如果成功抓到影像
+    # 取得當前時間 (年, 月, 日, 時, 分, 秒, 星期, 一年中的第幾天)
+    t = time.localtime()  
+    
+    # 產生檔名，例如：/sd/20260127-10h45m30.jpg
+    # 格式: 年月日-時h分m秒.jpg
     filename = "/sd/{:04d}{:02d}{:02d}-{:02d}h{:02d}m{:02d}.jpg".format(*t[:6])
+    
+    # 開啟檔案以二進位寫入模式 ("wb")，將影像資料寫入 SD 卡
     with open(filename, "wb") as f:
-        f.write(img)
-    print("📸 影像已存成:", filename)
+        # 將 memoryview 的 JPEG 資料寫入檔案
+        f.write(img)  
+
+    # 提示使用者存檔成功
+    print("📸 影像已存成:", filename)  
+
 else:
-    print("❌ 拍照失敗")</code></pre>
-    </div>
-</section>
+    print("❌ 拍照失敗")
 
-<section>
-    <h2>5️⃣ 顯示 SD 卡內容</h2>
-    <div class="code-block">
-        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-        <pre><code>print("📁 SD 根目錄:", os.listdir(MOUNT_POINT))</code></pre>
-    </div>
-</section>
+# ------------ 顯示 SD 卡內容 ------------
+print("📁 SD 根目錄:", os.listdir(MOUNT_POINT))
 
-<script>
-function copyCode(btn) {
-    const code = btn.nextElementSibling.innerText;
-    navigator.clipboard.writeText(code).then(() => {
-        btn.innerText = "Copied!";
-        setTimeout(() => { btn.innerText = "Copy"; }, 1200);
-    });
-}
-</script>
+            </code></pre>
+        </div>
+    </section>
+
+    <section>
+        <h2>開啟 Thonny 並執行範例程式</h2>
+        <p>sdcard.py</span></p>
+        <div class="source">
+            檔案來源：
+            <a href="https://github.com/micropython/micropython-lib/blob/master/micropython/drivers/storage/sdcard/sdcard.py"
+                target="_blank">
+                Micropython github
+            </a>
+        </div>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>
+# 檔案來源：https://github.com/micropython/micropython-lib/blob/master/micropython/drivers/storage/sdcard/sdcard.py
+
+"""
+使用 SPI 介面操作 SD 卡的 MicroPython 驅動程式
+
+需求：
+- 一組 SPI 匯流排
+- 一個 CS（Chip Select）腳位
+
+此類別提供 readblocks 與 writeblocks 方法
+讓 SD 卡可以被掛載成檔案系統
+
+------------------------------------------------
+使用範例（pyboard）：
+
+    import pyb, sdcard, os
+    sd = sdcard.SDCard(pyb.SPI(1), pyb.Pin.board.X5)
+    pyb.mount(sd, '/sd2')
+    os.listdir('/')
+
+------------------------------------------------
+使用範例（ESP8266 / ESP32）：
+
+    import machine, sdcard, os
+    sd = sdcard.SDCard(machine.SPI(1), machine.Pin(15))
+    os.mount(sd, '/sd')
+    os.listdir('/sd')
+"""
+
+from micropython import const
+import time
+
+
+_CMD_TIMEOUT = const(100)
+
+_R1_IDLE_STATE = const(1 << 0)
+# R1_ERASE_RESET = const(1 << 1)
+_R1_ILLEGAL_COMMAND = const(1 << 2)
+# R1_COM_CRC_ERROR = const(1 << 3)
+# R1_ERASE_SEQUENCE_ERROR = const(1 << 4)
+# R1_ADDRESS_ERROR = const(1 << 5)
+# R1_PARAMETER_ERROR = const(1 << 6)
+_TOKEN_CMD25 = const(0xFC)
+_TOKEN_STOP_TRAN = const(0xFD)
+_TOKEN_DATA = const(0xFE)
+
+
+class SDCard:
+    def __init__(self, spi, cs, baudrate=1320000):
+        self.spi = spi
+        self.cs = cs
+
+        self.cmdbuf = bytearray(6)
+        self.dummybuf = bytearray(512)
+        self.tokenbuf = bytearray(1)
+        for i in range(512):
+            self.dummybuf[i] = 0xFF
+        self.dummybuf_memoryview = memoryview(self.dummybuf)
+
+        # initialise the card
+        self.init_card(baudrate)
+
+    def init_spi(self, baudrate):
+        try:
+            master = self.spi.MASTER
+        except AttributeError:
+            # on ESP8266
+            self.spi.init(baudrate=baudrate, phase=0, polarity=0)
+        else:
+            # on pyboard
+            self.spi.init(master, baudrate=baudrate, phase=0, polarity=0)
+
+    def init_card(self, baudrate):
+        # init CS pin
+        self.cs.init(self.cs.OUT, value=1)
+
+        # init SPI bus; use low data rate for initialisation
+        self.init_spi(100000)
+
+        # clock card at least 100 cycles with cs high
+        for i in range(16):
+            self.spi.write(b"\xff")
+
+        # CMD0: init card; should return _R1_IDLE_STATE (allow 5 attempts)
+        for _ in range(5):
+            if self.cmd(0, 0, 0x95) == _R1_IDLE_STATE:
+                break
+        else:
+            raise OSError("no SD card")
+
+        # CMD8: determine card version
+        r = self.cmd(8, 0x01AA, 0x87, 4)
+        if r == _R1_IDLE_STATE:
+            self.init_card_v2()
+        elif r == (_R1_IDLE_STATE | _R1_ILLEGAL_COMMAND):
+            self.init_card_v1()
+        else:
+            raise OSError("couldn't determine SD card version")
+
+        # get the number of sectors
+        # CMD9: response R2 (R1 byte + 16-byte block read)
+        if self.cmd(9, 0, 0, 0, False) != 0:
+            raise OSError("no response from SD card")
+        csd = bytearray(16)
+        self.readinto(csd)
+        if csd[0] & 0xC0 == 0x40:  # CSD version 2.0
+            self.sectors = ((csd[7] << 16 | csd[8] << 8 | csd[9]) + 1) * 1024
+        elif csd[0] & 0xC0 == 0x00:  # CSD version 1.0 (old, <=2GB)
+            c_size = (csd[6] & 0b11) << 10 | csd[7] << 2 | csd[8] >> 6
+            c_size_mult = (csd[9] & 0b11) << 1 | csd[10] >> 7
+            read_bl_len = csd[5] & 0b1111
+            capacity = (c_size + 1) * (2 ** (c_size_mult + 2)) * (2**read_bl_len)
+            self.sectors = capacity // 512
+        else:
+            raise OSError("SD card CSD format not supported")
+        # print('sectors', self.sectors)
+
+        # CMD16: set block length to 512 bytes
+        if self.cmd(16, 512, 0) != 0:
+            raise OSError("can't set 512 block size")
+
+        # set to high data rate now that it's initialised
+        self.init_spi(baudrate)
+
+    def init_card_v1(self):
+        for i in range(_CMD_TIMEOUT):
+            time.sleep_ms(50)
+            self.cmd(55, 0, 0)
+            if self.cmd(41, 0, 0) == 0:
+                # SDSC card, uses byte addressing in read/write/erase commands
+                self.cdv = 512
+                # print("[SDCard] v1 card")
+                return
+        raise OSError("timeout waiting for v1 card")
+
+    def init_card_v2(self):
+        for i in range(_CMD_TIMEOUT):
+            time.sleep_ms(50)
+            self.cmd(58, 0, 0, 4)
+            self.cmd(55, 0, 0)
+            if self.cmd(41, 0x40000000, 0) == 0:
+                self.cmd(58, 0, 0, -4)  # 4-byte response, negative means keep the first byte
+                ocr = self.tokenbuf[0]  # get first byte of response, which is OCR
+                if not ocr & 0x40:
+                    # SDSC card, uses byte addressing in read/write/erase commands
+                    self.cdv = 512
+                else:
+                    # SDHC/SDXC card, uses block addressing in read/write/erase commands
+                    self.cdv = 1
+                # print("[SDCard] v2 card")
+                return
+        raise OSError("timeout waiting for v2 card")
+
+    def cmd(self, cmd, arg, crc, final=0, release=True, skip1=False):
+        self.cs(0)
+
+        # create and send the command
+        buf = self.cmdbuf
+        buf[0] = 0x40 | cmd
+        buf[1] = arg >> 24
+        buf[2] = arg >> 16
+        buf[3] = arg >> 8
+        buf[4] = arg
+        buf[5] = crc
+        self.spi.write(buf)
+
+        if skip1:
+            self.spi.readinto(self.tokenbuf, 0xFF)
+
+        # wait for the response (response[7] == 0)
+        for i in range(_CMD_TIMEOUT):
+            self.spi.readinto(self.tokenbuf, 0xFF)
+            response = self.tokenbuf[0]
+            if not (response & 0x80):
+                # this could be a big-endian integer that we are getting here
+                # if final<0 then store the first byte to tokenbuf and discard the rest
+                if final < 0:
+                    self.spi.readinto(self.tokenbuf, 0xFF)
+                    final = -1 - final
+                for j in range(final):
+                    self.spi.write(b"\xff")
+                if release:
+                    self.cs(1)
+                    self.spi.write(b"\xff")
+                return response
+
+        # timeout
+        self.cs(1)
+        self.spi.write(b"\xff")
+        return -1
+
+    def readinto(self, buf):
+        self.cs(0)
+
+        # read until start byte (0xff)
+        for i in range(_CMD_TIMEOUT):
+            self.spi.readinto(self.tokenbuf, 0xFF)
+            if self.tokenbuf[0] == _TOKEN_DATA:
+                break
+            time.sleep_ms(1)
+        else:
+            self.cs(1)
+            raise OSError("timeout waiting for response")
+
+        # read data
+        mv = self.dummybuf_memoryview
+        if len(buf) != len(mv):
+            mv = mv[: len(buf)]
+        self.spi.write_readinto(mv, buf)
+
+        # read checksum
+        self.spi.write(b"\xff")
+        self.spi.write(b"\xff")
+
+        self.cs(1)
+        self.spi.write(b"\xff")
+
+    def write(self, token, buf):
+        self.cs(0)
+
+        # send: start of block, data, checksum
+        self.spi.read(1, token)
+        self.spi.write(buf)
+        self.spi.write(b"\xff")
+        self.spi.write(b"\xff")
+
+        # check the response
+        if (self.spi.read(1, 0xFF)[0] & 0x1F) != 0x05:
+            self.cs(1)
+            self.spi.write(b"\xff")
+            return
+
+        # wait for write to finish
+        while self.spi.read(1, 0xFF)[0] == 0:
+            pass
+
+        self.cs(1)
+        self.spi.write(b"\xff")
+
+    def write_token(self, token):
+        self.cs(0)
+        self.spi.read(1, token)
+        self.spi.write(b"\xff")
+        # wait for write to finish
+        while self.spi.read(1, 0xFF)[0] == 0x00:
+            pass
+
+        self.cs(1)
+        self.spi.write(b"\xff")
+
+    def readblocks(self, block_num, buf):
+        # workaround for shared bus, required for (at least) some Kingston
+        # devices, ensure MOSI is high before starting transaction
+        self.spi.write(b"\xff")
+
+        nblocks = len(buf) // 512
+        assert nblocks and not len(buf) % 512, "Buffer length is invalid"
+        if nblocks == 1:
+            # CMD17: set read address for single block
+            if self.cmd(17, block_num * self.cdv, 0, release=False) != 0:
+                # release the card
+                self.cs(1)
+                raise OSError(5)  # EIO
+            # receive the data and release card
+            self.readinto(buf)
+        else:
+            # CMD18: set read address for multiple blocks
+            if self.cmd(18, block_num * self.cdv, 0, release=False) != 0:
+                # release the card
+                self.cs(1)
+                raise OSError(5)  # EIO
+            offset = 0
+            mv = memoryview(buf)
+            while nblocks:
+                # receive the data and release card
+                self.readinto(mv[offset : offset + 512])
+                offset += 512
+                nblocks -= 1
+            if self.cmd(12, 0, 0xFF, skip1=True):
+                raise OSError(5)  # EIO
+
+    def writeblocks(self, block_num, buf):
+        # workaround for shared bus, required for (at least) some Kingston
+        # devices, ensure MOSI is high before starting transaction
+        self.spi.write(b"\xff")
+
+        nblocks, err = divmod(len(buf), 512)
+        assert nblocks and not err, "Buffer length is invalid"
+        if nblocks == 1:
+            # CMD24: set write address for single block
+            if self.cmd(24, block_num * self.cdv, 0) != 0:
+                raise OSError(5)  # EIO
+
+            # send the data
+            self.write(_TOKEN_DATA, buf)
+        else:
+            # CMD25: set write address for first block
+            if self.cmd(25, block_num * self.cdv, 0) != 0:
+                raise OSError(5)  # EIO
+            # send the data
+            offset = 0
+            mv = memoryview(buf)
+            while nblocks:
+                self.write(_TOKEN_CMD25, mv[offset : offset + 512])
+                offset += 512
+                nblocks -= 1
+            self.write_token(_TOKEN_STOP_TRAN)
+
+    def ioctl(self, op, arg):
+        if op == 4:  # get number of blocks
+            return self.sectors
+        if op == 5:  # get block size in bytes
+            return 512
+            </code></pre>
+        </div>
+    </section>
+
+    <section>
+        <h2>重要提示</h2>
+        <div class="redbackground">
+            <ul>
+                <li>拍攝前務必先下載指定韌體版本</li>
+                <li>避免使用過高解析度導致 RAM 不足</li>
+                <li>每次拍攝完成後，請釋放影像 buffer</li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+        <h2>▶ 執行結果</h2>
+        <div class="greenbackground">
+            <ul>
+                <li>✅ MicroSD 卡掛載成功（/sd）</li>
+                <li>📷 Camera 初始化完成</li>
+                <li>📸 影像已存成: /sd/20260201-00h03m35.jpg</li>
+                <li>📁 SD 根目錄: ['System Volume Information', 'hello.txt', '20260201-00h03m35.jpg']</li>
+                <li>重新整理即可看到影像。</li>
+                <img src="../00-Assets/S03-CaptureSaveToSd.png" alt="S03-CaptureSaveToSd.png" />
+
+            </ul>
+        </div>
+    </section>
+
+    <!-- 相關連結的section -->
+    <section>
+        <h2>🔗 相關連結</h2>
+
+        <div class="link-icons">
+            <a href="https://easyway0301.github.io/" target="_blank">
+                <span class="icon">🏠</span>
+                <span class="text">主頁</span>
+            </a>
+
+            <a href="mailto:easyway0301@gmail.com">
+                <span class="icon">✉️</span>
+                <span class="text">Email</span>
+            </a>
+        </div>
+    </section>
+
+    <script>
+        function copyCode(btn) {
+            const code = btn.nextElementSibling.innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                btn.innerText = "Copied!";
+                setTimeout(() => { btn.innerText = "Copy"; }, 1000);
+            });
+        }
+    </script>
 
 </body>
+
 </html>
