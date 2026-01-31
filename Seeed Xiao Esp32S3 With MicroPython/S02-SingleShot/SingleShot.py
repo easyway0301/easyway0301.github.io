@@ -36,7 +36,7 @@ R96X96   會出錯  會出錯
 # 設定影像格式為 JPEG，解析度 XGA，JPEG 品質 90，FB 數量 2，抓取模式為 WHEN_EMPTY
 cam = Camera(
     pixel_format=PixelFormat.JPEG,  # JPEG 格式
-    frame_size=FrameSize.QVGA,       # 解析度 WQXGA (2048X1536)
+    frame_size=FrameSize.WQXGA,       # 解析度 WQXGA (2048X1536)
     jpeg_quality=90,                # JPEG 壓縮品質
     fb_count=1,                      # frame buffer 數量
     grab_mode=GrabMode.WHEN_EMPTY   # 抓取模式，當 buffer 空時才抓
