@@ -205,55 +205,55 @@
     </style>
 </head>
 
-  <body>
-    <h1>LCD1602A I2C</h1>
+<body>
+    <h1>LCD1602A(I2C)</h1>
 
     <section>
-      <h2>第一步：認識 LCD1602A I2C 模組</h2>
-
-      <p>
-        本教學使用 <strong>LCD1602A 文字顯示器（1602 LCD）</strong> ，
-        只需兩條訊號線（SDA、SCL）即可顯示 16×2 文字。
-      </p>
+        <h2>需要的材料</h2>
+        <div class="orangebackground">
+            <ul>
+                <li>Seeed XIAO Esp32-S3 開發板1片。</li>
+                <li>麵包板1片。</li>
+                <li>LCD1602A(I2C)模組1個。</li>
+            </ul>
+        </div>
     </section>
 
     <!-- 腳位圖 -->
     <section>
-      <img
-        src="../00-Assets/B03-LCD1602A I2C.jpeg"
-        alt="B03-LCD1602A I2C.jpeg"
-      />
+        <h2>腳位圖</h2>
+        <img src="../00-Assets/Pin-List.png" alt="Pin-List.png" />
 
-      <img src="../00-Assets/Pin-List.png" alt="Pin-List.png" />
+        <div class="source">
+            圖片來源：
+            <a href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/" target="_blank">
+                Seeed Studio 官方文件
+            </a>
+        </div>
 
-      <div class="source">
-        圖片來源：
-        <a
-          href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/"
-          target="_blank"
-        >
-          Seeed Studio 官方文件
-        </a>
-      </div>
+        <br>
+        <h2>接線圖</h2>
+
+        <img src="../00-Assets/B03-LCD1602A I2C.jpeg" alt="B03-LCD1602A I2C.jpeg" />
+        <div class="orangebackground">
+            <ul>
+                <li>把Esp32插在麵包板左側正中間。</li>
+                <li>Esp32的5V接在模組的VCC。</li>
+                <li>Esp32的GND接在模組的GND。</li>
+                <li>Esp32的GPIO 5接在模組的SDA。</li>
+                <li>Esp32的GPIO 6接在模組的SCL。</li>
+            </ul>
+        </div>
     </section>
 
     <section>
-      <p>LCD1602A I2C 模組特點：</p>
-      <ul>
-        <li>顯示尺寸：16 字 × 2 行</li>
-        <li>通訊方式：I2C（SDA / SCL）</li>
-        <li>常見 I2C 位址：0x27（部分模組為 0x3F）</li>
-      </ul>
-    </section>
+        <h2>開啟 Thonny 並執行範例程式</h2>
 
-    <section>
-      <h2>第二步：MicroPython 控制範例</h2>
+        <p>Lcd1602aI2C.py</p>
 
-      <p>Lcd1602aI2C.py</p>
-
-      <div class="code-block">
-        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-        <pre>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre>
         <code>
             from time import sleep_ms
             from machine import I2C, Pin
@@ -284,17 +284,20 @@
             lcd.clear()
             </code>
     </pre>
-      </div>
+        </div>
 
-      <p>esp8266_i2c_lcd.py</p>
-      <p>
-        # 資料來源：
-        https://github.com/dhylands/python_lcd/blob/master/lcd/esp8266_i2c_lcd.py
-      </p>
+        <br>
+        <p>esp8266_i2c_lcd.py</p>
+        <div class="source">
+            資料來源：
+            <a href="https://github.com/dhylands/python_lcd/blob/master/lcd/esp8266_i2c_lcd.py" target="_blank">
+                esp8266_i2c_lcd.py
+            </a>
+        </div>
 
-      <div class="code-block">
-        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-        <pre><code>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>
 # https://github.com/dhylands/python_lcd/blob/master/lcd/esp8266_i2c_lcd.py
 
 """Implements a HD44780 character LCD connected via PCF8574 on I2C.
@@ -382,16 +385,21 @@ class I2cLcd(LcdApi):
         self.i2c.writeto(self.i2c_addr, bytearray([byte]))
 
 </code></pre>
-      </div>
-      <p>lcd_api.py</p>
-      <p>
-        # 資料來源： #
-        https://github.com/dhylands/python_lcd/blob/master/lcd/lcd_api.py
-      </p>
+        </div>
 
-      <div class="code-block">
-        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-        <pre><code>
+        <br>
+        <p>lcd_api.py</p>
+
+        <div class="source">
+            資料來源：
+            <a href="https://github.com/dhylands/python_lcd/blob/master/lcd/lcd_api.py" target="_blank">
+                lcd_api.py
+            </a>
+        </div>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>
 
 # https://github.com/dhylands/python_lcd/blob/master/lcd/lcd_api.py
 
@@ -596,25 +604,29 @@ class LcdApi:
         time.sleep_us(usecs)
 
 </code></pre>
-      </div>
+        </div>
     </section>
 
     <section>
-      <h2>補充說明</h2>
 
-      <p>
-        如果你看到的 LCD 顯示亂碼或空白：<br />
-        請先確認 I2C 位址是否正確（0x27 / 0x3F），以及 SDA、SCL 接線是否接反。
-        再確認是否接上5V，背面十字旋鈕轉動可調整字體深淺。
-      </p>
+        <h2>補充說明</h2>
 
-      <p>若不確定 I2C 位址，可先執行 <strong>I2C Scan</strong> 程式確認。</p>
+        <div class="orangebackground">
+            <ul>
+                <li>顯示尺寸：16 字 × 2 行</li>
+                <li>如果你看到的 LCD 顯示亂碼或空白：<br />
+                    請先確認 I2C 位址是否正確（0x27 / 0x3F），以及 SDA、SCL 接線是否接反。
+                    再確認是否接上5V，背面十字旋鈕轉動可調整字體深淺。</li>
+                <li>若不確定 I2C 位址，可先執行 <strong>I2C Scan</strong> 程式確認。</li>
+            </ul>
+        </div>
     </section>
 
     <section>
-      <div class="code-block">
-        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-        <pre><code>
+        <h2>I2C Scan</h2>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>
 from machine import I2C, Pin
 
 i2c = I2C(
@@ -624,49 +636,55 @@ i2c = I2C(
 )
 
 print("I2C devices:", i2c.scan())
-
         </code></pre>
-      </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>▶ 執行結果</h2>
+
+        <ul>
+            <li>第一行文字顯示Hello ESP32-S3</li>
+            <li>第二行文字顯示LCD1602A I2C OK</li>
+        </ul>
     </section>
 
     <!-- youtube的section -->
     <section>
-      <h2>完整操作影片教學</h2>
+        <h2>完整操作影片教學</h2>
 
-      <div class="video">
-        <a href="https://youtu.be/Bm9OTdL_nKc" target="_blank">
-          <img
-            src="http://img.youtube.com/vi/Bm9OTdL_nKc/0.jpg"
-            alt="完整步驟影片"
-          />
-        </a>
-      </div>
+        <div class="video">
+            <a href="https://youtu.be/Bm9OTdL_nKc" target="_blank">
+                <img src="http://img.youtube.com/vi/Bm9OTdL_nKc/0.jpg" alt="完整步驟影片" />
+            </a>
+        </div>
     </section>
 
     <!-- 相關連結的section -->
     <section>
-      <h2>🔗 相關連結</h2>
+        <h2>🔗 相關連結</h2>
 
-      <div class="link-icons">
-        <a href="https://easyway0301.github.io/" target="_blank">
-          <span class="icon">🏠</span>
-          <span class="text">主頁</span>
-        </a>
+        <div class="link-icons">
+            <a href="https://easyway0301.github.io/" target="_blank">
+                <span class="icon">🏠</span>
+                <span class="text">主頁</span>
+            </a>
 
-        <a href="mailto:easyway0301@gmail.com">
-          <span class="icon">✉️</span>
-          <span class="text">Email</span>
-        </a>
-      </div>
+            <a href="mailto:easyway0301@gmail.com">
+                <span class="icon">✉️</span>
+                <span class="text">Email</span>
+            </a>
+        </div>
     </section>
 
     <script>
-      function copyCode(btn) {
-          const code = btn.nextElementSibling.innerText;
-          navigator.clipboard.writeText(code);
-          btn.innerText = "Copied!";
-          setTimeout(() => btn.innerText = "Copy", 1500);
-      }
+        function copyCode(btn) {
+            const code = btn.nextElementSibling.innerText;
+            navigator.clipboard.writeText(code);
+            btn.innerText = "Copied!";
+            setTimeout(() => btn.innerText = "Copy", 1500);
+        }
     </script>
-  </body>
+</body>
+
 </html>
