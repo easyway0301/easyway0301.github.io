@@ -1,196 +1,213 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-Hant">
 
 <head>
-  <meta charset="UTF-8" />
-  <title>從零開始學Esp32</title>
+    <meta charset="UTF-8" />
+    <title>從零開始學Esp32</title>
 
-  <style>
-    body {
-      font-family: Arial, "Microsoft JhengHei", sans-serif;
-      line-height: 1.9;
-      max-width: 980px;
-      margin: 40px auto;
-      padding: 0 20px;
-      color: #222;
-      background-color: #f5f7fa;
-    }
+    <style>
+        body {
+            font-family: Arial, "Microsoft JhengHei", sans-serif;
+            line-height: 1.9;
+            max-width: 980px;
+            margin: 40px auto;
+            padding: 0 20px;
+            color: #222;
+            background-color: #f5f7fa;
+        }
 
-    h1 {
-      text-align: center;
-      margin-bottom: 10px;
-    }
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
 
-    .subtitle {
-      text-align: center;
-      color: #555;
-      margin-bottom: 50px;
-    }
+        .subtitle {
+            text-align: center;
+            color: #555;
+            margin-bottom: 50px;
+        }
 
-    section {
-      background: #ffffff;
-      border-radius: 14px;
-      padding: 40px;
-      margin-bottom: 50px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-    }
+        section {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 40px;
+            margin-bottom: 50px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
 
-    h2 {
-      margin-top: 0;
-      border-left: 6px solid #4caf50;
-      padding-left: 14px;
-    }
+        h2 {
+            margin-top: 0;
+            border-left: 6px solid #4caf50;
+            padding-left: 14px;
+        }
 
-    p {
-      margin: 14px 0;
-    }
+        p {
+            margin: 14px 0;
+        }
 
-    ul {
-      margin-left: 22px;
-    }
+        ul {
+            margin-left: 22px;
+        }
 
-    img {
-      max-width: 100%;
-      height: auto;
-      display: block;
-      margin: 28px auto 10px;
-      border-radius: 12px;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-    }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 28px auto 10px;
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
 
-    .highlight-yellow {
-      background-color: #ffff00;
-      /* 螢光黃背景 */
-      color: #000000;
-      /* 黑色文字，比較清楚 */
-      padding: 2px 4px;
-      /* 可選：讓背景有點空間 */
-      border-radius: 2px;
-      /* 可選：圓角 */
-      font-weight: bold;
-      /* 可選：文字加粗更醒目 */
-    }
+        .text-red {
+            color: #ff0000;
+        }
 
-    .redbackground {
-      background: #ff8e90;
-      border-left: 6px solid #ff1a00;
-      padding: 16px 20px;
-      border-radius: 8px;
-      margin: 20px 0;
-      font-size: 16px;
-    }
+        .text-blue {
+            color: #1f6feb;
+        }
 
-    .greenbackground {
-      background: #e8f5e9;
-      border-left: 6px solid #4caf50;
-      padding: 16px 20px;
-      border-radius: 8px;
-      margin: 20px 0;
-      font-size: 16px;
-    }
+        .text-green {
+            color: #4caf50;
+        }
 
-    .orangebackground {
-      background: #fff3e0;
-      border-left: 6px solid #ff9800;
-      padding: 16px 20px;
-      border-radius: 8px;
-      margin: 20px 0;
-      font-size: 16px;
-    }
+        .text-orange {
+            color: #FF7300;
+        }
 
-    a {
-      color: #2e7d32;
-      text-decoration: none;
-      font-weight: bold;
-    }
 
-    a:hover {
-      text-decoration: underline;
-    }
+        .highlight-yellow {
+            background-color: #ffff00;
+            /* 螢光黃背景 */
+            color: #000000;
+            /* 黑色文字，比較清楚 */
+            padding: 2px 4px;
+            /* 可選：讓背景有點空間 */
+            border-radius: 2px;
+            /* 可選：圓角 */
+            font-weight: bold;
+            /* 可選：文字加粗更醒目 */
+        }
 
-    /* Code block */
-    .code-block {
-      position: relative;
-      background: #0d1117;
-      color: #c9d1d9;
-      border-radius: 12px;
-      padding: 20px;
-      margin: 30px 0;
-      font-family: Consolas, Monaco, monospace;
-      font-size: 14px;
-      overflow-x: auto;
-    }
+        .redbackground {
+            background: #ff8e90;
+            border-left: 6px solid #ff1a00;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 16px;
+        }
 
-    .code-block pre {
-      margin: 0;
-      white-space: pre;
-    }
+        .greenbackground {
+            background: #e8f5e9;
+            border-left: 6px solid #4caf50;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 16px;
+        }
 
-    .copy-btn {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: #1f6feb;
-      /* GitHub 藍 */
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 6px 14px;
-      cursor: pointer;
-      font-size: 13px;
-    }
+        .orangebackground {
+            background: #fff3e0;
+            border-left: 6px solid #ff9800;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 16px;
+        }
 
-    .copy-btn:hover {
-      background: #388bfd;
-    }
+        a {
+            color: #2e7d32;
+            text-decoration: none;
+            font-weight: bold;
+        }
 
-    .link-icons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      margin-top: 20px;
-    }
+        a:hover {
+            text-decoration: underline;
+        }
 
-    .link-icons a {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 18px;
-      border-radius: 12px;
-      background: #f1f3f6;
-      color: #222;
-      text-decoration: none;
-      font-size: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      transition:
-        transform 0.15s ease,
-        box-shadow 0.15s ease;
-    }
+        /* Code block */
+        .code-block {
+            position: relative;
+            background: #0d1117;
+            color: #c9d1d9;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
 
-    .link-icons a:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-    }
+        .code-block pre {
+            margin: 0;
+            white-space: pre;
+        }
 
-    /* ⭐ 關鍵：圖示等寬 */
-    .link-icons .icon {
-      width: 28px;
-      /* 固定寬度 */
-      text-align: center;
-      /* 置中 emoji */
-      font-size: 20px;
-      line-height: 1;
-    }
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #1f6feb;
+            /* GitHub 藍 */
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 14px;
+            cursor: pointer;
+            font-size: 13px;
+        }
 
-    .link-icons .text {
-      font-weight: 500;
-    }
-  </style>
+        .copy-btn:hover {
+            background: #388bfd;
+        }
+
+        .link-icons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .link-icons a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            background: #f1f3f6;
+            color: #222;
+            text-decoration: none;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition:
+                transform 0.15s ease,
+                box-shadow 0.15s ease;
+        }
+
+        .link-icons a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        }
+
+        /* ⭐ 關鍵：圖示等寬 */
+        .link-icons .icon {
+            width: 28px;
+            /* 固定寬度 */
+            text-align: center;
+            /* 置中 emoji */
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .link-icons .text {
+            font-weight: 500;
+        }
+    </style>
 </head>
 
 <body>
 
-  <h1>ESP32 AP模式</h1>
+  <h1>ESP32 Wi-Fi Station 模式</h1>
 
   <section>
     <h2>需要的材料</h2>
@@ -201,122 +218,74 @@
     </div>
   </section>
 
-  <!-- 說明 -->
   <section>
     <h2>認識 ESP32-S3 開發板</h2>
-    <p>
-      讓 ESP32 啟動 <b>AP 模式（基地台）</b>，
-      並建立一個簡單的 <b>HTTP Server</b>。
-    </p>
-
-    <ul>
-      <li>ESP32 自行開 Wi-Fi 熱點</li>
-      <li>手機 / 電腦可直接連線</li>
-      <li>瀏覽器輸入 IP 即可看到回應</li>
-    </ul>
-
-    <div class="greenbackground">
-      ✔ 不需要外部路由器，也能直接連 ESP32
-    </div>
-
-    <ul>
-      <li><b>SSID：</b>ESP32_AP</li>
-      <li><b>密碼：</b>12345678</li>
-      <li><b>連線後 IP：</b>通常為192.168.4.1</li>
-    </ul>
-
-    <div class="orangebackground">
-      📌 密碼長度必須至少 8 個字元，否則 AP 會啟動失敗
+    <p>使用ESP32-S3 作為 Wi-Fi Station（STA）模式，連接到既有的無線網路。</p>
+    <div class="highlight">
+      ⚠️ 你需要知道要連接的 SSID（熱點名稱）與密碼<br>
+      📌 若無法連線，請確認 Wi-Fi SSID 及密碼正確、Wi-Fi 訊號良好。
     </div>
   </section>
 
-  <!-- 程式碼 -->
+  <section>
+    <h2>📶 Wi-Fi 設定參數</h2>
+    <ul>
+      <li><strong>SSID：</strong>你的無線網路名稱</li>
+      <li><strong>Password：</strong>你的 Wi-Fi 密碼</li>
+    </ul>
+  </section>
+
   <section>
     <h2>開啟 Thonny 並執行範例程式</h2>
 
     <div class="code-block">
       <button class="copy-btn" onclick="copyCode(this)">Copy</button>
       <pre><code>
-import network              # 匯入 network 模組，用來控制 ESP32 的 Wi-Fi（AP / STA）
-import socket               # 匯入 socket 模組，用來建立 TCP / HTTP 伺服器
-import time                 # 匯入 time 模組（本範例雖未使用，通常用於延遲或時間控制）
+import network        # 引用 Wi-Fi 模組
+import time
 
-# ---------- AP 設定 ----------
-SSID = "ESP32_AP"            # 設定 AP（基地台）的 Wi-Fi 名稱
-PASSWORD = "12345678"        # 設定 AP 的連線密碼（至少 8 碼）
+# 你的熱點 SSID 與密碼
+SSID = "YourSSID"
+PASSWORD = "YourPassword"
 
-ap = network.WLAN(network.AP_IF)  # 建立一個 AP 模式的 WLAN 物件
+# 建立 Station 介面
+sta = network.WLAN(network.STA_IF)
 
-if ap.active():              # 檢查目前 AP 是否已經啟用
-    ap.active(False)         # 如果已啟用，先關閉舊的 AP
-    print("已停掉舊的 AP")   # 印出提示訊息
+# 啟動 Station
+sta.active(True)
 
-ap.active(True)              # 啟用 AP 模式
-ap.config(                   # 設定 AP 相關參數
-    essid=SSID,              # 設定 Wi-Fi 的 SSID 名稱
-    password=PASSWORD,       # 設定 Wi-Fi 密碼
-    authmode=3               # 設定加密模式（3 = WPA2-PSK）
-)
+# 連接 Wi-Fi
+print("📶 開始連線到 Wi-Fi:", SSID)
+sta.connect(SSID, PASSWORD)
 
-print("AP 已啟動")           # 顯示 AP 已成功啟動
-print("SSID:", SSID)         # 顯示 AP 的 Wi-Fi 名稱
-print("密碼:", PASSWORD)     # 顯示 AP 的 Wi-Fi 密碼
-print("IP:", ap.ifconfig()[0])  # 顯示 AP 的 IP 位址（通常是 192.168.4.1）
+# 等待連線結果，最多等 10 秒
+timeout = 10
+while timeout > 0 and not sta.isconnected():
+    print("⏳ 連線中…", timeout)
+    time.sleep(1)
+    timeout -= 1
 
-addr = socket.getaddrinfo(   # 取得本機位址資訊
-    "0.0.0.0",               # 監聽所有網路介面
-    80                       # 使用 HTTP 標準的 80 Port
-)[0][-1]                     # 取出 socket 可用的位址格式
-
-s = socket.socket()          # 建立一個 TCP Socket 物件
-s.setsockopt(                # 設定 socket 選項
-    socket.SOL_SOCKET,       # 指定 socket 層級
-    socket.SO_REUSEADDR,     # 允許重複使用位址
-    1                        # 啟用該選項
-)
-s.bind(addr)                 # 將 socket 綁定到指定的 IP 與 Port
-s.listen(1)                  # 開始監聽連線（最多 1 個等待佇列）
-
-print("TCP Server 已建立，port 80")  # 顯示 TCP Server 已啟動
-
-try:
-    while True:              # 進入無限迴圈，持續等待客戶端連線
-        cl, addr = s.accept()# 接受客戶端連線，cl 是連線物件，addr 是客戶端位址
-        print("Client 連線:", addr)  # 印出客戶端的 IP 與 Port
-
-        data = cl.recv(1024).decode()  # 接收最多 1024 bytes 的資料並轉成字串
-        print("收到:", data)           # 印出接收到的 HTTP 請求內容
-
-        cl.send(                       # 回傳 HTTP 回應給客戶端
-            "HTTP/1.1 200 OK\r\n\r\nHello ESP32"
-        )
-        cl.close()                     # 關閉此次客戶端連線
-
-except KeyboardInterrupt:    # 當按下 Ctrl + C 時觸發
-    print("停止 Server")     # 印出 Server 停止訊息
-
-finally:
-    s.close()                # 關閉 socket 釋放資源
-    ap.active(False)         # 關閉 AP 模式
+# 判斷是否連線成功
+if sta.isconnected():
+    print("✅ Wi-Fi 連線成功！")
+    print("📍 IP 位址:", sta.ifconfig()[0])
+else:
+    print("❌ Wi-Fi 連線失敗")
 
     </code></pre>
     </div>
   </section>
 
-  <!-- 測試方式 -->
   <section>
-    <h2>🧪 測試方式</h2>
-
-    <ol>
-      <li>燒錄程式到 ESP32</li>
-      <li>手機 / 電腦連線到 <b>ESP32_AP</b></li>
-      <li>打開瀏覽器，輸入：http://192.168.4.1</li>
-      <li>畫面出現 <b>Hello ESP32</b> 即成功</li>
-    </ol>
-
-    <div class="redbackground">
-      ⚠ 若重新燒錄失敗，請確認 Port 80 是否被其他程式佔用
-    </div>
+    <h2>▶ 執行結果</h2>
+    <p>
+      若成功連上 Wi-Fi，你會在序列埠看到類似：</p>
+    <ul>
+      <li>📶 開始連線…</li>
+      <li>✅ Wi-Fi 連線成功！</li>
+      <li>📍 IP 位址: 192.168.1.xxx</li>
+    </ul>
+    <p>若沒成功連線會顯示 <strong>❌ Wi-Fi 連線失敗</strong>。</p>
   </section>
 
   <!-- 相關連結的section -->
