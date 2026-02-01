@@ -2,282 +2,258 @@
 <html lang="zh-Hant">
 
 <head>
-    <meta charset="UTF-8" />
-    <title>從零開始學Esp32</title>
+  <meta charset="UTF-8" />
+  <title>從零開始學Esp32</title>
 
-    <style>
-        body {
-            font-family: Arial, "Microsoft JhengHei", sans-serif;
-            line-height: 1.9;
-            max-width: 980px;
-            margin: 40px auto;
-            padding: 0 20px;
-            color: #222;
-            background-color: #f5f7fa;
-        }
+  <style>
+    body {
+      font-family: Arial, "Microsoft JhengHei", sans-serif;
+      line-height: 1.9;
+      max-width: 980px;
+      margin: 40px auto;
+      padding: 0 20px;
+      color: #222;
+      background-color: #f5f7fa;
+    }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 10px;
-        }
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
 
-        .subtitle {
-            text-align: center;
-            color: #555;
-            margin-bottom: 50px;
-        }
+    .subtitle {
+      text-align: center;
+      color: #555;
+      margin-bottom: 50px;
+    }
 
-        section {
-            background: #ffffff;
-            border-radius: 14px;
-            padding: 40px;
-            margin-bottom: 50px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-        }
+    section {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 40px;
+      margin-bottom: 50px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
 
-        h2 {
-            margin-top: 0;
-            border-left: 6px solid #4caf50;
-            padding-left: 14px;
-        }
+    h2 {
+      margin-top: 0;
+      border-left: 6px solid #4caf50;
+      padding-left: 14px;
+    }
 
-        p {
-            margin: 14px 0;
-        }
+    p {
+      margin: 14px 0;
+    }
 
-        ul {
-            margin-left: 22px;
-        }
+    ul {
+      margin-left: 22px;
+    }
 
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 28px auto 10px;
-            border-radius: 12px;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-        }
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 28px auto 10px;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    }
 
-        .text-red {
-            color: #ff0000;
-        }
+    .text-red {
+      color: #ff0000;
+    }
 
-        .text-blue {
-            color: #1f6feb;
-        }
+    .text-blue {
+      color: #1f6feb;
+    }
 
-        .text-green {
-            color: #4caf50;
-        }
+    .text-green {
+      color: #4caf50;
+    }
 
-        .text-orange {
-            color: #FF7300;
-        }
+    .text-orange {
+      color: #FF7300;
+    }
 
 
-        .highlight-yellow {
-            background-color: #ffff00;
-            /* 螢光黃背景 */
-            color: #000000;
-            /* 黑色文字，比較清楚 */
-            padding: 2px 4px;
-            /* 可選：讓背景有點空間 */
-            border-radius: 2px;
-            /* 可選：圓角 */
-            font-weight: bold;
-            /* 可選：文字加粗更醒目 */
-        }
+    .highlight-yellow {
+      background-color: #ffff00;
+      /* 螢光黃背景 */
+      color: #000000;
+      /* 黑色文字，比較清楚 */
+      padding: 2px 4px;
+      /* 可選：讓背景有點空間 */
+      border-radius: 2px;
+      /* 可選：圓角 */
+      font-weight: bold;
+      /* 可選：文字加粗更醒目 */
+    }
 
-        .redbackground {
-            background: #ff8e90;
-            border-left: 6px solid #ff1a00;
-            padding: 16px 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-            font-size: 16px;
-        }
+    .redbackground {
+      background: #ff8e90;
+      border-left: 6px solid #ff1a00;
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 16px;
+    }
 
-        .greenbackground {
-            background: #e8f5e9;
-            border-left: 6px solid #4caf50;
-            padding: 16px 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-            font-size: 16px;
-        }
+    .greenbackground {
+      background: #e8f5e9;
+      border-left: 6px solid #4caf50;
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 16px;
+    }
 
-        .orangebackground {
-            background: #fff3e0;
-            border-left: 6px solid #ff9800;
-            padding: 16px 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-            font-size: 16px;
-        }
+    .orangebackground {
+      background: #fff3e0;
+      border-left: 6px solid #ff9800;
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 16px;
+    }
 
-        a {
-            color: #2e7d32;
-            text-decoration: none;
-            font-weight: bold;
-        }
+    a {
+      color: #2e7d32;
+      text-decoration: none;
+      font-weight: bold;
+    }
 
-        a:hover {
-            text-decoration: underline;
-        }
+    a:hover {
+      text-decoration: underline;
+    }
 
-        /* Code block */
-        .code-block {
-            position: relative;
-            background: #0d1117;
-            color: #c9d1d9;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 30px 0;
-            font-family: Consolas, Monaco, monospace;
-            font-size: 14px;
-            overflow-x: auto;
-        }
+    /* Code block */
+    .code-block {
+      position: relative;
+      background: #0d1117;
+      color: #c9d1d9;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 30px 0;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 14px;
+      overflow-x: auto;
+    }
 
-        .code-block pre {
-            margin: 0;
-            white-space: pre;
-        }
+    .code-block pre {
+      margin: 0;
+      white-space: pre;
+    }
 
-        .copy-btn {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: #1f6feb;
-            /* GitHub 藍 */
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 6px 14px;
-            cursor: pointer;
-            font-size: 13px;
-        }
+    .copy-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #1f6feb;
+      /* GitHub 藍 */
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-size: 13px;
+    }
 
-        .copy-btn:hover {
-            background: #388bfd;
-        }
+    .copy-btn:hover {
+      background: #388bfd;
+    }
 
-        .link-icons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 20px;
-        }
+    .link-icons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 20px;
+    }
 
-        .link-icons a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 18px;
-            border-radius: 12px;
-            background: #f1f3f6;
-            color: #222;
-            text-decoration: none;
-            font-size: 16px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            transition:
-                transform 0.15s ease,
-                box-shadow 0.15s ease;
-        }
+    .link-icons a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: #f1f3f6;
+      color: #222;
+      text-decoration: none;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+    }
 
-        .link-icons a:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-        }
+    .link-icons a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    }
 
-        /* ⭐ 關鍵：圖示等寬 */
-        .link-icons .icon {
-            width: 28px;
-            /* 固定寬度 */
-            text-align: center;
-            /* 置中 emoji */
-            font-size: 20px;
-            line-height: 1;
-        }
+    /* ⭐ 關鍵：圖示等寬 */
+    .link-icons .icon {
+      width: 28px;
+      /* 固定寬度 */
+      text-align: center;
+      /* 置中 emoji */
+      font-size: 20px;
+      line-height: 1;
+    }
 
-        .link-icons .text {
-            font-weight: 500;
-        }
-    </style>
+    .link-icons .text {
+      font-weight: 500;
+    }
+  </style>
 </head>
 
-  <body>
-    <!-- 主標題 -->
-    <h1>SH1106 I2C 顯示模組（1.3吋）</h1>
+<body>
+  <!-- 主標題 -->
+  <h1>SH1106 I2C 顯示模組（1.3吋）</h1>
 
-    <section>
-      <h2>第一步：認識 SH1106 OLED 模組</h2>
-
-      <p>
-        SH1106 是一款常見的 <strong>1.3吋 單色 OLED 顯示模組</strong>， 常使用
-        <strong>I2C</strong> 通訊方式。
-      </p>
-
-      <div class="greenbackground">
-        <strong>模組規格：</strong><br />
-        • 解析度：128 × 64<br />
-        • 通訊方式：I2C<br />
-        • 常見位址：0x3C
-      </div>
-
-      <p><strong>I2C 腳位連接：</strong></p>
+  <section>
+    <h2>需要的材料</h2>
+    <div class="orangebackground">
       <ul>
-        <li>VCC → 3V3</li>
-        <li>GND → GND</li>
-        <li>SDA → GPIO 5</li>
-        <li>SCL → GPIO 6</li>
+        <li>Seeed XIAO Esp32-S3 開發板1片。</li>
+        <li>麵包板1片。</li>
+        <li>SH1106 I2C 顯示模組（1.3吋）1個。</li>
       </ul>
-    </section>
+    </div>
+  </section>
 
-    <section>
-      <h2>第二步：SH1106 顯示原理</h2>
+  <!-- 腳位圖 -->
+  <section>
+    <h2>腳位圖</h2>
+    <img src="../00-Assets/Pin-List.png" alt="Pin-List.png" />
 
-      <p>
-        SH1106 OLED 使用<span class="highlight-yellow">framebuffer</span
-        >（畫面緩衝區）概念，
-        所有文字與圖形都是先畫在記憶體中，再一次顯示到螢幕。
-      </p>
+    <div class="source">
+      圖片來源：
+      <a href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/" target="_blank">
+        Seeed Studio 官方文件
+      </a>
+    </div>
 
+    <br>
+    <h2>接線圖</h2>
+
+    <img src="../00-Assets/B04-OledSh1106Display.jpeg" alt="B04-OledSh1106Display.jpeg" />
+    <div class="orangebackground">
       <ul>
-        <li>顯示前要先 <code>fill(0)</code> 清畫面</li>
-        <li>繪製完成後要呼叫 <code>show()</code></li>
+        <li>把Esp32插在麵包板左側正中間。</li>
+        <li>Esp32的GND接在模組的GND。</li>
+        <li>Esp32的3V3接在模組的VDD。</li>
+        <li>Esp32的GPIO 5接在模組的SDA。</li>
+        <li>Esp32的GPIO 6接在模組的SCK。</li>
       </ul>
-    </section>
+    </div>
+  </section>
 
-    <!-- 腳位圖 -->
-    <section>
-      <img
-        src="../00-Assets/B04-OledSh1106Display.jpeg"
-        alt="B04-OledSh1106Display.jpeg"
-      />
+  <section>
+    <h2>開啟 Thonny 並執行範例程式</h2>
 
-      <img src="../00-Assets/Pin-List.png" alt="Pin-List.png" />
-
-      <div class="source">
-        圖片來源：
-        <a
-          href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/"
-          target="_blank"
-        >
-          Seeed Studio 官方文件
-        </a>
-      </div>
-    </section>
-    <section>
-      <h2>第三步：MicroPython 顯示範例</h2>
-
-      <p>
-        以下程式碼可直接在 <strong>Thonny</strong> 上執行， 顯示文字於 SH1106
-        OLED。
-      </p>
-
-      <div class="code-block">
-        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-        <pre><code>
+    <p>OledSh1106Display.py</p>
+    <div class="code-block">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code>
 from machine import Pin, I2C        # 匯入 Pin 與 I2C 類別
 import sh1106                      # 匯入 SH1106 OLED 驅動
 import time                        # 匯入時間模組
@@ -311,47 +287,406 @@ oled.text("SH1106 OLED", 0, 32)    # 在 (0,32) 顯示文字
 oled.show()                        # 將畫面送到 OLED
 
 </code></pre>
-      </div>
-    </section>
+    </div>
 
-    <!-- youtube的section -->
-    <section>
-      <h2>完整操作影片教學</h2>
+    <br>
+    <p>sh1106.py</p>
 
-      <div class="video">
-        <a href="https://youtu.be/K2Ehu1gULug" target="_blank">
-          <img
-            src="http://img.youtube.com/vi/K2Ehu1gULug/0.jpg"
-            alt="完整步驟影片"
-          />
-        </a>
-      </div>
-    </section>
+    <div class="source">
+      資料來源：
+      <a href="https://github.com/robert-hh/SH1106/blob/master/sh1106.py" target="_blank">
+        sh1106.py
+      </a>
+    </div>
+    <div class="code-block">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code>
+# 資料來源 https://github.com/robert-hh/SH1106/blob/master/sh1106.py
 
-    <!-- 相關連結的section -->
-    <section>
-      <h2>🔗 相關連結</h2>
+# MicroPython SH1106 OLED driver, I2C and SPI interfaces
+#
+# The MIT License (MIT)
+#
+# Copyright (c) 2016 Radomir Dopieralski (@deshipu),
+#               2017-2021 Robert Hammelrath (@robert-hh)
+#               2021 Tim Weber (@scy)
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+#
+# Sample code sections for ESP8266 pin assignments
+# ------------ SPI ------------------
+# Pin Map SPI
+#   - 3v - xxxxxx   - Vcc
+#   - G  - xxxxxx   - Gnd
+#   - D7 - GPIO 13  - Din / MOSI fixed
+#   - D5 - GPIO 14  - Clk / Sck fixed
+#   - D8 - GPIO 4   - CS (optional, if the only connected device)
+#   - D2 - GPIO 5   - D/C
+#   - D1 - GPIO 2   - Res
+#
+# for CS, D/C and Res other ports may be chosen.
+#
+# from machine import Pin, SPI
+# import sh1106
 
-      <div class="link-icons">
-        <a href="https://easyway0301.github.io/" target="_blank">
-          <span class="icon">🏠</span>
-          <span class="text">主頁</span>
-        </a>
+# spi = SPI(1, baudrate=1000000)
+# display = sh1106.SH1106_SPI(128, 64, spi, Pin(5), Pin(2), Pin(4))
+# display.sleep(False)
+# display.fill(0)
+# display.text('Testing 1', 0, 0, 1)
+# display.show()
+#
+# --------------- I2C ------------------
+#
+# Pin Map I2C
+#   - 3v - xxxxxx   - Vcc
+#   - G  - xxxxxx   - Gnd
+#   - D2 - GPIO 5   - SCK / SCL
+#   - D1 - GPIO 4   - DIN / SDA
+#   - D0 - GPIO 16  - Res
+#   - G  - xxxxxx     CS
+#   - G  - xxxxxx     D/C
+#
+# Pin's for I2C can be set almost arbitrary
+#
+# from machine import Pin, I2C
+# import sh1106
+#
+# i2c = I2C(scl=Pin(5), sda=Pin(4), freq=400000)
+# display = sh1106.SH1106_I2C(128, 64, i2c, Pin(16), 0x3c)
+# display.sleep(False)
+# display.fill(0)
+# display.text('Testing 1', 0, 0, 1)
+# display.show()
 
-        <a href="mailto:easyway0301@gmail.com">
-          <span class="icon">✉️</span>
-          <span class="text">Email</span>
-        </a>
-      </div>
-    </section>
+from micropython import const
+import utime as time
+import framebuf
 
-    <script>
-      function copyCode(btn) {
-          const code = btn.nextElementSibling.innerText;
-          navigator.clipboard.writeText(code);
-          btn.innerText = "Copied!";
-          setTimeout(() => btn.innerText = "Copy", 1500);
-      }
-    </script>
-  </body>
+
+# a few register definitions
+_SET_CONTRAST        = const(0x81)
+_SET_NORM_INV        = const(0xa6)
+_SET_DISP            = const(0xae)
+_SET_SCAN_DIR        = const(0xc0)
+_SET_SEG_REMAP       = const(0xa0)
+_LOW_COLUMN_ADDRESS  = const(0x00)
+_HIGH_COLUMN_ADDRESS = const(0x10)
+_SET_PAGE_ADDRESS    = const(0xB0)
+
+
+class SH1106(framebuf.FrameBuffer):
+
+    def __init__(self, width, height, external_vcc, rotate=0):
+        self.width = width
+        self.height = height
+        self.external_vcc = external_vcc
+        self.flip_en = rotate == 180 or rotate == 270
+        self.rotate90 = rotate == 90 or rotate == 270
+        self.pages = self.height // 8
+        self.bufsize = self.pages * self.width
+        self.renderbuf = bytearray(self.bufsize)
+        self.pages_to_update = 0
+        self.delay = 0
+
+        if self.rotate90:
+            self.displaybuf = bytearray(self.bufsize)
+            # HMSB is required to keep the bit order in the render buffer
+            # compatible with byte-for-byte remapping to the display buffer,
+            # which is in VLSB. Else we'd have to copy bit-by-bit!
+            super().__init__(self.renderbuf, self.height, self.width,
+                             framebuf.MONO_HMSB)
+        else:
+            self.displaybuf = self.renderbuf
+            super().__init__(self.renderbuf, self.width, self.height,
+                             framebuf.MONO_VLSB)
+
+        # flip() was called rotate() once, provide backwards compatibility.
+        self.rotate = self.flip
+        self.init_display()
+
+    # abstractmethod
+    def write_cmd(self, *args, **kwargs): 
+        raise NotImplementedError
+
+    # abstractmethod
+    def write_data(self,  *args, **kwargs):
+        raise NotImplementedError
+
+    def init_display(self):
+        self.reset()
+        self.fill(0)
+        self.show()
+        self.poweron()
+        # rotate90 requires a call to flip() for setting up.
+        self.flip(self.flip_en)
+
+    def poweroff(self):
+        self.write_cmd(_SET_DISP | 0x00)
+
+    def poweron(self):
+        self.write_cmd(_SET_DISP | 0x01)
+        if self.delay:
+            time.sleep_ms(self.delay)
+
+    def flip(self, flag=None, update=True):
+        if flag is None:
+            flag = not self.flip_en
+        mir_v = flag ^ self.rotate90
+        mir_h = flag
+        self.write_cmd(_SET_SEG_REMAP | (0x01 if mir_v else 0x00))
+        self.write_cmd(_SET_SCAN_DIR | (0x08 if mir_h else 0x00))
+        self.flip_en = flag
+        if update:
+            self.show(True) # full update
+
+    def sleep(self, value):
+        self.write_cmd(_SET_DISP | (not value))
+
+    def contrast(self, contrast):
+        self.write_cmd(_SET_CONTRAST)
+        self.write_cmd(contrast)
+
+    def invert(self, invert):
+        self.write_cmd(_SET_NORM_INV | (invert & 1))
+
+    def show(self, full_update = False):
+        # self.* lookups in loops take significant time (~4fps).
+        (w, p, db, rb) = (self.width, self.pages,
+                          self.displaybuf, self.renderbuf)
+        if self.rotate90:
+            for i in range(self.bufsize):
+                db[w * (i % p) + (i // p)] = rb[i]
+        if full_update:
+            pages_to_update = (1 << self.pages) - 1
+        else:
+            pages_to_update = self.pages_to_update
+        #print("Updating pages: {:08b}".format(pages_to_update))
+        for page in range(self.pages):
+            if (pages_to_update & (1 << page)):
+                self.write_cmd(_SET_PAGE_ADDRESS | page)
+                self.write_cmd(_LOW_COLUMN_ADDRESS | 2)
+                self.write_cmd(_HIGH_COLUMN_ADDRESS | 0)
+                self.write_data(db[(w*page):(w*page+w)])
+        self.pages_to_update = 0
+
+    def pixel(self, x, y, color=None):
+        if color is None:
+            return super().pixel(x, y)
+        else:
+            super().pixel(x, y , color)
+            page = y // 8
+            self.pages_to_update |= 1 << page
+
+    def text(self, text, x, y, color=1):
+        super().text(text, x, y, color)
+        self.register_updates(y, y+7)
+
+    def line(self, x0, y0, x1, y1, color):
+        super().line(x0, y0, x1, y1, color)
+        self.register_updates(y0, y1)
+
+    def hline(self, x, y, w, color):
+        super().hline(x, y, w, color)
+        self.register_updates(y)
+
+    def vline(self, x, y, h, color):
+        super().vline(x, y, h, color)
+        self.register_updates(y, y+h-1)
+
+    def fill(self, color):
+        super().fill(color)
+        self.pages_to_update = (1 << self.pages) - 1
+
+    def blit(self, fbuf, x, y, key=-1, palette=None):
+        super().blit(fbuf, x, y, key, palette)
+        self.register_updates(y, y+self.height)
+
+    def scroll(self, x, y):
+        # my understanding is that scroll() does a full screen change
+        super().scroll(x, y)
+        self.pages_to_update =  (1 << self.pages) - 1
+
+    def fill_rect(self, x, y, w, h, color):
+        super().fill_rect(x, y, w, h, color)
+        self.register_updates(y, y+h-1)
+
+    def rect(self, x, y, w, h, color):
+        super().rect(x, y, w, h, color)
+        self.register_updates(y, y+h-1)
+
+    def ellipse(self, x, y, xr, yr, color):
+        super().ellipse(x, y, xr, yr, color)
+        self.register_updates(y-yr, y+yr-1)
+
+    def register_updates(self, y0, y1=None):
+        # this function takes the top and optional bottom address of the changes made
+        # and updates the pages_to_change list with any changed pages
+        # that are not yet on the list
+        start_page = max(0, y0 // 8)
+        end_page = max(0, y1 // 8) if y1 is not None else start_page
+        # rearrange start_page and end_page if coordinates were given from bottom to top
+        if start_page > end_page:
+            start_page, end_page = end_page, start_page
+        for page in range(start_page, end_page+1):
+            self.pages_to_update |= 1 << page
+
+    def reset(self, res=None):
+        if res is not None:
+            res(1)
+            time.sleep_ms(1)
+            res(0)
+            time.sleep_ms(20)
+            res(1)
+            time.sleep_ms(20)
+
+
+class SH1106_I2C(SH1106):
+    def __init__(self, width, height, i2c, res=None, addr=0x3c,
+                 rotate=0, external_vcc=False, delay=0):
+        self.i2c = i2c
+        self.addr = addr
+        self.res = res
+        self.temp = bytearray(2)
+        self.delay = delay
+        if res is not None:
+            res.init(res.OUT, value=1)
+        super().__init__(width, height, external_vcc, rotate)
+
+    def write_cmd(self, cmd):
+        self.temp[0] = 0x80  # Co=1, D/C#=0
+        self.temp[1] = cmd
+        self.i2c.writeto(self.addr, self.temp)
+
+    def write_data(self, buf):
+        self.i2c.writeto(self.addr, b'\x40'+buf)
+
+    def reset(self,res=None):
+        super().reset(self.res)
+
+
+class SH1106_SPI(SH1106):
+    def __init__(self, width, height, spi, dc, res=None, cs=None,
+                 rotate=0, external_vcc=False, delay=0):
+        dc.init(dc.OUT, value=0)
+        if res is not None:
+            res.init(res.OUT, value=0)
+        if cs is not None:
+            cs.init(cs.OUT, value=1)
+        self.spi = spi
+        self.dc = dc
+        self.res = res
+        self.cs = cs
+        self.delay = delay
+        super().__init__(width, height, external_vcc, rotate)
+
+    def write_cmd(self, cmd):
+        if self.cs is not None:
+            self.cs(1)
+            self.dc(0)
+            self.cs(0)
+            self.spi.write(bytearray([cmd]))
+            self.cs(1)
+        else:
+            self.dc(0)
+            self.spi.write(bytearray([cmd]))
+
+    def write_data(self, buf):
+        if self.cs is not None:
+            self.cs(1)
+            self.dc(1)
+            self.cs(0)
+            self.spi.write(buf)
+            self.cs(1)
+        else:
+            self.dc(1)
+            self.spi.write(buf)
+
+    def reset(self, res=None):
+        super().reset(self.res)
+
+</code></pre>
+    </div>
+  </section>
+
+  <section>
+
+    <h2>補充說明</h2>
+
+    <div class="orangebackground">
+      <ul>
+        <li>解析度：128 × 64。</li>
+        <li>通訊方式：I2C。</li>
+        <li>SH1106 OLED 使用<span class="highlight-yellow">framebuffer</span>（畫面緩衝區）概念，
+          所有文字與圖形都是先畫在記憶體中，再一次顯示到螢幕。</li>
+        <li>顯示前要先 <code>fill(0)</code> 清畫面</li>
+        <li>繪製完成後要呼叫 <code>show()</code></li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>▶ 執行結果</h2>
+
+    <ul>
+      <li>第一行文字顯示ESP32-S3</li>
+      <li>第二行文字顯示MicroPython</li>
+      <li>第三行文字顯示SH1106 OLED</li>
+    </ul>
+  </section>
+
+  <!-- youtube的section -->
+  <section>
+    <h2>完整操作影片教學</h2>
+
+    <div class="video">
+      <a href="https://youtu.be/K2Ehu1gULug" target="_blank">
+        <img src="http://img.youtube.com/vi/K2Ehu1gULug/0.jpg" alt="完整步驟影片" />
+      </a>
+    </div>
+  </section>
+
+  <!-- 相關連結的section -->
+  <section>
+    <h2>🔗 相關連結</h2>
+
+    <div class="link-icons">
+      <a href="https://easyway0301.github.io/" target="_blank">
+        <span class="icon">🏠</span>
+        <span class="text">主頁</span>
+      </a>
+
+      <a href="mailto:easyway0301@gmail.com">
+        <span class="icon">✉️</span>
+        <span class="text">Email</span>
+      </a>
+    </div>
+  </section>
+
+  <script>
+    function copyCode(btn) {
+      const code = btn.nextElementSibling.innerText;
+      navigator.clipboard.writeText(code);
+      btn.innerText = "Copied!";
+      setTimeout(() => btn.innerText = "Copy", 1500);
+    }
+  </script>
+</body>
+
 </html>
