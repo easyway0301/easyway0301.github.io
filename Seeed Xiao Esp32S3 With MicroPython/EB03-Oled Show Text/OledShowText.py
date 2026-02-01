@@ -1,40 +1,28 @@
-# 從 machine 模組匯入 Pin（腳位控制）與 I2C（I2C 通訊）
-from machine import Pin, I2C
 
-# 匯入 SSD1306 OLED 顯示器的驅動程式
-import ssd1306
+from machine import Pin, I2C       # 匯入 I2C 類別
+import ssd1306                     # 匯入 SSD1306 顯示驅動
+import time                        # 匯入時間
 
-# 建立 I2C 物件
-# I2C(0)            → 使用 I2C 匯流排 0
-# sda=Pin(5)        → 設定 SDA 腳位為 GPIO5（XIAO Expansion Board）
-# scl=Pin(6)        → 設定 SCL 腳位為 GPIO6（你實測可用）
-# freq=400000       → 設定 I2C 通訊速度為 400kHz（Fast Mode）
-i2c = I2C(0, sda=Pin(5), scl=Pin(6), freq=400000)
+# === 初始化 I2C ===
+# scl 使用 GPIO6
+# sda 使用 GPIO5
+i2c = I2C(1, scl=Pin(6), sda=Pin(5), freq=400000)
 
-# 掃描 I2C 匯流排上所有裝置
-# 正常情況下會看到：
-# 0x3C（60）→ OLED
-# 0x51（81）→ Expansion Board 上的 EEPROM
-print(i2c.scan())
+# === 建立 OLED 物件 ===
+oled = ssd1306.SSD1306_I2C(128, 64, i2c)
 
-# 建立 SSD1306 OLED 物件
-# 128, 64   → OLED 解析度為 128x64
-# i2c       → 使用上面建立的 I2C 物件
-# addr=0x3C → 指定 OLED 的 I2C 位址為 0x3C
-oled = ssd1306.SSD1306_I2C(128, 64, i2c, addr=0x3C)
+# === 清除畫面 ===
+oled.fill(0)                      # 填滿黑色
+oled.show()                       # 顯示更新
 
-# 清空整個畫面（填滿 0 = 黑色）
-oled.fill(0)
+# === 顯示文字 ===
+oled.text("Hello ESP32-S3", 0, 0) # 第一行
+oled.text("OLED Text OK!", 0, 15) # 第二行
+oled.show()                       # 推送到 OLED
 
-# 在 (x=0, y=0) 的位置顯示文字
-oled.text("Hello! Word", 0, 0)
+# === 保持顯示 5 秒 ===
+time.sleep(5)
 
-# 在 (x=0, y=16) 的位置顯示文字（往下 16 像素）
-oled.text("Xiao Esp32 S3", 0, 16)
-
-# 在 (x=0, y=32) 的位置顯示文字（再往下 16 像素）
-oled.text("MicroPython", 0, 32)
-
-# 將緩衝區的內容真正顯示到 OLED 螢幕上
-oled.show()
-
+# === 清除畫面 ===
+oled.fill(0)                      # 填滿黑色
+oled.show()                       # 顯示更新
