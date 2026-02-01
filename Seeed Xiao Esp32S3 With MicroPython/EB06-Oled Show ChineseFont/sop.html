@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
 
 <head>
@@ -56,18 +56,6 @@
             margin: 28px auto 10px;
             border-radius: 12px;
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-        }
-
-        .text-red {
-            color: #ff0000;
-        }
-
-        .text-blue {
-            color: #1f6feb;
-        }
-
-        .text-green {
-            color: #4caf50;
         }
 
         .highlight-yellow {
@@ -202,25 +190,97 @@
 
 <body>
 
-    <h1>EB05 - OLED 顯示中文字</h1>
+    <h1>OLED 顯示中文字</h1>
+
+    <section>
+        <h2>需要的材料</h2>
+        <div class="orangebackground">
+            <ul>
+                <li>Seeed XIAO Esp32-S3開發板1片。</li>
+                <li>Seeeduino XIAO Expansion Board擴充板1片。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+        <h2>認識 Seeeduino XIAO Expansion Board擴充板</h2>
+
+        <p>
+            在開始撰寫程式之前，先來認識這塊擴充板。
+        </p>
+
+        <div class="greenbackground">
+            <ul>
+                <li>D1按鈕</li>
+                <li>無源蜂鳴器</li>
+                <li>0.96" OLED 顯示模組</li>
+                <li>MicroSD 卡插槽</li>
+                <li>RTC 電池座</li>
+            </ul>
+        </div>
+
+        <h2>操作示意圖</h2>
+        <img src="../00-Assets/EB03-Oled Show Text.png" alt="EB03-Oled Show Text" />
+    </section>
+
+    <!-- 腳位圖 -->
+    <section>
+        <h2>正面圖</h2>
+        <img src="../00-Assets/EBfront.png" alt="Seeeduino XIAO Expansion Board擴充板正面" />
+
+        <br>
+        <h2>背面圖</h2>
+        <img src="../00-Assets/EBback.png" alt="Seeeduino XIAO Expansion Board擴充板背面" />
+
+        <br>
+        <h2>腳位圖</h2>
+        <img src="../00-Assets/Pin-List(EB).png" alt="Seeeduino XIAO Expansion Board擴充板腳位圖" />
+
+        <div class="source">
+            圖片來源：
+            <a href="https://wiki.seeedstudio.com/cn/Seeeduino-XIAO-Expansion-Board/" target="_blank">
+                Seeed Studio 官方文件
+            </a>
+        </div>
+    </section>
 
     <section>
         <h2>程式說明</h2>
         <p>在擴充板上的 OLED 顯示中文字，並使用波特律動網站建的 FONT16 字型。</p>
         <ul>
             <li>
-                <p>先到<a href="https://led.baud-dance.com/">波特律動網站</a>建立需要的中文字。</p>
+                先到<a href="https://led.baud-dance.com/" target="_blank">波特律動網站</a>建立需要的中文字。</p>
             </li>
             <li>波特律動的字體用<strong>文泉驿·点阵字</strong>，寬跟高都是<strong>16</strong>。</li>
             <li>取模方式選<strong>逐行式</strong>。</li>
             <li>阴阳码選擇<strong>阳码</strong>。</li>
             <li>生成模板選擇<strong>波特律动OLED驱动</strong>。</li>
+            <li>基本上設定都不用動，只需要輸入您要的文字，然後複製右邊的碼回來改。</li>
+            <img src="../00-Assets/ledbaud.png" alt="ledbaud.png" />
         </ul>
     </section>
 
     <section>
-        <h2>範例程式碼(font16.py)</h2>
+        <h2>波特律動網站取回來的碼</h2>
+        <ol>
+            <li>將大括號{...}裡的碼複製貼出來。</li>
+            <li>貼到font16.py，如下圖</li>
+        </ol>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>
+# font16.py
+const uint8_t zh16x16[][36] = {
+/* 0 你 */ {0xe4,0xbd,0xa0,0x00,0x10,0x01,0x10,0x01,0x10,0x01,0x88,0x7f,0x88,0x40,0x4c,0x20,0x2c,0x04,0x0a,0x04,0x89,0x14,0x88,0x24,0x48,0x24,0x48,0x44,0x28,0x44,0x08,0x04,0x08,0x05,0x08,0x02,},
+/* 1 好 */ {0xe5,0xa5,0xbd,0x00,0x08,0x00,0x08,0x3f,0x08,0x20,0x08,0x10,0x3f,0x08,0x24,0x04,0x24,0x04,0xa4,0x7f,0x24,0x04,0x12,0x04,0x14,0x04,0x08,0x04,0x14,0x04,0x22,0x04,0x21,0x05,0x00,0x02,},
+/* 2 嗎 */ {0xe5,0x97,0x8e,0x00,0x00,0x00,0x80,0x7f,0x9e,0x04,0x92,0x3f,0x92,0x04,0x92,0x3f,0x92,0x04,0x92,0x04,0x92,0x7f,0x12,0x40,0x5e,0x55,0x52,0x55,0x40,0x55,0x40,0x40,0x00,0x28,0x00,0x10,}
+};
+const Font font16x16 = {.w =16, .h = 16, .chars = (const uint8_t *)zh16x16,.len = sizeof(zh16x16)/36, .ascii = &afont16x8};
 
+        </code></pre>
+        </div>
+
+        <h2>範例程式碼(font16.py)</h2>
         <div class="code-block">
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             <pre><code>
@@ -242,7 +302,8 @@ FONT16 = {
     </section>
 
     <section>
-        <h2>範例程式碼(ChineseFont.py)</h2>
+        <h2>開啟 Thonny 並執行範例程式</h2>
+        <p>範例程式碼(ChineseFont.py)</p>
 
         <div class="code-block">
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
@@ -279,7 +340,6 @@ oled.show()
 
     <section>
         <h2>範例程式碼(ssd1306.py)</h2>
-        <span class="highlight-yellow">注意，這個ssd1306.py有新增方法，跟之前範例的不同。</span>
         <div class="code-block">
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             <pre><code>
@@ -418,6 +478,37 @@ class SSD1306_I2C(SSD1306):
         </code></pre>
         </div>
     </section>
+
+    <section>
+        <div class="orangebackground">
+            <h2>⚠ 注意事項</h2>
+            注意，這個ssd1306.py有新增def _font16_row_to_vlsb(self, font)跟def text16(self, text, x, y, spacing=0)，<span
+                class="highlight-yellow">跟之前範例的不同。</span>
+        </div>
+    </section>
+
+    <section>
+        <h2>▶ 執行結果</h2>
+        <p>OLED 螢幕會在第一行顯示<strong>你好嗎</strong>。</p>
+    </section>
+
+    <!-- 相關連結的section -->
+    <section>
+        <h2>🔗 相關連結</h2>
+
+        <div class="link-icons">
+            <a href="https://easyway0301.github.io/" target="_blank">
+                <span class="icon">🏠</span>
+                <span class="text">主頁</span>
+            </a>
+
+            <a href="mailto:easyway0301@gmail.com">
+                <span class="icon">✉️</span>
+                <span class="text">Email</span>
+            </a>
+        </div>
+    </section>
+
 
     <script>
         function copyCode(btn) {
