@@ -1,139 +1,293 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
+
 <head>
-  <meta charset="UTF-8">
-  <title>麵包板（Breadboard）使用教學 SOP</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>從零開始學Esp32</title>
+
   <style>
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
-      line-height: 1.8;
-      margin: 0;
-      padding: 20px;
-      background: #fafafa;
+      font-family: Arial, "Microsoft JhengHei", sans-serif;
+      line-height: 1.9;
+      max-width: 980px;
+      margin: 40px auto;
+      padding: 0 20px;
       color: #222;
-    }
-
-    h1, h2 {
-      text-align: center;
+      background-color: #f5f7fa;
     }
 
     h1 {
+      text-align: center;
       margin-bottom: 10px;
     }
 
+    .subtitle {
+      text-align: center;
+      color: #555;
+      margin-bottom: 50px;
+    }
+
+    section {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 40px;
+      margin-bottom: 50px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
     h2 {
-      margin-top: 50px;
-      border-bottom: 2px solid #ddd;
-      padding-bottom: 6px;
+      margin-top: 0;
+      border-left: 6px solid #4caf50;
+      padding-left: 14px;
     }
 
-    .step {
-      margin: 30px 0;
+    p {
+      margin: 14px 0;
     }
 
-    .step img {
-      display: block;
+    ul {
+      margin-left: 22px;
+    }
+
+    img {
       max-width: 100%;
       height: auto;
-      margin: 15px auto;
+      display: block;
+      margin: 28px auto 10px;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    }
+
+    .text-red {
+      color: #ff0000;
+      font-weight: bold;
+    }
+
+    .text-blue {
+      color: #1f6feb;
+    }
+
+    .text-green {
+      color: #2e7d32;
+    }
+
+    .text-orange {
+      color: #FF7300;
+    }
+
+    .highlight-yellow {
+      background-color: #ffff00;
+      /* 螢光黃背景 */
+      color: #000000;
+      /* 黑色文字，比較清楚 */
+      padding: 2px 4px;
+      /* 可選：讓背景有點空間 */
+      border-radius: 2px;
+      /* 可選：圓角 */
+      font-weight: bold;
+      /* 可選：文字加粗更醒目 */
+    }
+
+    .redbackground {
+      background: #ff8e90;
+      border-left: 6px solid #ff1a00;
+      padding: 16px 20px;
       border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-    }
-
-    .note {
-      background: #eef6ff;
-      border-left: 4px solid #4a90e2;
-      padding: 12px 16px;
       margin: 20px 0;
+      font-size: 16px;
     }
 
-    .warning {
-      background: #fff3f3;
-      border-left: 4px solid #e74c3c;
-      padding: 12px 16px;
+    .greenbackground {
+      background: #e8f5e9;
+      border-left: 6px solid #4caf50;
+      padding: 16px 20px;
+      border-radius: 8px;
       margin: 20px 0;
+      font-size: 16px;
     }
 
-    footer {
-      margin-top: 60px;
-      text-align: center;
+    .orangebackground {
+      background: #fff3e0;
+      border-left: 6px solid #ff9800;
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 16px;
+    }
+
+    a {
+      color: #2e7d32;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Code block */
+    .code-block {
+      position: relative;
+      background: #0d1117;
+      color: #c9d1d9;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 30px 0;
+      font-family: Consolas, Monaco, monospace;
       font-size: 14px;
-      color: #666;
+      overflow-x: auto;
+    }
+
+    .code-block pre {
+      margin: 0;
+      white-space: pre;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #1f6feb;
+      /* GitHub 藍 */
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .copy-btn:hover {
+      background: #388bfd;
+    }
+
+    .link-icons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .link-icons a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: #f1f3f6;
+      color: #222;
+      text-decoration: none;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+    }
+
+    .link-icons a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    }
+
+    /* ⭐ 關鍵：圖示等寬 */
+    .link-icons .icon {
+      width: 28px;
+      /* 固定寬度 */
+      text-align: center;
+      /* 置中 emoji */
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .link-icons .text {
+      font-weight: 500;
     }
   </style>
 </head>
+
 <body>
 
-<h1>麵包板（Breadboard）使用教學 SOP</h1>
-<p style="text-align:center;">適用於 ESP32 / Arduino / 教學與實作</p>
+  <h1>麵包板（Breadboard）</h1>
 
-<h2>步驟 1：認識麵包板「哪裡相通、哪裡不通」</h2>
-<div class="step">
-  <p>
-    麵包板內部並不是全部連在一起，而是<strong>分區導通</strong>。
-    中間的插孔通常是「橫向相通」，左右兩側電源軌則是「縱向相通」。
-  </p>
-  <img src="breadboard-connectivity.jpg" alt="麵包板相通與不相通示意圖">
-  <div class="note">
-    🔍 <strong>重點：</strong><br>
-    中間凹槽左右兩邊<strong>不相通</strong>，通常用來跨接 IC 或開發板。
-  </div>
-</div>
+  <section>
+    <h2>認識麵包板「哪裡相通、哪裡不通」</h2>
+    <img src="../00-Assets/board.png" alt="board.png" />
+    <div class="orangebackground">
+      <ul>
+        <li>麵包板內部並不是全部連在一起，而是<strong>分區導通</strong>。</li>
+        <li>上下兩側電源軌<span class="highlight-yellow">各自</span>「橫向相通」。(<span class="text-red">紅色</span>跟<span
+            class="text-blue">藍色</span>)</li>
+        <li>中間的插孔<span class="highlight-yellow">各自</span>「縱向相通」。(<span class="text-orange">橘色</span>跟<span
+            class="text-green">綠色</span>)</li>
+        <li>中間凹槽左右兩邊<strong>不相通</strong>(<span class="text-orange">橘色</span>跟<span class="text-green">綠色</span>)，通常用來跨接
+          IC 或開發板。</li>
+      </ul>
+    </div>
+  </section>
 
-<h2>步驟 2：將 ESP32 插入麵包板</h2>
-<div class="step">
-  <p>
-    將 ESP32 對準麵包板中央的凹槽插入，
-    確保左右兩排腳位不會短路，且每一隻腳都有獨立的插孔。
-  </p>
-  <img src="esp32-on-breadboard.jpg" alt="ESP32 插在麵包板上的位置">
-  <div class="warning">
-    ⚠️ <strong>注意：</strong><br>
-    如果 ESP32 插歪或壓在同一排孔位，可能會導致短路或無法運作。
-  </div>
-</div>
+  <section>
+    <h2>將 ESP32 插入麵包板</h2>
+    <div class="step">
+      <p>
+        將 ESP32 對準麵包板中央的凹槽插入，
+        確保左右兩排腳位不會短路，且每一隻腳都有獨立的插孔。
+      </p>
+      <img src="../00-Assets/board-01.jpeg" alt="board-01.jpeg" />
+      <div class="redbackground">
+        ⚠️ <strong>注意：</strong>如果 ESP32 插歪或壓在同一排孔位，可能會導致短路或無法運作。
+      </div>
+  </section>
 
-<h2>步驟 3：正極（+）電源軌相通說明</h2>
-<div class="step">
-  <p>
-    麵包板上通常會標示紅線（+），代表<strong>正極電源軌</strong>。
-    同一條紅線上的插孔在<strong>縱向是相通的</strong>。
-  </p>
-  <img src="breadboard-positive-rail.jpg" alt="麵包板正極相通示意圖">
-  <div class="note">
-    💡 <strong>實務建議：</strong><br>
-    可將 ESP32 的 3.3V 或 5V 接到紅色電源軌，
-    方便分接給感測器或模組。
-  </div>
-</div>
+  <section>
+    <h2>正極（+）電源軌相通說明</h2>
 
-<h2>步驟 4：負極（– / GND）電源軌相通說明</h2>
-<div class="step">
-  <p>
-    藍線或黑線通常代表<strong>負極（GND）</strong>。
-    與正極一樣，在同一條電源軌上是<strong>整條相通</strong>的。
-  </p>
-  <img src="breadboard-negative-rail.jpg" alt="麵包板負極相通示意圖">
-  <div class="note">
-    🔧 <strong>重要觀念：</strong><br>
-    所有模組與 ESP32 的 GND 必須「共地」，
-    否則訊號可能會異常。
-  </div>
-</div>
+    <div class="orangebackground">
+      <ul>
+        <li>麵包板上通常會標示紅線（+），代表<strong>正極電源軌</strong>。</li>
+        <li>同一條紅線上的插孔在<strong>橫向是相通的</strong>。</li>
+        <li>如下圖，紅線(橫向)跟橘線(縱向)都是3V3。</li>
+      </ul>
+    </div>
 
-<h2>總結</h2>
-<ul>
-  <li>中間插孔：<strong>橫向相通</strong></li>
-  <li>中央凹槽左右：<strong>不相通</strong></li>
-  <li>紅色電源軌：<strong>正極縱向相通</strong></li>
-  <li>藍色 / 黑色電源軌：<strong>負極縱向相通</strong></li>
-</ul>
+    <img src="../00-Assets/board-02.jpeg" alt="board-02.jpeg" />
+  </section>
 
-<footer>
-  本教學適用於 ESP32 / MicroPython / 教學實作<br>
-  © SOP Teaching Material
-</footer>
+  <section>
+    <h2>負極（– / GND）電源軌相通說明</h2>
+
+    <div class="orangebackground">
+      <ul>
+        <li>藍線代表<strong>負極（GND）</strong>。</li>
+        <li>同一條藍線上的插孔在<strong>橫向是相通的</strong>。</li>
+        <li>如下圖，藍線(橫向)跟(縱向)都是GND。</li>
+      </ul>
+    </div>
+    <img src="../00-Assets/board-03.jpeg" alt="board-03.jpeg" />
+
+    <div class="redbackground">
+      🔧 <strong>重要觀念：</strong><br>
+      所有模組與 ESP32 的 GND 必須「共地」，
+      否則訊號可能會異常。
+    </div>
+  </section>
+
+  <!-- 相關連結的section -->
+  <section>
+    <h2>🔗 相關連結</h2>
+
+    <div class="link-icons">
+      <a href="https://easyway0301.github.io/" target="_blank">
+        <span class="icon">🏠</span>
+        <span class="text">主頁</span>
+      </a>
+
+      <a href="mailto:easyway0301@gmail.com">
+        <span class="icon">✉️</span>
+        <span class="text">Email</span>
+      </a>
+    </div>
+  </section>
 
 </body>
+
 </html>
