@@ -1,1 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>麵包板（Breadboard）使用教學 SOP</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+      line-height: 1.8;
+      margin: 0;
+      padding: 20px;
+      background: #fafafa;
+      color: #222;
+    }
 
+    h1, h2 {
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      margin-top: 50px;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 6px;
+    }
+
+    .step {
+      margin: 30px 0;
+    }
+
+    .step img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 15px auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .note {
+      background: #eef6ff;
+      border-left: 4px solid #4a90e2;
+      padding: 12px 16px;
+      margin: 20px 0;
+    }
+
+    .warning {
+      background: #fff3f3;
+      border-left: 4px solid #e74c3c;
+      padding: 12px 16px;
+      margin: 20px 0;
+    }
+
+    footer {
+      margin-top: 60px;
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+<h1>麵包板（Breadboard）使用教學 SOP</h1>
+<p style="text-align:center;">適用於 ESP32 / Arduino / 教學與實作</p>
+
+<h2>步驟 1：認識麵包板「哪裡相通、哪裡不通」</h2>
+<div class="step">
+  <p>
+    麵包板內部並不是全部連在一起，而是<strong>分區導通</strong>。
+    中間的插孔通常是「橫向相通」，左右兩側電源軌則是「縱向相通」。
+  </p>
+  <img src="breadboard-connectivity.jpg" alt="麵包板相通與不相通示意圖">
+  <div class="note">
+    🔍 <strong>重點：</strong><br>
+    中間凹槽左右兩邊<strong>不相通</strong>，通常用來跨接 IC 或開發板。
+  </div>
+</div>
+
+<h2>步驟 2：將 ESP32 插入麵包板</h2>
+<div class="step">
+  <p>
+    將 ESP32 對準麵包板中央的凹槽插入，
+    確保左右兩排腳位不會短路，且每一隻腳都有獨立的插孔。
+  </p>
+  <img src="esp32-on-breadboard.jpg" alt="ESP32 插在麵包板上的位置">
+  <div class="warning">
+    ⚠️ <strong>注意：</strong><br>
+    如果 ESP32 插歪或壓在同一排孔位，可能會導致短路或無法運作。
+  </div>
+</div>
+
+<h2>步驟 3：正極（+）電源軌相通說明</h2>
+<div class="step">
+  <p>
+    麵包板上通常會標示紅線（+），代表<strong>正極電源軌</strong>。
+    同一條紅線上的插孔在<strong>縱向是相通的</strong>。
+  </p>
+  <img src="breadboard-positive-rail.jpg" alt="麵包板正極相通示意圖">
+  <div class="note">
+    💡 <strong>實務建議：</strong><br>
+    可將 ESP32 的 3.3V 或 5V 接到紅色電源軌，
+    方便分接給感測器或模組。
+  </div>
+</div>
+
+<h2>步驟 4：負極（– / GND）電源軌相通說明</h2>
+<div class="step">
+  <p>
+    藍線或黑線通常代表<strong>負極（GND）</strong>。
+    與正極一樣，在同一條電源軌上是<strong>整條相通</strong>的。
+  </p>
+  <img src="breadboard-negative-rail.jpg" alt="麵包板負極相通示意圖">
+  <div class="note">
+    🔧 <strong>重要觀念：</strong><br>
+    所有模組與 ESP32 的 GND 必須「共地」，
+    否則訊號可能會異常。
+  </div>
+</div>
+
+<h2>總結</h2>
+<ul>
+  <li>中間插孔：<strong>橫向相通</strong></li>
+  <li>中央凹槽左右：<strong>不相通</strong></li>
+  <li>紅色電源軌：<strong>正極縱向相通</strong></li>
+  <li>藍色 / 黑色電源軌：<strong>負極縱向相通</strong></li>
+</ul>
+
+<footer>
+  本教學適用於 ESP32 / MicroPython / 教學實作<br>
+  © SOP Teaching Material
+</footer>
+
+</body>
+</html>
