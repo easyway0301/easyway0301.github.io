@@ -21,9 +21,11 @@ ir.irq(                            # 設定 GPIO 中斷
 
 print("📡 IR Receiver ready")      # 提示紅外線接收器已就緒
 
-while True:                        # 主迴圈，持續運行
-    time.sleep(1)                  # 每秒檢查一次（避免 CPU 忙碌）
-    if len(pulses) > 60:           # 如果已收到超過 60 筆脈衝（NEC 通常約 67）
-        print("📥 pulses =", pulses)  # 印出目前收到的脈衝時間序列
-        pulses = []                # 清空 pulses，準備接收下一次
+while True:
+    time.sleep(0.1)  # 100ms 檢查一次
 
+    # 如果已經有資料，而且 50ms 沒再收到新脈衝
+    if pulses and time.ticks_diff(time.ticks_us(), last) > 50_000:
+        print("📥 pulses 數量 =", len(pulses))
+        print("📥 pulses =", pulses)
+        pulses = []   # 只在「真的結束」後才清空
