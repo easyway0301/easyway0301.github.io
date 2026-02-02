@@ -205,88 +205,103 @@
     </style>
 </head>
 
-  <body>
+<body>
     <h1>MAX7219 8x8 LED</h1>
 
     <section>
-      <h2>第一步：模組介紹</h2>
-
-      <p>
-        本教學使用 <strong>MAX7219 8x8 LED 矩陣模組</strong>，透過 SPI
-        控制顯示文字。
-      </p>
-
-      <div class="greenbackground">
-        <strong>模組特點：</strong><br />
-        • 8x8 LED 矩陣<br />
-        • SPI 通訊控制<br />
-        • 可串接多個模組
-      </div>
-
-      <p><strong>接線方式 (Seeed XIAO ESP32-S3)：</strong></p>
-      <ul>
-        <li>VCC → 3V3</li>
-        <li>GND → GND</li>
-        <li>DIN / MOSI → GPIO 9</li>
-        <li>SCK → GPIO 7</li>
-        <li>CS → GPIO 8</li>
-      </ul>
+        <h2>需要的材料</h2>
+        <div class="orangebackground">
+            <ul>
+                <li>Seeed XIAO Esp32-S3 開發板1片。</li>
+                <li>麵包板1片。</li>
+                <li>MAX7219 8x8 LED模組1個。</li>
+            </ul>
+        </div>
     </section>
 
     <!-- 腳位圖 -->
     <section>
-      <img
-        src="../00-Assets/B10-max72198x8led.jpeg"
-        alt="B10-max72198x8led.jpeg"
-      />
+        <h2>腳位圖</h2>
+        <img src="../00-Assets/Pin-List.png" alt="Pin-List.png" />
 
-      <img src="../00-Assets/Pin-List.png" alt="Pin-List.png" />
+        <div class="source">
+            圖片來源：
+            <a href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/" target="_blank">
+                Seeed Studio 官方文件
+            </a>
+        </div>
 
-      <div class="source">
-        圖片來源：
-        <a
-          href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/"
-          target="_blank"
-        >
-          Seeed Studio 官方文件
-        </a>
-      </div>
+        <br>
+        <h2>接線圖</h2>
+
+        <img src="../00-Assets/B10-max72198x8led.jpeg" alt="B10-max72198x8led.jpeg" />
+        <div class="orangebackground">
+            <ul>
+                <li>把Esp32插在麵包板左側正中間。</li>
+                <li>Esp32的GND接在模組的GND。</li>
+                <li>Esp32的3V3接在模組的VCC。</li>
+                <li>Esp32的GPIO 9接在模組的DIN。</li>
+                <li>Esp32的GPIO 8接在模組的CS。</li>
+                <li>Esp32的GPIO 7接在模組的CLK。</li>
+            </ul>
+        </div>
     </section>
 
     <section>
-      <h2>第二步：MicroPython 程式碼</h2>
+        <h2>開啟 Thonny 並執行範例程式</h2>
 
-      <p>以下程式碼可直接在 Thonny 上執行，顯示跑馬燈文字 "HELLO"。</p>
-      <p>max72198x8led.py</p>
-      <div class="code-block">
-        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-        <pre><code>
-from machine import Pin, SPI      # 匯入 SPI 與 Pin 類別
-import max7219                    # 匯入 MAX7219 模組
-import time                        # 匯入時間模組
+        <p>max72198x8led.py</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>
+from machine import Pin, SPI
+import max7219
+import time
 
-# === 初始化 SPI ===
-spi = SPI(1, baudrate=10_000_000, sck=Pin(7), mosi=Pin(9))   # SPI 物件，指定 SCK 與 MOSI
-cs = Pin(8, Pin.OUT)                                         # CS 腳位
+# 初始化 SPI
+spi = SPI(1, baudrate=10000000, polarity=0, phase=0,
+          sck=Pin(7), mosi=Pin(9))
+cs = Pin(8, Pin.OUT)
 
-# === 初始化 MAX7219 ===
-display = max7219.Matrix8x8(spi, cs, 1)                      # 1 個 8x8 模組
-display.brightness(5)                                        # 設定亮度 0~15
+# 初始化 MAX7219，1 個 8x8 模組
+display = max7219.Matrix8x8(spi, cs, 1)
+display.brightness(5)  # 亮度 0~15
+display.fill(0)
+display.show()
 
-# === 顯示跑馬燈文字 ===
-# 往左移動文字從右邊開始跑到左邊
-for x in range(32, -40, -1):                                 # 文字 x 座標從 32 到 -40
-    display.fill(0)                                          # 清空畫面
-    display.text("HELLO", x, 0, 1)                           # 顯示文字
-    display.show()                                           # 更新顯示
-    time.sleep(0.1)                                         # 延遲 0.1 秒
+# 簡單字母對照字典 (A~H)
+letters = {
+    "H": [0x42,0x42,0x42,0x7E,0x42,0x42,0x42,0x00],
+    "E": [0x7E,0x40,0x40,0x7C,0x40,0x40,0x7E,0x00],
+    "L": [0x40,0x40,0x40,0x40,0x40,0x40,0x7E,0x00],
+    "O": [0x3C,0x42,0x42,0x42,0x42,0x42,0x3C,0x00]
+}
+
+text = "HELLO"
+
+# 用 for 迴圈顯示文字，每個字停 0.5 秒
+for char in text:
+    display.fill(0)
+    pattern = letters.get(char, [0]*8)
+    for row in range(8):
+        display.pixel(row, 0, (pattern[row] & 0x80) >> 7)
+        display.pixel(row, 1, (pattern[row] & 0x40) >> 6)
+        display.pixel(row, 2, (pattern[row] & 0x20) >> 5)
+        display.pixel(row, 3, (pattern[row] & 0x10) >> 4)
+        display.pixel(row, 4, (pattern[row] & 0x08) >> 3)
+        display.pixel(row, 5, (pattern[row] & 0x04) >> 2)
+        display.pixel(row, 6, (pattern[row] & 0x02) >> 1)
+        display.pixel(row, 7, (pattern[row] & 0x01))
+    display.show()
+    time.sleep(0.5)
+
 </code></pre>
-      </div>
+        </div>
 
-      <p>max7219.py</p>
-      <div class="code-block">
-        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-        <pre><code>
+        <p>max7219.py</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>
 # max7219.py
 from micropython import const
 import framebuf
@@ -339,66 +354,77 @@ class Matrix8x8(framebuf.FrameBuffer):
                 )
             self.cs(1)
 
-
 </code></pre>
-      </div>
+        </div>
+    </section>
+
+
+    <section>
+
+        <h2>補充說明</h2>
+
+        <div class="orangebackground">
+            <ul>
+                <li>8x8 LED 矩陣。</li>
+                <li>SPI 通訊控制。</li>
+                <li>可串接多個模組。</li>
+            </ul>
+        </div>
     </section>
 
     <section>
-      <h2>執行結果</h2>
+        <h2>執行結果</h2>
 
-      <ul>
-        <li>文字 "HELLO" 從右往左平滑滾動</li>
-        <li>亮度可透過display.brightness()調整</li>
-        <li>可延伸成跑馬燈選單、訊息顯示</li>
-      </ul>
+        <ul>
+            <li>文字 "HELLO" 從右往左平滑滾動</li>
+            <li>亮度可透過display.brightness()調整</li>
+            <li>可延伸成跑馬燈選單、訊息顯示</li>
+        </ul>
 
-      <div class="greenbackground">
-        📌 延伸練習建議：<br />
-        ✔ 顯示其他字串或數字<br />
-        ✔ 串接多個 8x8 模組滾動更長文字<br />
-        ✔ 結合按鈕控制跑馬燈速度
-      </div>
+        <div class="greenbackground">
+            📌 延伸練習建議：<br />
+            ✔ 顯示其他字串或數字<br />
+            ✔ 串接多個 8x8 模組滾動更長文字<br />
+            ✔ 結合按鈕控制跑馬燈速度
+        </div>
     </section>
 
     <!-- youtube的section -->
     <section>
-      <h2>完整操作影片教學</h2>
+        <h2>完整操作影片教學</h2>
 
-      <div class="video">
-        <a href="https://youtu.be/efPJApJG7Ec" target="_blank">
-          <img
-            src="http://img.youtube.com/vi/efPJApJG7Ec/0.jpg"
-            alt="完整步驟影片"
-          />
-        </a>
-      </div>
+        <div class="video">
+            <a href="https://youtu.be/efPJApJG7Ec" target="_blank">
+                <img src="http://img.youtube.com/vi/efPJApJG7Ec/0.jpg" alt="完整步驟影片" />
+            </a>
+        </div>
     </section>
 
     <!-- 相關連結的section -->
     <section>
-      <h2>🔗 相關連結</h2>
+        <h2>🔗 相關連結</h2>
 
-      <div class="link-icons">
-        <a href="https://easyway0301.github.io/" target="_blank">
-          <span class="icon">🏠</span>
-          <span class="text">主頁</span>
-        </a>
+        <div class="link-icons">
+            <a href="https://easyway0301.github.io/" target="_blank">
+                <span class="icon">🏠</span>
+                <span class="text">主頁</span>
+            </a>
 
-        <a href="mailto:easyway0301@gmail.com">
-          <span class="icon">✉️</span>
-          <span class="text">Email</span>
-        </a>
-      </div>
+            <a href="mailto:easyway0301@gmail.com">
+                <span class="icon">✉️</span>
+                <span class="text">Email</span>
+            </a>
+        </div>
     </section>
 
     <script>
-      function copyCode(btn) {
-          const code = btn.nextElementSibling.innerText;
-          navigator.clipboard.writeText(code);
-          btn.innerText = "Copied!";
-          setTimeout(() => btn.innerText = "Copy", 1500);
-      }
+        function copyCode(btn) {
+            const code = btn.nextElementSibling.innerText;
+            navigator.clipboard.writeText(code);
+            btn.innerText = "Copied!";
+            setTimeout(() => btn.innerText = "Copy", 1500);
+        }
     </script>
-  </body>
+</body>
+
 </html>
