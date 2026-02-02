@@ -204,61 +204,59 @@
         }
     </style>
 </head>
-  <body>
+
+<body>
+
     <h1>搖桿模組（Joystick / PS2）</h1>
 
     <section>
-      <h2>模組介紹</h2>
-
-      <p>
-        此搖桿模組內含兩個可變電阻（X / Y 軸）與一個按壓開關，
-        可用於方向控制、選單操作、遊戲輸入等應用。
-      </p>
-
-      <div class="greenbackground">
-        <strong>模組功能：</strong><br />
-        • VRX：左右方向（X 軸）<br />
-        • VRY：上下方向（Y 軸）<br />
-        • SW：按壓按鈕（通常按下 = 0）
-      </div>
-    </section>
-
-    <section>
-      <h2>接線方式</h2>
-
-      <ul>
-        <li>GND → GND</li>
-        <li>VCC → 3V3（⚠ 不要接 5V）</li>
-        <li>VRX → GPIO 9</li>
-        <li>VRY → GPIO 8</li>
-        <li>SW → GPIO 7</li>
-      </ul>
+        <h2>需要的材料</h2>
+        <div class="orangebackground">
+            <ul>
+                <li>Seeed XIAO Esp32-S3 開發板1片。</li>
+                <li>麵包板1片。</li>
+                <li>搖桿模組1個。</li>
+            </ul>
+        </div>
     </section>
 
     <!-- 腳位圖 -->
     <section>
-      <img src="../00-Assets/B09-Joystick.jpeg" alt="B09-Joystick.jpeg" />
+        <h2>腳位圖</h2>
+        <img src="../00-Assets/Pin-List.png" alt="Pin-List.png" />
 
-      <img src="../00-Assets/Pin-List.png" alt="Pin-List.png" />
+        <div class="source">
+            圖片來源：
+            <a href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/" target="_blank">
+                Seeed Studio 官方文件
+            </a>
+        </div>
 
-      <div class="source">
-        圖片來源：
-        <a
-          href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/"
-          target="_blank"
-        >
-          Seeed Studio 官方文件
-        </a>
-      </div>
+        <br>
+        <h2>接線圖</h2>
+
+        <img src="../00-Assets/B09-Joystick.jpeg" alt="B09-Joystick.jpeg" />
+        <div class="orangebackground">
+            <ul>
+                <li>把Esp32插在麵包板左側正中間。</li>
+                <li>Esp32的GND接在模組的GND。</li>
+                <li>Esp32的3V3接在模組的+5V。</li>
+                <li>Esp32的GPIO 9接在模組的VRX。</li>
+                <li>Esp32的GPIO 8接在模組的VRY。</li>
+                <li>Esp32的GPIO 7接在模組的SW。</li>
+            </ul>
+        </div>
     </section>
 
     <section>
-      <h2>MicroPython 範例程式（執行 10 秒）</h2>
+        <h2>開啟 Thonny 並執行範例程式</h2>
 
-      <div class="code-block">
-        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <p>Joystick.py</p>
 
-        <pre><code>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+
+            <pre><code>
 from machine import ADC, Pin      # 匯入 ADC 與 Pin 類別
 import time                       # 匯入時間模組
 
@@ -321,51 +319,67 @@ while time.ticks_diff(time.ticks_ms(), start) < 10000:
 
 print("✅ 測試結束（10 秒）")
 </code></pre>
-      </div>
-      <div class="highlight">
-        📌 本範例不使用 <code>while True</code>， 透過時間判斷讓程式
-        <strong>10 秒後自動結束</strong>， 非常適合教學與測試。
-      </div>
+        </div>
     </section>
 
     <section>
-      <h2>完整操作影片教學</h2>
 
-      <!-- youtube的section -->
-      <div class="video">
-        <a href="https://youtu.be/nx5FtBWFwbE" target="_blank">
-          <img
-            src="http://img.youtube.com/vi/nx5FtBWFwbE/0.jpg"
-            alt="完整步驟影片"
-          />
-        </a>
-      </div>
+        <h2>補充說明</h2>
+
+        <div class="orangebackground">
+            <ul>
+                <li>VRX：左右方向（X 軸）。</li>
+                <li>VRY：上下方向（Y 軸）。</li>
+                <li>SW：按壓按鈕（通常按下 = 0）。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+        <h2>執行結果</h2>
+
+        <ul>
+            <li>執行時間10秒鐘。</li>
+            <li>會列印出X軸、Y軸旳值。</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>完整操作影片教學</h2>
+
+        <!-- youtube的section -->
+        <div class="video">
+            <a href="https://youtu.be/nx5FtBWFwbE" target="_blank">
+                <img src="http://img.youtube.com/vi/nx5FtBWFwbE/0.jpg" alt="完整步驟影片" />
+            </a>
+        </div>
     </section>
 
     <!-- 相關連結的section -->
     <section>
-      <h2>🔗 相關連結</h2>
+        <h2>🔗 相關連結</h2>
 
-      <div class="link-icons">
-        <a href="https://easyway0301.github.io/" target="_blank">
-          <span class="icon">🏠</span>
-          <span class="text">主頁</span>
-        </a>
+        <div class="link-icons">
+            <a href="https://easyway0301.github.io/" target="_blank">
+                <span class="icon">🏠</span>
+                <span class="text">主頁</span>
+            </a>
 
-        <a href="mailto:easyway0301@gmail.com">
-          <span class="icon">✉️</span>
-          <span class="text">Email</span>
-        </a>
-      </div>
+            <a href="mailto:easyway0301@gmail.com">
+                <span class="icon">✉️</span>
+                <span class="text">Email</span>
+            </a>
+        </div>
     </section>
-    
+
     <script>
-      function copyCode(btn) {
-          const code = btn.nextElementSibling.innerText;
-          navigator.clipboard.writeText(code);
-          btn.innerText = "Copied!";
-          setTimeout(() => btn.innerText = "Copy", 1500);
-      }
+        function copyCode(btn) {
+            const code = btn.nextElementSibling.innerText;
+            navigator.clipboard.writeText(code);
+            btn.innerText = "Copied!";
+            setTimeout(() => btn.innerText = "Copy", 1500);
+        }
     </script>
-  </body>
+</body>
+
 </html>
