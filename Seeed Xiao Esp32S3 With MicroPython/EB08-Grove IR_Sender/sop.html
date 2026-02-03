@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>從零開始學Esp32</title>
+
+    <style>
+        body {
+            font-family: Arial, "Microsoft JhengHei", sans-serif;
+            line-height: 1.9;
+            max-width: 980px;
+            margin: 40px auto;
+            padding: 0 20px;
+            color: #222;
+            background-color: #f5f7fa;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #555;
+            margin-bottom: 50px;
+        }
+
+        section {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 40px;
+            margin-bottom: 50px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        h2 {
+            margin-top: 0;
+            border-left: 6px solid #4caf50;
+            padding-left: 14px;
+        }
+
+        p {
+            margin: 14px 0;
+        }
+
+        ul {
+            margin-left: 22px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 28px auto 10px;
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .text-red {
+            color: #ff0000;
+        }
+
+        .text-blue {
+            color: #1f6feb;
+        }
+
+        .text-green {
+            color: #4caf50;
+        }
+
+        .text-orange {
+            color: #FF7300;
+        }
+
+
+        .highlight-yellow {
+            background-color: #ffff00;
+            /* 螢光黃背景 */
+            color: #000000;
+            /* 黑色文字，比較清楚 */
+            padding: 2px 4px;
+            /* 可選：讓背景有點空間 */
+            border-radius: 2px;
+            /* 可選：圓角 */
+            font-weight: bold;
+            /* 可選：文字加粗更醒目 */
+        }
+
+        .redbackground {
+            background: #ff8e90;
+            border-left: 6px solid #ff1a00;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+
+        .greenbackground {
+            background: #e8f5e9;
+            border-left: 6px solid #4caf50;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+
+        .orangebackground {
+            background: #fff3e0;
+            border-left: 6px solid #ff9800;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+
+        a {
+            color: #2e7d32;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Code block */
+        .code-block {
+            position: relative;
+            background: #0d1117;
+            color: #c9d1d9;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            margin: 0;
+            white-space: pre;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #1f6feb;
+            /* GitHub 藍 */
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 14px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .copy-btn:hover {
+            background: #388bfd;
+        }
+
+        .link-icons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .link-icons a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            background: #f1f3f6;
+            color: #222;
+            text-decoration: none;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition:
+                transform 0.15s ease,
+                box-shadow 0.15s ease;
+        }
+
+        .link-icons a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        }
+
+        /* ⭐ 關鍵：圖示等寬 */
+        .link-icons .icon {
+            width: 28px;
+            /* 固定寬度 */
+            text-align: center;
+            /* 置中 emoji */
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .link-icons .text {
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Grove - Infrared Emitter(紅外線發射)</h1>
+
+    <section>
+        <h2>需要的材料</h2>
+        <div class="orangebackground">
+            <ul>
+                <li>Seeed XIAO Esp32-S3開發板1片。</li>
+                <li>Seeeduino XIAO Expansion Board擴充板1片。</li>
+                <li>Grove - Infrared Emitter模組1個。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+        <h2>認識 Seeeduino XIAO Expansion Board擴充板</h2>
+
+        <p>
+            在開始撰寫程式之前，先來認識這塊擴充板。
+        </p>
+
+        <div class="greenbackground">
+            <ul>
+                <li>D1按鈕</li>
+                <li>無源蜂鳴器</li>
+                <li>0.96" OLED 顯示模組</li>
+                <li>MicroSD 卡插槽</li>
+                <li>RTC 電池座</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 腳位圖 -->
+    <section>
+        <h2>正面圖</h2>
+        <img src="../00-Assets/EBfront.png" alt="Seeeduino XIAO Expansion Board擴充板正面" />
+
+        <br>
+        <h2>背面圖</h2>
+        <img src="../00-Assets/EBback.png" alt="Seeeduino XIAO Expansion Board擴充板背面" />
+
+        <br>
+        <h2>腳位圖</h2>
+        <img src="../00-Assets/Pin-List(EB).png" alt="Seeeduino XIAO Expansion Board擴充板腳位圖" />
+
+        <div class="source">
+            圖片來源：
+            <a href="https://wiki.seeedstudio.com/cn/Seeeduino-XIAO-Expansion-Board/" target="_blank">
+                Seeed Studio 官方文件
+            </a>
+        </div>
+
+        <br>
+        <h2>模組接線圖</h2>
+
+        <img src="../00-Assets/EB08-Grove IR_Sender.jpeg" alt="EB08-Grove IR_Sender.jpeg" />
+        <div class="orangebackground">
+            <ul>
+                <li>插在Seeeduino XIAO Expansion Board擴充板的A0接口。</li>
+                <li>A0接口對應Esp32的GPIO 1。</li>
+            </ul>
+        </div>
+
+        <div class="source">
+            官方說明：
+            <a href="https://wiki.seeedstudio.com/Grove-Infrared_Emitter/"
+                target="_blank">
+                Grove - Infrared Emitter
+            </a>
+        </div>
+    </section>
+
+    <section>
+        <h2>開啟 Thonny 並執行範例程式</h2>
+        <p>範例程式碼(IR_Sender.py)</p>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>
+from machine import Pin, PWM          # 從 machine 模組匯入 Pin（腳位）與 PWM（硬體 PWM）
+import time                           # 匯入 time 模組，用來做微秒延遲
+
+# =========================
+# NEC IR 發射器（單檔版）
+# =========================
+
+class IRSender:                       # 定義一個紅外線發射類別
+    def __init__(self, pin=1, freq=38000):  # 建構子，設定輸出腳位與載波頻率
+        self.pwm = PWM(               # 建立 PWM 物件
+            Pin(pin),                 # 指定 PWM 使用的 GPIO 腳位
+            freq=freq,                # 設定 PWM 頻率為 38kHz（NEC 標準）
+            duty=0                    # 初始 duty 設為 0（不發射）
+        )
+
+    def send(self, pulses):            # 定義發射紅外線的方法
+        """
+        pulses: [mark, space, mark, space ...] 單位 us
+        """
+        if not pulses:                # 如果 pulses 是空的
+            print("❌ pulses 為空")   # 印出錯誤訊息
+            return False              # 回傳 False 表示發射失敗
+
+        for i, duration in enumerate(pulses):  # 逐筆讀取脈衝索引與時間長度
+            if i % 2 == 0:             # 偶數 index → mark（紅外線 ON）
+                self.pwm.duty(512)     # 設定 duty 約 50%，輸出 38kHz 載波
+            else:                      # 奇數 index → space（紅外線 OFF）
+                self.pwm.duty(0)       # 將 duty 設為 0，關閉紅外線
+
+            time.sleep_us(duration)    # 延遲指定的微秒數，維持脈衝寬度
+
+        self.pwm.duty(0)               # 發射完成後，確保紅外線關閉
+        return True                    # 回傳 True 表示發射成功
+
+
+# =========================
+# NEC 測試碼（67 pulses）
+# =========================
+
+NEC_PULSES = [                         # 定義一組 NEC 協議的紅外線脈衝資料
+    9000, 4500,                        # Header：9ms mark + 4.5ms space
+    560, 560, 560, 560, 560, 560, 560, 1690,   # 資料位（0 與 1）
+    560, 560, 560, 560, 560, 560, 560, 560,    # 資料位
+    560, 560, 560, 1690, 560, 1690, 560, 560,  # 資料位
+    560, 1690, 560, 1690, 560, 1690, 560, 1690,# 資料位
+    560, 1690, 560, 560, 560, 1690, 560, 560,  # 資料位
+    560, 560, 560, 560, 560, 1690, 560, 560,   # 資料位
+    560, 560, 560, 1690, 560, 560, 560, 1690,  # 資料位
+    560, 1690, 560, 1690, 560, 560, 560, 1690,  # 資料位（結尾）
+    560
+]
+
+# =========================
+# 直接執行（無 main）
+# =========================
+
+ir = IRSender()                        # 建立 IRSender 物件（使用預設腳位與頻率）
+
+print("📡 發射 NEC")                  # 印出開始發射提示
+ir.send(NEC_PULSES)                   # 呼叫 send 方法發射 NEC 紅外線
+print("📡 發射完畢")                  # 印出發射完成提示
+        </code></pre>
+        </div>
+    </section>
+
+    <section>
+        <h2>▶ 執行結果</h2>
+        <ul>
+            <li>📡 發射 NEC</li>
+            <li>📡 發射完畢</li>
+            <li>會發射67個脈衝。</li>
+            <li>建議多準備另一組Esp32做接收器觀察接收的脈衝。</li>
+        </ul>
+    </section>
+
+    <!-- 相關連結的section -->
+    <section>
+        <h2>🔗 相關連結</h2>
+
+        <div class="link-icons">
+            <a href="https://easyway0301.github.io/" target="_blank">
+                <span class="icon">🏠</span>
+                <span class="text">主頁</span>
+            </a>
+
+            <a href="mailto:easyway0301@gmail.com">
+                <span class="icon">✉️</span>
+                <span class="text">Email</span>
+            </a>
+        </div>
+    </section>
+
+    <script>
+        function copyCode(btn) {
+            const code = btn.nextElementSibling.innerText;
+            navigator.clipboard.writeText(code);
+            btn.innerText = "Copied!";
+            setTimeout(() => btn.innerText = "Copy", 1500);
+        }
+    </script>
+
+</body>
+
+</html>
