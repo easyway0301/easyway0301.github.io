@@ -1,249 +1,484 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
+
 <head>
-    <meta charset="UTF-8">
-    <title>ThingSpeak SOP 教學（ESP32 / MicroPython）</title>
+    <meta charset="UTF-8" />
+    <title>從零開始學Esp32</title>
 
     <style>
         body {
-            font-family: "Segoe UI", "Noto Sans TC", Arial, sans-serif;
-            line-height: 1.8;
-            margin: 40px;
-            background-color: #fafafa;
-            color: #333;
-        }
-
-        h1, h2, h3 {
-            color: #1a73e8;
+            font-family: Arial, "Microsoft JhengHei", sans-serif;
+            line-height: 1.9;
+            max-width: 980px;
+            margin: 40px auto;
+            padding: 0 20px;
+            color: #222;
+            background-color: #f5f7fa;
         }
 
         h1 {
-            border-bottom: 3px solid #1a73e8;
-            padding-bottom: 10px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #555;
+            margin-bottom: 50px;
+        }
+
+        section {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 40px;
+            margin-bottom: 50px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
         }
 
         h2 {
-            margin-top: 40px;
-            border-left: 6px solid #1a73e8;
-            padding-left: 10px;
+            margin-top: 0;
+            border-left: 6px solid #4caf50;
+            padding-left: 14px;
         }
 
-        pre {
-            background: #272822;
-            color: #f8f8f2;
-            padding: 15px;
+        p {
+            margin: 14px 0;
+        }
+
+        ul {
+            margin-left: 22px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 28px auto 10px;
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .text-red {
+            color: #ff0000;
+        }
+
+        .text-blue {
+            color: #1f6feb;
+        }
+
+        .text-green {
+            color: #4caf50;
+        }
+
+        .text-orange {
+            color: #FF7300;
+        }
+
+
+        .highlight-yellow {
+            background-color: #ffff00;
+            /* 螢光黃背景 */
+            color: #000000;
+            /* 黑色文字，比較清楚 */
+            padding: 2px 4px;
+            /* 可選：讓背景有點空間 */
+            border-radius: 2px;
+            /* 可選：圓角 */
+            font-weight: bold;
+            /* 可選：文字加粗更醒目 */
+        }
+
+        .redbackground {
+            background: #ff8e90;
+            border-left: 6px solid #ff1a00;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+
+        .greenbackground {
+            background: #e8f5e9;
+            border-left: 6px solid #4caf50;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+
+        .orangebackground {
+            background: #fff3e0;
+            border-left: 6px solid #ff9800;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+
+        a {
+            color: #2e7d32;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Code block */
+        .code-block {
+            position: relative;
+            background: #0d1117;
+            color: #c9d1d9;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 14px;
             overflow-x: auto;
+        }
+
+        .code-block pre {
+            margin: 0;
+            white-space: pre;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #1f6feb;
+            /* GitHub 藍 */
+            color: white;
+            border: none;
             border-radius: 6px;
+            padding: 6px 14px;
+            cursor: pointer;
+            font-size: 13px;
         }
 
-        code {
-            font-family: Consolas, monospace;
+        .copy-btn:hover {
+            background: #388bfd;
         }
 
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin: 20px 0;
+        .link-icons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
         }
 
-        th, td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: left;
+        .link-icons a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            background: #f1f3f6;
+            color: #222;
+            text-decoration: none;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition:
+                transform 0.15s ease,
+                box-shadow 0.15s ease;
         }
 
-        th {
-            background-color: #e8f0fe;
+        .link-icons a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
         }
 
-        .note {
-            background: #fff3cd;
-            border-left: 6px solid #ffc107;
-            padding: 12px;
-            margin: 20px 0;
-        }
-
-        .ok {
-            background: #e6fffa;
-            border-left: 6px solid #20c997;
-            padding: 12px;
-            margin: 20px 0;
-        }
-
-        footer {
-            margin-top: 60px;
-            font-size: 0.9em;
-            color: #666;
+        /* ⭐ 關鍵：圖示等寬 */
+        .link-icons .icon {
+            width: 28px;
+            /* 固定寬度 */
             text-align: center;
+            /* 置中 emoji */
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .link-icons .text {
+            font-weight: 500;
         }
     </style>
 </head>
 
+
 <body>
 
-<h1>ThingSpeak SOP 教學</h1>
-<p><b>適用平台：</b>ESP32 / ESP32-S3 / MicroPython</p>
+    <h1>DHT22資料上傳到ThingSpeak</h1>
 
-<h2>一、目的說明</h2>
-<p>
-本 SOP 用於說明如何使用 ThingSpeak 平台，將 ESP32 感測資料上傳至雲端，
-並可再從雲端讀取或下載資料，適合作為教學、實驗與專題展示。
-</p>
+    <section>
+        <h2>需要的材料</h2>
+        <div class="orangebackground">
+            <ul>
+                <li>Seeed XIAO Esp32-S3 開發板1片。</li>
+                <li>麵包板1片。</li>
+                <li>DHT22 溫溼度感測模組1個。</li>
+                <li>Thingspeak帳號1個。</li>
+                <li>
+                    <a href="https://thingspeak.mathworks.com/login?skipSSOCheck=true" target="_blank">
+                        還沒註冊請按我
+                    </a>
+                </li>
+                <li>
+                    <a href="https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/00-thingspeak/sop.html"
+                        target="_blank">
+                        步驟在這
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </section>
 
-<ul>
-    <li>建立 ThingSpeak Channel</li>
-    <li>ESP32 上傳感測資料</li>
-    <li>讀取 / 下載雲端資料</li>
-    <li>瞭解免費版容量限制</li>
-</ul>
+    <section>
+        <h2>Thingspeak免費版限制（重要）</h2>
+        <div class="orangebackground">
+            <ul>
+                <li>Channel 4個。</li>
+                <li>每個Channel 8個欄位。</li>
+                <li>每年上傳筆數上限3,000,000 筆。</li>
+                <li>最短更新間隔 15秒。</li>
+                <li>免費版若更新間隔小於 15 秒，資料將無法成功寫入。</li>
+            </ul>
+        </div>
+    </section>
 
-<h2>二、ThingSpeak 平台簡介</h2>
-<p>
-ThingSpeak 是 MathWorks 提供的 IoT 雲端資料平台，
-設計理念為 <b>「以數值型資料為主」</b>。
-</p>
+    <section>
+        <h2>建立 Channel 步驟</h2>
+        <ol>
+            <li>登入 ThingSpeak
+                （<a href="https://thingspeak.com" target="_blank">
+                    https://thingspeak.com
+                </a>）
+            </li>
 
-<ul>
-    <li>使用 HTTP / HTTPS 傳輸</li>
-    <li>支援 JSON / CSV 資料格式</li>
-    <li>內建即時圖表（Charts）</li>
-</ul>
+            <br>
 
-<h2>三、免費版限制（重要）</h2>
+            <li>
+                如下圖，點選<strong>Channels</strong>，再點選<strong>My Channels</strong>。
+                <img src="../00-Assets/Project01-DHT22_And_ThingSpeak/01.png" alt="01.png" />
+            </li>
 
-<table>
-    <tr>
-        <th>項目</th>
-        <th>免費版限制</th>
-    </tr>
-    <tr>
-        <td>Channel 數量</td>
-        <td>4 個</td>
-    </tr>
-    <tr>
-        <td>每 Channel 欄位</td>
-        <td>8 個（Field1 ~ Field8）</td>
-    </tr>
-    <tr>
-        <td>最短更新間隔</td>
-        <td>15 秒</td>
-    </tr>
-    <tr>
-        <td>每年上傳筆數</td>
-        <td>約 3,000,000 筆（帳號共用）</td>
-    </tr>
-</table>
+            <br>
 
-<div class="note">
-免費版若更新間隔小於 15 秒，資料將無法成功寫入。
-</div>
+            <li>
+                如下圖，點選<strong>New Channel</strong>。
+                <img src="../00-Assets/Project01-DHT22_And_ThingSpeak/02.png" alt="02.png" />
+            </li>
 
-<h2>四、建立 Channel 步驟</h2>
+            <br>
 
-<ol>
-    <li>登入 ThingSpeak（https://thingspeak.com）</li>
-    <li>點選 <b>Channels → New Channel</b></li>
-    <li>設定 Channel Name 與 Field 名稱</li>
-    <li>儲存後取得 Channel ID 與 API Keys</li>
-</ol>
+            <li>
+                如下圖，設定 Channel Name與 Field 名稱，然後往下滑按下<span class="text-red">Save Channel</span>。
+                <img src="../00-Assets/Project01-DHT22_And_ThingSpeak/03.png" alt="03.png" />
+            </li>
 
-<h2>五、可傳送的資料格式</h2>
+            <li>
+                如下圖，設定 Channel Name與 Field 名稱，然後往下滑按下<span class="text-red">Save Channel</span>。
+                <img src="../00-Assets/Project01-DHT22_And_ThingSpeak/03.png" alt="03.png" />
+            </li>
 
-<h3>1. Field（主要資料）</h3>
-<ul>
-    <li>僅支援數值（整數 / 浮點數）</li>
-    <li>不可傳送文字或 JSON</li>
-</ul>
+            <li>
+                如下圖，取得<span class="text-red">API Keys</span>。
+                <img src="../00-Assets/Project01-DHT22_And_ThingSpeak/04.png" alt="04.png" />
+            </li>
+        </ol>
+    </section>
 
-<pre><code>field1=25.6
-field2=80
-</code></pre>
+    <!-- 腳位圖 -->
+    <section>
+        <h2>腳位圖</h2>
+        <img src="../00-Assets/Pin-List.png" alt="Pin-List.png" />
 
-<h3>2. Status（狀態文字）</h3>
-<p>
-Status 可傳送簡短文字（中文 / 英文），僅供顯示使用，無法用於圖表。
-</p>
+        <div class="source">
+            圖片來源：
+            <a href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/" target="_blank">
+                Seeed Studio 官方文件
+            </a>
+        </div>
 
-<pre><code>status=系統正常
-</code></pre>
+        <br>
+        <h2>接線圖</h2>
 
-<div class="ok">
-建議將「狀態」轉為數值代碼，存入 Field 欄位中。
-</div>
+        <img src="../00-Assets/B08-DHT22(AM2302).jpeg" alt="B08-DHT22(AM2302).jpeg" />
+        <div class="orangebackground">
+            <ul>
+                <li>把Esp32插在麵包板左側正中間。</li>
+                <li>Esp32的GND接在模組的-。</li>
+                <li>Esp32的3V3接在模組的+。</li>
+                <li>Esp32的GPIO 9接在模組的OUT。</li>
+            </ul>
+        </div>
+    </section>
 
-<h2>六、ESP32 上傳資料（MicroPython 範例）</h2>
 
-<pre><code>import urequests
+    <section>
+        <h2>開啟 Thonny 並執行範例程式</h2>
+
+        <p>DHT22_And_ThingSpeak.py</p>
+        <div class="orangebackground">
+            <ol>
+                <li>WIFI_SSID改成您家的。</li>
+                <li>WIFI_PASSWORD改成您家的。</li>
+                <li>THINGSPEAK_API_KEY改成您的。</li>
+            </ol>
+        </div>
+
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+
+            <pre><code>
+import machine
 import time
+import dht
+import network
+import urequests
 
-API_KEY = "你的 Write API Key"
+# ========= 使用者設定 =========
+WIFI_SSID = "改成您家的"
+WIFI_PASSWORD = "改成您家的"
+
+THINGSPEAK_API_KEY = "ZGJNHPWU2Z3BKXW0"
+THINGSPEAK_URL = "http://api.thingspeak.com/update"
+# =============================
+
+# DHT22 資料腳位（GPIO9）
+dht22 = dht.DHT22(machine.Pin(9))
+
+
+def connect_wifi():
+    wlan = network.WLAN(network.STA_IF)
+
+    # 🔥 關掉再開（重置內部狀態）
+    wlan.active(False)
+    time.sleep(1)
+    wlan.active(True)
+    time.sleep(1)
+
+    if not wlan.isconnected():
+        print("🔌 連線 WiFi 中...")
+        wlan.connect(WIFI_SSID, WIFI_PASSWORD)
+
+        for _ in range(20):
+            if wlan.isconnected():
+                break
+            time.sleep(1)
+
+    if wlan.isconnected():
+        print("✅ WiFi 已連線:", wlan.ifconfig())
+    else:
+        print("❌ WiFi 連線失敗")
+
+
+
+def read_dht22():
+    dht22.measure()
+    temp = dht22.temperature()
+    hum = dht22.humidity()
+    return temp, hum
+
+
+def send_to_thingspeak(temp, hum):
+    payload = {
+        "api_key": THINGSPEAK_API_KEY,
+        "field1": temp,
+        "field2": hum
+    }
+
+    r = urequests.post(THINGSPEAK_URL, json=payload)
+    r.close()
+    print("📤 已上傳 ThingSpeak")
+
+
+# ---------- 主程式 ----------
+connect_wifi()
 
 while True:
-    temp = 26.3
-    hum = 78
+    try:
+        temp, hum = read_dht22()
 
-    url = (
-        "https://api.thingspeak.com/update?"
-        "api_key={}&field1={}&field2={}&status={}"
-    ).format(API_KEY, temp, hum, "正常")
+        print("🌡 溫度: {:.1f}°C".format(temp))
+        print("💧 濕度: {:.1f}%".format(hum))
 
-    r = urequests.get(url)
-    r.close()
+        send_to_thingspeak(temp, hum)
 
-    time.sleep(15)   # 免費版最短 15 秒
+    except OSError as e:
+        print("❌ 感測失敗:", e)
+
+    # ThingSpeak 免費版最少 15 秒一次
+    time.sleep(20)
 </code></pre>
+        </div>
+    </section>
 
-<h2>七、資料讀取與下載</h2>
+    <section>
+        <h2>回到Thingspeak網站</h2>
+        <ol>
+            <li>
+                如下圖，點選<strong>Private View</strong>，下面兩張圖就是收集到的資料。
+                <img src="../00-Assets/Project01-DHT22_And_ThingSpeak/05.png" alt="05.png" />
+            </li>
 
-<h3>1. CSV 下載（Excel 可直接開啟）</h3>
-<pre><code>https://api.thingspeak.com/channels/你的ChannelID/feeds.csv
-</code></pre>
+            <br>
 
-<h3>2. JSON 讀取（程式使用）</h3>
-<pre><code>https://api.thingspeak.com/channels/你的ChannelID/feeds.json
-</code></pre>
+            <li>
+                如下圖，點選<strong>Sharing</strong>，再勾選<strong>Share channel view with everyone</strong>。
+                <img src="../00-Assets/Project01-DHT22_And_ThingSpeak/06.png" alt="06.png" />
+            </li>
 
-<h3>3. 只讀取最新一筆資料</h3>
-<pre><code>https://api.thingspeak.com/channels/你的ChannelID/feeds/last.json
-</code></pre>
+            <br>
 
-<h2>八、ESP32 讀取資料範例（MicroPython）</h2>
+            <li>
+                如下圖，點選<strong>Public View</strong>，再點選<span class="text-red">Add visualizations</span>。
+                <img src="../00-Assets/Project01-DHT22_And_ThingSpeak/07.png" alt="07.png" />
+            </li>
 
-<pre><code>import urequests
+            <br>
 
-CHANNEL_ID = "123456"
-READ_KEY = "你的 Read API Key"
+            <li>
+                如下圖，兩張圖都點選，然後按下<span class="text-red">Save</span>。
+                <img src="../00-Assets/Project01-DHT22_And_ThingSpeak/08.png" alt="08.png" />
+            </li>
 
-url = "https://api.thingspeak.com/channels/{}/feeds/last.json?api_key={}".format(
-    CHANNEL_ID, READ_KEY)
+            <br>
 
-r = urequests.get(url)
-data = r.json()
-r.close()
+            <li>
+                如下圖，取得連結分享給別人。
+                <img src="../00-Assets/Project01-DHT22_And_ThingSpeak/09.png" alt="09.png" />
+            </li>
+        </ol>
+    </section>
 
-print("Temperature:", data["field1"])
-print("Humidity:", data["field2"])
-</code></pre>
+    <!-- 相關連結的section -->
+    <section>
+        <h2>🔗 相關連結</h2>
 
-<h2>九、常見注意事項</h2>
+        <div class="link-icons">
+            <a href="https://easyway0301.github.io/" target="_blank">
+                <span class="icon">🏠</span>
+                <span class="text">主頁</span>
+            </a>
 
-<ul>
-    <li>Field 欄位只能存數值</li>
-    <li>免費版更新間隔至少 15 秒</li>
-    <li>大量資料建議定期匯出 CSV 備份</li>
-</ul>
+            <a href="mailto:easyway0301@gmail.com">
+                <span class="icon">✉️</span>
+                <span class="text">Email</span>
+            </a>
+        </div>
+    </section>
 
-<h2>十、結語</h2>
-
-<p>
-ThingSpeak 非常適合作為 IoT 教學與入門雲端平台，
-只要遵守 <b>數值為主、更新頻率控制</b> 的原則，
-即可穩定且免費地長期使用。
-</p>
-
-<footer>
-    ThingSpeak SOP 教學｜ESP32 / MicroPython
-</footer>
+    <script>
+        function copyCode(btn) {
+            const code = btn.nextElementSibling.innerText;
+            navigator.clipboard.writeText(code);
+            btn.innerText = "Copied!";
+            setTimeout(() => btn.innerText = "Copy", 1500);
+        }
+    </script>
 
 </body>
+
 </html>
