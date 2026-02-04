@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>ThingSpeak SOP 教學（ESP32 / MicroPython）</title>
+
+    <style>
+        body {
+            font-family: "Segoe UI", "Noto Sans TC", Arial, sans-serif;
+            line-height: 1.8;
+            margin: 40px;
+            background-color: #fafafa;
+            color: #333;
+        }
+
+        h1, h2, h3 {
+            color: #1a73e8;
+        }
+
+        h1 {
+            border-bottom: 3px solid #1a73e8;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            margin-top: 40px;
+            border-left: 6px solid #1a73e8;
+            padding-left: 10px;
+        }
+
+        pre {
+            background: #272822;
+            color: #f8f8f2;
+            padding: 15px;
+            overflow-x: auto;
+            border-radius: 6px;
+        }
+
+        code {
+            font-family: Consolas, monospace;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #e8f0fe;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 6px solid #ffc107;
+            padding: 12px;
+            margin: 20px 0;
+        }
+
+        .ok {
+            background: #e6fffa;
+            border-left: 6px solid #20c997;
+            padding: 12px;
+            margin: 20px 0;
+        }
+
+        footer {
+            margin-top: 60px;
+            font-size: 0.9em;
+            color: #666;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>ThingSpeak SOP 教學</h1>
+<p><b>適用平台：</b>ESP32 / ESP32-S3 / MicroPython</p>
+
+<h2>一、目的說明</h2>
+<p>
+本 SOP 用於說明如何使用 ThingSpeak 平台，將 ESP32 感測資料上傳至雲端，
+並可再從雲端讀取或下載資料，適合作為教學、實驗與專題展示。
+</p>
+
+<ul>
+    <li>建立 ThingSpeak Channel</li>
+    <li>ESP32 上傳感測資料</li>
+    <li>讀取 / 下載雲端資料</li>
+    <li>瞭解免費版容量限制</li>
+</ul>
+
+<h2>二、ThingSpeak 平台簡介</h2>
+<p>
+ThingSpeak 是 MathWorks 提供的 IoT 雲端資料平台，
+設計理念為 <b>「以數值型資料為主」</b>。
+</p>
+
+<ul>
+    <li>使用 HTTP / HTTPS 傳輸</li>
+    <li>支援 JSON / CSV 資料格式</li>
+    <li>內建即時圖表（Charts）</li>
+</ul>
+
+<h2>三、免費版限制（重要）</h2>
+
+<table>
+    <tr>
+        <th>項目</th>
+        <th>免費版限制</th>
+    </tr>
+    <tr>
+        <td>Channel 數量</td>
+        <td>4 個</td>
+    </tr>
+    <tr>
+        <td>每 Channel 欄位</td>
+        <td>8 個（Field1 ~ Field8）</td>
+    </tr>
+    <tr>
+        <td>最短更新間隔</td>
+        <td>15 秒</td>
+    </tr>
+    <tr>
+        <td>每年上傳筆數</td>
+        <td>約 3,000,000 筆（帳號共用）</td>
+    </tr>
+</table>
+
+<div class="note">
+免費版若更新間隔小於 15 秒，資料將無法成功寫入。
+</div>
+
+<h2>四、建立 Channel 步驟</h2>
+
+<ol>
+    <li>登入 ThingSpeak（https://thingspeak.com）</li>
+    <li>點選 <b>Channels → New Channel</b></li>
+    <li>設定 Channel Name 與 Field 名稱</li>
+    <li>儲存後取得 Channel ID 與 API Keys</li>
+</ol>
+
+<h2>五、可傳送的資料格式</h2>
+
+<h3>1. Field（主要資料）</h3>
+<ul>
+    <li>僅支援數值（整數 / 浮點數）</li>
+    <li>不可傳送文字或 JSON</li>
+</ul>
+
+<pre><code>field1=25.6
+field2=80
+</code></pre>
+
+<h3>2. Status（狀態文字）</h3>
+<p>
+Status 可傳送簡短文字（中文 / 英文），僅供顯示使用，無法用於圖表。
+</p>
+
+<pre><code>status=系統正常
+</code></pre>
+
+<div class="ok">
+建議將「狀態」轉為數值代碼，存入 Field 欄位中。
+</div>
+
+<h2>六、ESP32 上傳資料（MicroPython 範例）</h2>
+
+<pre><code>import urequests
+import time
+
+API_KEY = "你的 Write API Key"
+
+while True:
+    temp = 26.3
+    hum = 78
+
+    url = (
+        "https://api.thingspeak.com/update?"
+        "api_key={}&field1={}&field2={}&status={}"
+    ).format(API_KEY, temp, hum, "正常")
+
+    r = urequests.get(url)
+    r.close()
+
+    time.sleep(15)   # 免費版最短 15 秒
+</code></pre>
+
+<h2>七、資料讀取與下載</h2>
+
+<h3>1. CSV 下載（Excel 可直接開啟）</h3>
+<pre><code>https://api.thingspeak.com/channels/你的ChannelID/feeds.csv
+</code></pre>
+
+<h3>2. JSON 讀取（程式使用）</h3>
+<pre><code>https://api.thingspeak.com/channels/你的ChannelID/feeds.json
+</code></pre>
+
+<h3>3. 只讀取最新一筆資料</h3>
+<pre><code>https://api.thingspeak.com/channels/你的ChannelID/feeds/last.json
+</code></pre>
+
+<h2>八、ESP32 讀取資料範例（MicroPython）</h2>
+
+<pre><code>import urequests
+
+CHANNEL_ID = "123456"
+READ_KEY = "你的 Read API Key"
+
+url = "https://api.thingspeak.com/channels/{}/feeds/last.json?api_key={}".format(
+    CHANNEL_ID, READ_KEY)
+
+r = urequests.get(url)
+data = r.json()
+r.close()
+
+print("Temperature:", data["field1"])
+print("Humidity:", data["field2"])
+</code></pre>
+
+<h2>九、常見注意事項</h2>
+
+<ul>
+    <li>Field 欄位只能存數值</li>
+    <li>免費版更新間隔至少 15 秒</li>
+    <li>大量資料建議定期匯出 CSV 備份</li>
+</ul>
+
+<h2>十、結語</h2>
+
+<p>
+ThingSpeak 非常適合作為 IoT 教學與入門雲端平台，
+只要遵守 <b>數值為主、更新頻率控制</b> 的原則，
+即可穩定且免費地長期使用。
+</p>
+
+<footer>
+    ThingSpeak SOP 教學｜ESP32 / MicroPython
+</footer>
+
+</body>
+</html>
