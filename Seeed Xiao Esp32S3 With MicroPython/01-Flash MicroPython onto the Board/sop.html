@@ -2,212 +2,235 @@
 <html lang="zh-Hant">
 
 <head>
-    <meta charset="UTF-8" />
-    <title>從零開始學Esp32</title>
+  <meta charset="UTF-8" />
+  <title>從零開始學Esp32</title>
 
-    <style>
-        body {
-            font-family: Arial, "Microsoft JhengHei", sans-serif;
-            line-height: 1.9;
-            max-width: 980px;
-            margin: 40px auto;
-            padding: 0 20px;
-            color: #222;
-            background-color: #f5f7fa;
-        }
+  <style>
+    body {
+      font-family: Arial, "Microsoft JhengHei", sans-serif;
+      line-height: 1.9;
+      max-width: 980px;
+      margin: 40px auto;
+      padding: 0 20px;
+      color: #222;
+      background-color: #f5f7fa;
+    }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 10px;
-        }
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
 
-        .subtitle {
-            text-align: center;
-            color: #555;
-            margin-bottom: 50px;
-        }
+    .subtitle {
+      text-align: center;
+      color: #555;
+      margin-bottom: 50px;
+    }
 
-        section {
-            background: #ffffff;
-            border-radius: 14px;
-            padding: 40px;
-            margin-bottom: 50px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-        }
+    section {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 40px;
+      margin-bottom: 50px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
 
-        h2 {
-            margin-top: 0;
-            border-left: 6px solid #4caf50;
-            padding-left: 14px;
-        }
+    h2 {
+      margin-top: 0;
+      border-left: 6px solid #4caf50;
+      padding-left: 14px;
+    }
 
-        p {
-            margin: 14px 0;
-        }
+    p {
+      margin: 14px 0;
+    }
 
-        ul {
-            margin-left: 22px;
-        }
+    ul {
+      margin-left: 22px;
+    }
 
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 28px auto 10px;
-            border-radius: 12px;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-        }
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 28px auto 10px;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    }
 
-        .text-red {
-            color: #ff0000;
-        }
+    .text-red {
+      color: #ff0000;
+    }
 
-        .text-blue {
-            color: #1f6feb;
-        }
+    .text-blue {
+      color: #1f6feb;
+    }
 
-        .text-green {
-            color: #4caf50;
-        }
+    .text-green {
+      color: #4caf50;
+    }
 
-        .text-orange {
-            color: #FF7300;
-        }
+    .text-orange {
+      color: #FF7300;
+    }
 
 
-        .highlight-yellow {
-            background-color: #ffff00;
-            /* 螢光黃背景 */
-            color: #000000;
-            /* 黑色文字，比較清楚 */
-            padding: 2px 4px;
-            /* 可選：讓背景有點空間 */
-            border-radius: 2px;
-            /* 可選：圓角 */
-            font-weight: bold;
-            /* 可選：文字加粗更醒目 */
-        }
+    .highlight-yellow {
+      background-color: #ffff00;
+      /* 螢光黃背景 */
+      color: #000000;
+      /* 黑色文字，比較清楚 */
+      padding: 2px 4px;
+      /* 可選：讓背景有點空間 */
+      border-radius: 2px;
+      /* 可選：圓角 */
+      font-weight: bold;
+      /* 可選：文字加粗更醒目 */
+    }
 
-        .redbackground {
-            background: #ff8e90;
-            border-left: 6px solid #ff1a00;
-            padding: 16px 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-            font-size: 16px;
-        }
+    .redbackground {
+      background: #ff8e90;
+      border-left: 6px solid #ff1a00;
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 16px;
+    }
 
-        .greenbackground {
-            background: #e8f5e9;
-            border-left: 6px solid #4caf50;
-            padding: 16px 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-            font-size: 16px;
-        }
+    .greenbackground {
+      background: #e8f5e9;
+      border-left: 6px solid #4caf50;
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 16px;
+    }
 
-        .orangebackground {
-            background: #fff3e0;
-            border-left: 6px solid #ff9800;
-            padding: 16px 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-            font-size: 16px;
-        }
+    .orangebackground {
+      background: #fff3e0;
+      border-left: 6px solid #ff9800;
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 16px;
+    }
 
-        a {
-            color: #2e7d32;
-            text-decoration: none;
-            font-weight: bold;
-        }
+    a {
+      color: #2e7d32;
+      text-decoration: none;
+      font-weight: bold;
+    }
 
-        a:hover {
-            text-decoration: underline;
-        }
+    a:hover {
+      text-decoration: underline;
+    }
 
-        /* Code block */
-        .code-block {
-            position: relative;
-            background: #0d1117;
-            color: #c9d1d9;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 30px 0;
-            font-family: Consolas, Monaco, monospace;
-            font-size: 14px;
-            overflow-x: auto;
-        }
+    /* Code block */
+    .code-block {
+      position: relative;
+      background: #0d1117;
+      color: #c9d1d9;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 30px 0;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 14px;
+      overflow-x: auto;
+    }
 
-        .code-block pre {
-            margin: 0;
-            white-space: pre;
-        }
+    .code-block pre {
+      margin: 0;
+      white-space: pre;
+    }
 
-        .copy-btn {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: #1f6feb;
-            /* GitHub 藍 */
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 6px 14px;
-            cursor: pointer;
-            font-size: 13px;
-        }
+    .copy-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #1f6feb;
+      /* GitHub 藍 */
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-size: 13px;
+    }
 
-        .copy-btn:hover {
-            background: #388bfd;
-        }
+    .copy-btn:hover {
+      background: #388bfd;
+    }
 
-        .link-icons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 20px;
-        }
+    .link-icons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 20px;
+    }
 
-        .link-icons a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 18px;
-            border-radius: 12px;
-            background: #f1f3f6;
-            color: #222;
-            text-decoration: none;
-            font-size: 16px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            transition:
-                transform 0.15s ease,
-                box-shadow 0.15s ease;
-        }
+    .link-icons a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: #f1f3f6;
+      color: #222;
+      text-decoration: none;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+    }
 
-        .link-icons a:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-        }
+    .link-icons a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    }
 
-        /* ⭐ 關鍵：圖示等寬 */
-        .link-icons .icon {
-            width: 28px;
-            /* 固定寬度 */
-            text-align: center;
-            /* 置中 emoji */
-            font-size: 20px;
-            line-height: 1;
-        }
+    /* ⭐ 關鍵：圖示等寬 */
+    .link-icons .icon {
+      width: 28px;
+      /* 固定寬度 */
+      text-align: center;
+      /* 置中 emoji */
+      font-size: 20px;
+      line-height: 1;
+    }
 
-        .link-icons .text {
-            font-weight: 500;
-        }
-    </style>
+    .link-icons .text {
+      font-weight: 500;
+    }
+  </style>
 </head>
 
 <body>
   <!-- 主標題 -->
   <h1>下載Thonny及燒錄韌體</h1>
+
+  <section>
+    <h2>學習提示</h2>
+    <div class="greenbackground">
+      <ul>
+        <li>基礎的範例，只負責接線讓模組動起來，有問題問Chatgpt。</li>
+        <li>模組大概注意要接3V或是5V。</li>
+        <li>Esp32主要有<strong>arduino-ide</strong>跟<strong>Thonny</strong>來編輯。</li>
+        <li>以下範例全部採用Seeed XIAO Esp32-S3及Thonny來編輯MicroPython。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Chatgpt問法</h2>
+
+    <div class="code-block">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre><code>
+我有一片Seeed XIAO Esp32-S3跟一個DHT22模組，給我MicroPython的範例，GPIO要用第幾腳位。
+        </code></pre>
+    </div>
+  </section>
 
   <section>
     <h2>需要的材料</h2>
@@ -329,6 +352,103 @@
 
   </section>
 
+  <section>
+    <h2>Thonny簡易操作步驟</h2>
+
+    <ol>
+      <li>插上Esp32，打開Thonny軟體。正常的畫面如下，互動環境有MicroPython的訊息，左下窗格有看到MicroPython 設備。</li>
+      <img src="../00-Assets/Thonny/01.png" alt="01.png" />
+
+      <br>
+      <li>工具列　-> 選項 -> 一般。</li>
+      <ul>
+        <li>僅允許單個Thonny實例，有勾只能操作一個Esp32，不勾選可以操作多個Esp32。</li>
+        <li>使用介面模式，選expert。</li>
+        <li>使用介面的縮放倍數，選1.5或2.0。</li>
+        <li>字體縮放模式，選automatic。</li>
+      </ul>
+      <img src="../00-Assets/Thonny/02.png" alt="02.png" />
+
+      <br>
+      <li>檔案，這窗格是顯示電腦的檔案。通常只會用到一個功能，按右鍵選<strong>上傳到 /</strong>，把檔案傳輸到Esp32。</li>
+      <img src="../00-Assets/Thonny/03.png" alt="03.png" />
+
+      <br>
+      <li>MicroPython 設備，這窗格是顯示Esp32的檔案。通常只會用到一個功能，按右鍵選<strong>建立新檔</strong>。<br><span
+          class="text-red">建立py檔務必含同副檔名，例如test.py</span></li>
+      <img src="../00-Assets/Thonny/04.png" alt="04.png" />
+
+      <br>
+      <li>未命名的檔案，直接按打叉的地方關掉。</li>
+      <img src="../00-Assets/Thonny/05.png" alt="05.png" />
+
+      <br>
+      <li><strong>boot.py</strong>左鍵點兩下，輸入print("hello world")</li>
+      <img src="../00-Assets/Thonny/06.png" alt="06.png" />
+      <div class="redbackground">
+        boot.py裡面<span class="highlight-yellow">不要使用while迴圈</span>，會無法再進入Thonny編輯，一通電就卡在迴圈裡。
+      </div>
+
+      <br>
+      <li>按下執行目前腳本。</li>
+      <img src="../00-Assets/Thonny/07.png" alt="07.png" />
+      <div class="orangebackground">
+        <ul>
+          <li>互動環境出現兩次hello world，boot.py一通電就會執行第1次，接著會再執行1次。</li>
+          <li>每次開機，boot.py一定先跑，接著跑main.py。</li>
+        </ul>
+      </div>
+
+
+
+    </ol>
+
+  </section>
+
+  <section>
+    <h2>boot.py適合做這些事情</h2>
+    <div class="greenbackground">
+      <ul>
+        <li>📶 WiFi 連線（STA / AP）</li>
+
+        <li>🕰 設定 RTC / 時區</li>
+
+        <li>📂 掛載 SD 卡</li>
+
+        <li>🔐 設定系統參數</li>
+
+        <li>🔇 關閉除錯輸出</li>
+
+        <li>🧹 只做一次的初始化</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>main.py適合做這些事情</h2>
+    <div class="greenbackground">
+      <ul>
+        <li>🌡 讀 DHT22 / SHT31</li>
+
+        <li>📺 OLED 顯示</li>
+
+        <li>🌐 HTTP Server</li>
+
+        <li>☁️ ThingSpeak 上傳</li>
+
+        <li>🔁 while True 主迴圈</li>
+      </ul>
+    </div>
+  </section>
+
+
+
+
+
+
+
+
+
   <!-- youtube的section -->
   <section>
 
@@ -356,6 +476,15 @@
       </a>
     </div>
   </section>
+
+  <script>
+    function copyCode(btn) {
+      const code = btn.nextElementSibling.innerText;
+      navigator.clipboard.writeText(code);
+      btn.innerText = "Copied!";
+      setTimeout(() => btn.innerText = "Copy", 1500);
+    }
+  </script>
 </body>
 
 </html>
