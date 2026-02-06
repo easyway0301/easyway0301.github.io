@@ -2,13 +2,13 @@
 <html lang="zh-Hant">
 
 <head>
+
     <!-- Google AdSense（通過審核後才會顯示） -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1749995304255800"
-        crossorigin="anonymous"></script>
-    <meta charset="UTF-8" />
+        crossorigin="anonymous">
+        </script>
 
-    <span class="menu-btn" onclick="toggleSidebar()">☰</span>
-    
+    <meta charset="UTF-8" />
     <title>從零開始學Esp32(MicroPython)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -31,9 +31,16 @@
             color: white;
             display: flex;
             align-items: center;
-            padding: 0 24px;
+            padding: 0 16px;
             font-size: 20px;
             font-weight: bold;
+        }
+
+        .menu-btn {
+            display: none;
+            font-size: 26px;
+            margin-right: 16px;
+            cursor: pointer;
         }
 
         /* ===== Layout ===== */
@@ -51,6 +58,18 @@
             padding-bottom: 16px;
         }
 
+        .search-box {
+            padding: 12px 16px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
         .group-title {
             padding: 12px 16px;
             font-size: 14px;
@@ -58,10 +77,6 @@
             cursor: pointer;
             background: #eef2f7;
             border-top: 1px solid #ddd;
-        }
-
-        .group-title:hover {
-            background: #e3f2fd;
         }
 
         .group-items {
@@ -103,61 +118,33 @@
         }
 
         /* ===== Mobile ===== */
-        .search-box {
-            padding: 12px 16px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 8px 10px;
-            font-size: 14px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-        }
-
-        /* ❌ 先拿掉這段 */
-        /*
         @media (max-width: 768px) {
-            .sidebar {
-                display: none;
-            }
-        }
-        */
 
-        .menu-btn {
-            display: none;
-            font-size: 24px;
-            margin-right: 16px;
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
             .menu-btn {
                 display: block;
             }
-        
+
             .sidebar {
                 position: fixed;
                 top: 64px;
-                left: -280px;           /* 預設藏起來 */
+                left: -280px;
                 height: calc(100vh - 64px);
                 z-index: 1000;
                 transition: left 0.3s ease;
-                display: block;         /* ⚠️ 不再用 none */
+                display: block;
             }
-        
+
             .sidebar.open {
-                left: 0;                /* 滑出來 */
+                left: 0;
             }
         }
-
     </style>
 </head>
 
 <body>
 
     <header>
+        <span class="menu-btn" onclick="toggleSidebar()">☰</span>
         從零開始學Esp32(MicroPython)
     </header>
 
@@ -353,62 +340,50 @@
         <!-- Content -->
         <main class="content">
             <iframe id="viewer"
-                src="https://easyway0301.github.io/Seeed%20Xiao%20Esp32S3%20With%20MicroPython/01-Flash%20MicroPython%20onto%20the%20Board/sop.html"></iframe>
+                src="https://easyway0301.github.io/Seeed%20Xiao%20Esp32S3%20With%20MicroPython/01-Flash%20MicroPython%20onto%20the%20Board/sop.html">
+            </iframe>
         </main>
 
     </div>
 
     <script>
         function toggleGroup(title) {
-            const group = title.parentElement;
-            group.classList.toggle('open');
+            title.parentElement.classList.toggle('open');
         }
 
         function loadPage(el, url) {
             document.getElementById('viewer').src = url;
 
-            // 清除所有章節高亮
-            document.querySelectorAll('.group-items a').forEach(a => {
-                a.classList.remove('active');
-            });
+            document.querySelectorAll('.group-items a')
+                .forEach(a => a.classList.remove('active'));
 
-            // 自動展開父層
-            const group = el.closest('.group');
-            group.classList.add('open');
-
-            // 設定目前章節高亮
             el.classList.add('active');
+
+            // 手機點擊後自動收起 sidebar
+            if (window.innerWidth <= 768) {
+                document.querySelector('.sidebar').classList.remove('open');
+            }
+        }
+
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('open');
         }
 
         function filterChapters() {
             const keyword = document.getElementById('searchInput').value.toLowerCase();
 
             document.querySelectorAll('.group').forEach(group => {
-                let hasVisibleItem = false;
-
-                group.querySelectorAll('.group-items a').forEach(link => {
-                    const text = link.textContent.toLowerCase();
-                    const match = text.includes(keyword);
-
-                    link.style.display = match ? 'block' : 'none';
-                    if (match) hasVisibleItem = true;
+                let show = false;
+                group.querySelectorAll('a').forEach(a => {
+                    const match = a.textContent.toLowerCase().includes(keyword);
+                    a.style.display = match ? 'block' : 'none';
+                    if (match) show = true;
                 });
-
-                // 若該分類底下有符合項目就展開，否則隱藏
-                group.style.display = hasVisibleItem || keyword === '' ? 'block' : 'none';
-                if (keyword && hasVisibleItem) {
-                    group.classList.add('open');
-                }
+                group.style.display = show || keyword === '' ? 'block' : 'none';
+                if (show) group.classList.add('open');
             });
         }
     </script>
-
-    <script>
-    function toggleSidebar() {
-        document.querySelector('.sidebar').classList.toggle('open');
-    }
-    </script>
-
 
 </body>
 
