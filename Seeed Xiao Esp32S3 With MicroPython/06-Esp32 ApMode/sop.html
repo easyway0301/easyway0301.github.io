@@ -207,53 +207,58 @@
 
 <body>
 
-  <h1>ESP32 AP模式</h1>
+    <h1>ESP32 AP模式</h1>
 
-  <section>
-    <h2>需要的材料</h2>
-    <div class="orangebackground">
-      <ul>
-        <li>Seeed XIAO Esp32-S3 開發板1片。</li>
-      </ul>
-    </div>
-  </section>
+    <section>
+        <h2>需要的材料</h2>
+        <div class="orangebackground">
+            <ul>
+                <li>Seeed XIAO Esp32-S3 開發板1片。</li>
+            </ul>
+        </div>
+    </section>
 
-  <!-- 說明 -->
-  <section>
-    <h2>認識 ESP32-S3 開發板</h2>
-    <p>
-      讓 ESP32 啟動 <b>AP 模式（基地台）</b>，
-      並建立一個簡單的 <b>HTTP Server</b>。
-    </p>
+    <!-- 說明 -->
+    <section>
+        <h2>認識 ESP32-S3 開發板</h2>
+        <p>
+            讓 ESP32 啟動 <b>AP 模式（基地台）</b>，
+            並建立一個簡單的 <b>HTTP Server</b>。
+        </p>
 
-    <ul>
-      <li>ESP32 自行開 Wi-Fi 熱點</li>
-      <li>手機 / 電腦可直接連線</li>
-      <li>瀏覽器輸入 IP 即可看到回應</li>
-    </ul>
+        <ul>
+            <li>ESP32 自行開 Wi-Fi 熱點</li>
+            <li>手機 / 電腦可直接連線</li>
+            <li>瀏覽器輸入 IP 即可看到回應</li>
+        </ul>
 
-    <div class="greenbackground">
-      ✔ 不需要外部路由器，也能直接連 ESP32
-    </div>
+        <div class="greenbackground">
+            ✔ 不需要外部路由器，也能直接連 ESP32
+        </div>
 
-    <ul>
-      <li><b>SSID：</b>ESP32_AP</li>
-      <li><b>密碼：</b>12345678</li>
-      <li><b>連線後 IP：</b>通常為192.168.4.1</li>
-    </ul>
+        <ul>
+            <li><b>SSID：</b>ESP32_AP</li>
+            <li><b>密碼：</b>12345678</li>
+            <li><b>連線後 IP：</b>通常為192.168.4.1</li>
+        </ul>
 
-    <div class="orangebackground">
-      📌 密碼長度必須至少 8 個字元，否則 AP 會啟動失敗
-    </div>
-  </section>
+        <div class="orangebackground">
+            📌 密碼長度必須至少 8 個字元，否則 AP 會啟動失敗
+        </div>
+    </section>
 
-  <!-- 程式碼 -->
-  <section>
-    <h2>開啟 Thonny 並執行範例程式</h2>
+    <!-- 程式碼 -->
+    <section>
+        <h2>開啟 Thonny 並執行範例程式</h2>
 
-    <div class="code-block">
-      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-      <pre><code>
+        <div class="redbackground">
+            ⚠️ 程式為無限迴圈執行，<br />
+            <span class="highlight-yellow"><strong>若要停止程式，請在Thonny 連按兩次 Ctrl + C</strong></span>
+        </div>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>
 import network              # 匯入 network 模組，用來控制 ESP32 的 Wi-Fi（AP / STA）
 import socket               # 匯入 socket 模組，用來建立 TCP / HTTP 伺服器
 import time                 # 匯入 time 模組（本範例雖未使用，通常用於延遲或時間控制）
@@ -317,50 +322,50 @@ finally:
     ap.active(False)         # 關閉 AP 模式
 
     </code></pre>
-    </div>
-  </section>
+        </div>
+    </section>
 
-  <!-- 測試方式 -->
-  <section>
-    <h2>🧪 測試方式</h2>
+    <!-- 測試方式 -->
+    <section>
+        <h2>🧪 測試方式</h2>
 
-    <ol>
-      <li>燒錄程式到 ESP32</li>
-      <li>手機 / 電腦連線到 <b>ESP32_AP</b></li>
-      <li>打開瀏覽器，輸入：http://192.168.4.1</li>
-      <li>畫面出現 <b>Hello ESP32</b> 即成功</li>
-    </ol>
+        <ol>
+            <li>燒錄程式到 ESP32</li>
+            <li>手機 / 電腦連線到 <b>ESP32_AP</b></li>
+            <li>打開瀏覽器，輸入：http://192.168.4.1</li>
+            <li>畫面出現 <b>Hello ESP32</b> 即成功</li>
+        </ol>
 
-    <div class="redbackground">
-      ⚠ 若重新燒錄失敗，請確認 Port 80 是否被其他程式佔用
-    </div>
-  </section>
+        <div class="redbackground">
+            ⚠ 若重新燒錄失敗，請確認 Port 80 是否被其他程式佔用
+        </div>
+    </section>
 
-  <!-- 相關連結的section -->
-  <section>
-    <h2>🔗 相關連結</h2>
+    <!-- 相關連結的section -->
+    <section>
+        <h2>🔗 相關連結</h2>
 
-    <div class="link-icons">
-      <a href="https://easyway0301.github.io/" target="_blank">
-        <span class="icon">🏠</span>
-        <span class="text">主頁</span>
-      </a>
+        <div class="link-icons">
+            <a href="https://easyway0301.github.io/" target="_blank">
+                <span class="icon">🏠</span>
+                <span class="text">主頁</span>
+            </a>
 
-      <a href="mailto:easyway0301@gmail.com">
-        <span class="icon">✉️</span>
-        <span class="text">Email</span>
-      </a>
-    </div>
-  </section>
+            <a href="mailto:easyway0301@gmail.com">
+                <span class="icon">✉️</span>
+                <span class="text">Email</span>
+            </a>
+        </div>
+    </section>
 
-  <script>
-    function copyCode(btn) {
-      const code = btn.nextElementSibling.innerText;
-      navigator.clipboard.writeText(code);
-      btn.innerText = "Copied!";
-      setTimeout(() => btn.innerText = "Copy", 1500);
-    }
-  </script>
+    <script>
+        function copyCode(btn) {
+            const code = btn.nextElementSibling.innerText;
+            navigator.clipboard.writeText(code);
+            btn.innerText = "Copied!";
+            setTimeout(() => btn.innerText = "Copy", 1500);
+        }
+    </script>
 
 </body>
 
