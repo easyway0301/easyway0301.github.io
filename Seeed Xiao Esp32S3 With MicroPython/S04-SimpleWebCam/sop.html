@@ -268,6 +268,12 @@ PASSWORD = '你的WIFI密碼'</code></pre>
 
     <section>
         <h2>開啟 Thonny 並執行範例程式</h2>
+
+        <div class="redbackground">
+            ⚠️ 程式為無限迴圈執行，<br />
+            <span class="highlight-yellow"><strong>若要停止程式，請在Thonny 連按兩次 Ctrl + C</strong></span>
+        </div>
+
         <p>SimpleWebCam.py</p>
         <div class="source">
             參考來源：
@@ -412,22 +418,22 @@ HTML_PAGE = """&lt;!DOCTYPE html&gt;
 """
 </code></pre>
 
-# ==============================
-# 處理單一 Client 連線
-# ==============================
-def handle_client(client, cam):
-    try:
-        # 讀取瀏覽器送來的 HTTP Request
-        request = client.recv(1024).decode()
+            # ==============================
+            # 處理單一 Client 連線
+            # ==============================
+            def handle_client(client, cam):
+            try:
+            # 讀取瀏覽器送來的 HTTP Request
+            request = client.recv(1024).decode()
 
-        # --------------------------
-        # 若是影像串流請求
-        # --------------------------
-        if 'GET /stream' in request:
+            # --------------------------
+            # 若是影像串流請求
+            # --------------------------
+            if 'GET /stream' in request:
             # 回傳 MJPEG HTTP Header
             client.send(
-                b'HTTP/1.1 200 OK\r\n'
-                b'Content-Type: multipart/x-mixed-replace; boundary=frame\r\n\r\n'
+            b'HTTP/1.1 200 OK\r\n'
+            b'Content-Type: multipart/x-mixed-replace; boundary=frame\r\n\r\n'
             )
 
             # 初始化攝影機
@@ -435,108 +441,108 @@ def handle_client(client, cam):
 
             # 持續串流影像
             while True:
-                try:
-                    # 擷取一張 JPEG 影像
-                    frame = cam.capture()
-                    
-                    print(hex(frame[-2]), hex(frame[-1]))
+            try:
+            # 擷取一張 JPEG 影像
+            frame = cam.capture()
+
+            print(hex(frame[-2]), hex(frame[-1]))
 
 
-                    # 若沒有影像資料則中斷
-                    if not frame:
-                        break
+            # 若沒有影像資料則中斷
+            if not frame:
+            break
 
-                    # 傳送一個 MJPEG frame
-                    client.send(
-                        b'--frame\r\n'
-                        b'Content-Type: image/jpeg\r\n'
-                        b'Content-Length: ' + str(len(frame)).encode() + b'\r\n\r\n'
-                        + frame + b'\r\n'
-                    )
-                    
-                    cam.free_buffer()
+            # 傳送一個 MJPEG frame
+            client.send(
+            b'--frame\r\n'
+            b'Content-Type: image/jpeg\r\n'
+            b'Content-Length: ' + str(len(frame)).encode() + b'\r\n\r\n'
+            + frame + b'\r\n'
+            )
+
+            cam.free_buffer()
 
 
-                # 若客戶端斷線或錯誤則跳出
-                except Exception:
-                    break
+            # 若客戶端斷線或錯誤則跳出
+            except Exception:
+            break
 
-        # --------------------------
-        # 一般首頁請求（HTML）
-        # --------------------------
-        else:
+            # --------------------------
+            # 一般首頁請求（HTML）
+            # --------------------------
+            else:
             # 組合 HTTP 回應內容
             response = (
-                'HTTP/1.1 200 OK\r\n'
-                'Content-Type: text/html\r\n\r\n'
-                + HTML_PAGE
+            'HTTP/1.1 200 OK\r\n'
+            'Content-Type: text/html\r\n\r\n'
+            + HTML_PAGE
             )
 
             # 傳送 HTML 頁面
             client.send(response.encode())
 
-    # 捕捉整體錯誤
-    except Exception as e:
-        print('Client 錯誤：', e)
+            # 捕捉整體錯誤
+            except Exception as e:
+            print('Client 錯誤：', e)
 
-    # 最後一定要關閉 Client
-    finally:
-        client.close()
-        # ⚠️ 不在此 deinit camera，避免其他連線被中斷
-
-
-# ==============================
-# 啟動 HTTP Server
-# ==============================
-def start_server(cam):
-    # 取得本機 0.0.0.0:80 的 socket 位址
-    addr = socket.getaddrinfo('0.0.0.0', 80)[0][-1]
-
-    # 建立 socket
-    s = socket.socket()
-
-    # 允許重複使用 port（非常重要）
-    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-
-    # 綁定 IP 與 Port
-    s.bind(addr)
-
-    # 開始監聽（一次一個 client）
-    s.listen(1)
-
-    # 顯示 Server 啟動訊息
-    print('HTTP Server 啟動，等待連線中...')
-
-    # 不斷接受新的連線
-    while True:
-        # 等待 Client 連線
-        client, addr = s.accept()
-
-        # 顯示連線來源
-        print('連線來源：', addr)
-
-        # 處理 Client 請求
-        handle_client(client, cam)
+            # 最後一定要關閉 Client
+            finally:
+            client.close()
+            # ⚠️ 不在此 deinit camera，避免其他連線被中斷
 
 
-# ==============================
-# 主程式進入點
-# ==============================
-def main():
-    # 連線到 Wi-Fi
-    connect_wifi()
+            # ==============================
+            # 啟動 HTTP Server
+            # ==============================
+            def start_server(cam):
+            # 取得本機 0.0.0.0:80 的 socket 位址
+            addr = socket.getaddrinfo('0.0.0.0', 80)[0][-1]
 
-    # 建立 Camera 物件
-    cam = init_camera()
+            # 建立 socket
+            s = socket.socket()
 
-    # 啟動 HTTP Server
-    start_server(cam)
+            # 允許重複使用 port（非常重要）
+            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+            # 綁定 IP 與 Port
+            s.bind(addr)
+
+            # 開始監聽（一次一個 client）
+            s.listen(1)
+
+            # 顯示 Server 啟動訊息
+            print('HTTP Server 啟動，等待連線中...')
+
+            # 不斷接受新的連線
+            while True:
+            # 等待 Client 連線
+            client, addr = s.accept()
+
+            # 顯示連線來源
+            print('連線來源：', addr)
+
+            # 處理 Client 請求
+            handle_client(client, cam)
 
 
-# ==============================
-# 程式開始執行
-# ==============================
-main()
+            # ==============================
+            # 主程式進入點
+            # ==============================
+            def main():
+            # 連線到 Wi-Fi
+            connect_wifi()
+
+            # 建立 Camera 物件
+            cam = init_camera()
+
+            # 啟動 HTTP Server
+            start_server(cam)
+
+
+            # ==============================
+            # 程式開始執行
+            # ==============================
+            main()
             </code></pre>
         </div>
     </section>
