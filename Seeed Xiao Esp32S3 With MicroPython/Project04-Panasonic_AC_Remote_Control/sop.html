@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>從零開始學Esp32</title>
+
+    <style>
+        body {
+            font-family: Arial, "Microsoft JhengHei", sans-serif;
+            line-height: 1.9;
+            max-width: 980px;
+            margin: 40px auto;
+            padding: 0 20px;
+            color: #222;
+            background-color: #f5f7fa;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #555;
+            margin-bottom: 50px;
+        }
+
+        section {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 40px;
+            margin-bottom: 50px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        h2 {
+            margin-top: 0;
+            border-left: 6px solid #4caf50;
+            padding-left: 14px;
+        }
+
+        p {
+            margin: 14px 0;
+        }
+
+        ul {
+            margin-left: 22px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 28px auto 10px;
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .text-red {
+            color: #ff0000;
+        }
+
+        .text-blue {
+            color: #1f6feb;
+        }
+
+        .text-green {
+            color: #4caf50;
+        }
+
+        .text-orange {
+            color: #FF7300;
+        }
+
+
+        .highlight-yellow {
+            background-color: #ffff00;
+            /* 螢光黃背景 */
+            color: #000000;
+            /* 黑色文字，比較清楚 */
+            padding: 2px 4px;
+            /* 可選：讓背景有點空間 */
+            border-radius: 2px;
+            /* 可選：圓角 */
+            font-weight: bold;
+            /* 可選：文字加粗更醒目 */
+        }
+
+        .redbackground {
+            background: #ff8e90;
+            border-left: 6px solid #ff1a00;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+
+        .greenbackground {
+            background: #e8f5e9;
+            border-left: 6px solid #4caf50;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+
+        .orangebackground {
+            background: #fff3e0;
+            border-left: 6px solid #ff9800;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+
+        a {
+            color: #2e7d32;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Code block */
+        .code-block {
+            position: relative;
+            background: #0d1117;
+            color: #c9d1d9;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            margin: 0;
+            white-space: pre;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #1f6feb;
+            /* GitHub 藍 */
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 14px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .copy-btn:hover {
+            background: #388bfd;
+        }
+
+        .link-icons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .link-icons a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            background: #f1f3f6;
+            color: #222;
+            text-decoration: none;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition:
+                transform 0.15s ease,
+                box-shadow 0.15s ease;
+        }
+
+        .link-icons a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        }
+
+        /* ⭐ 關鍵：圖示等寬 */
+        .link-icons .icon {
+            width: 28px;
+            /* 固定寬度 */
+            text-align: center;
+            /* 置中 emoji */
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .link-icons .text {
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>國際牌冷氣遙控器</h1>
+
+    <section>
+        <h2>需要的材料</h2>
+        <div class="orangebackground">
+            <ul>
+                <li>Seeed XIAO Esp32-S3開發板1片。</li>
+                <li>Seeeduino XIAO Expansion Board擴充板1片。</li>
+                <li>Grove - Infrared Receiver模組1個。</li>
+                <li>Grove - Infrared Emitter模組1個。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+        <h2>認識 Seeeduino XIAO Expansion Board擴充板</h2>
+
+        <p>
+            在開始撰寫程式之前，先來認識這塊擴充板。
+        </p>
+
+        <div class="greenbackground">
+            <ul>
+                <li>D1按鈕</li>
+                <li>無源蜂鳴器</li>
+                <li>0.96" OLED 顯示模組</li>
+                <li>MicroSD 卡插槽</li>
+                <li>RTC 電池座</li>
+            </ul>
+        </div>
+
+        <h2>操作示意圖</h2>
+        <img src="../00-Assets/Project04-Panasonic_AC_Remote_Control/01.jpeg" alt="01.jpeg" />
+    </section>
+
+    <!-- 腳位圖 -->
+    <section>
+        <h2>正面圖</h2>
+        <img src="../00-Assets/EBfront.png" alt="Seeeduino XIAO Expansion Board擴充板正面" />
+
+        <br>
+        <h2>背面圖</h2>
+        <img src="../00-Assets/EBback.png" alt="Seeeduino XIAO Expansion Board擴充板背面" />
+
+        <br>
+        <h2>腳位圖</h2>
+        <img src="../00-Assets/Pin-List(EB).png" alt="Seeeduino XIAO Expansion Board擴充板腳位圖" />
+
+        <div class="source">
+            圖片來源：
+            <a href="https://wiki.seeedstudio.com/cn/Seeeduino-XIAO-Expansion-Board/" target="_blank">
+                Seeed Studio 官方文件
+            </a>
+        </div>
+
+        <br>
+        <h2>接線圖</h2>
+
+        <img src="../00-Assets/Project04-Panasonic_AC_Remote_Control/02.jpeg" alt="02.jpeg" />
+        <div class="orangebackground">
+            <ul>
+                <li>Grove - Infrared Emitter模組接在A0(GPIO 1)。</li>
+                <li>Grove - Infrared Receiver模組接在A5(GPIO 6)。</li>
+                <li>Wifi天線裝上。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+        <h2>開啟 Thonny 並上傳或新增範例程式，總共有七個PY檔。</h2>
+
+        <ul>
+            <li>IR_Codes.py</li>
+            <li>IR_Receiver.py</li>
+            <li>IR_Sender.py</li>
+            <li>main.py</li>
+            <li>OledShowText.py</li>
+            <li>ssd1306.py</li>
+            <li>StaModeHttpServer.py</li>
+
+        </ul>
+
+        <p>IR_Codes.py</p>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>
+# ir_codes.py
+# 專門放「紅外線資料」
+
+# 打開冷氣
+Panasonic_AC_PowerON = [                        # 定義一組 Panasonic 的紅外線脈衝資料
+    10368, 3488,
+    1728, 432, 432, 432, 1296, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 1296, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 1296, 432, 1296, 432, 1296, 432,
+    432, 432, 432, 432, 1296, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 1296, 432, 1296, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    10368, 3488,
+    1728, 432, 432, 432, 1296, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 1296, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 1296, 432, 1296, 432, 1296, 432,
+    432, 432, 432, 432, 1296, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 1296, 432, 432, 432, 432, 432, 1296, 432,
+    1296, 432, 1296, 432, 432, 432, 432, 432, 432, 432,
+    1296, 432, 1296, 432, 432, 432, 1296, 432, 1296, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 1296, 432,
+    1296, 432, 432, 432, 432, 432, 432, 432, 1296, 432,
+    1296, 432, 432, 432, 432, 432, 1296, 432, 432, 432,
+    432, 432, 1296, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    1296, 432, 1296, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 1296, 432, 1296, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 1296, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 1296, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 1296, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 1296, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 1296, 432,
+    432, 432, 1296, 432, 432, 432, 1296, 432, 1296, 432,
+    432, 432, 1296, 432, 1296, 432
+]
+
+# 關掉冷氣
+Panasonic_AC_PowerOFF = [
+    # 另一組 pulses
+]
+
+
+# 用 dict 管理所有遙控碼
+CODES = {
+    "Panasonic_AC_PowerON": Panasonic_AC_PowerON,
+    "Panasonic_AC_PowerOFF": Panasonic_AC_PowerOFF,
+}
+</code></pre>
+        </div>
+
+        <br>
+
+        <p>IR_Receiver.py</p>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>
+from machine import Pin
+import time
+from array import array  # ✅ 只匯入 class
+
+
+RX_PIN = 6
+MAX_LEN = 800  # 固定大小 array，比 append 快
+IDLE_US = 500_000  # 40ms 判斷封包結束
+
+# 使用 array 儲存脈衝
+pulses = array('I', [0]*MAX_LEN)
+idx = 0
+
+_last = time.ticks_us()
+
+def irq_handler(pin):
+    global _last, pulses, idx
+    now = time.ticks_us()
+    diff = time.ticks_diff(now, _last)
+    _last = now
+    if diff < 100:   # 過短視為雜訊
+        return
+    if idx < MAX_LEN:
+        pulses[idx] = diff
+        idx += 1
+    else:
+        # 超過 max_len，自動停 IRQ
+        pin.irq(handler=None)
+
+# attach both edges
+ir = Pin(RX_PIN, Pin.IN)
+
+#time.sleep(5)
+ir.irq(trigger=Pin.IRQ_RISING | Pin.IRQ_FALLING, handler=irq_handler)
+
+print("請按遙控器按鍵（保持按一秒以上）...")
+
+start_time = time.ticks_us()
+while True:
+    # 如果已收到資料，並且最後一次脈衝距離現在 > IDLE_US
+    if idx > 1 and time.ticks_diff(time.ticks_us(), _last) > IDLE_US:
+        break
+    # 避免無限等待
+    if time.ticks_diff(time.ticks_us(), start_time) > 5_000_000:  # 5秒
+        break
+
+# 停掉 IRQ
+ir.irq(handler=None)
+
+print("原始pulses:",pulses)
+
+print("收完，共", len(pulses), "脈衝")
+# 映射規則函數
+def map_pulse(val):
+    if val >= 10000:
+        return 10368
+    elif 3000 <= val <= 4000:
+        return 3488
+    elif 1500 <= val <= 2800:
+        return 1728
+    elif 1000 <= val <= 1500:
+        return 1296
+    elif 600 <= val <= 1000:
+        return 864
+    elif 1 <= val <= 600:
+        return 432
+    else:
+        return 0  # 無法判斷
+
+# 重新整理並去掉 0
+mapped_pulses = array('I', [mp for mp in (map_pulse(p) for p in pulses) if mp != 0])
+
+print("整理後脈衝長度:", len(mapped_pulses))
+print("整理後脈衝:", mapped_pulses)
+</code></pre>
+        </div>
+
+        <br>
+
+        <p>IR_Sender.py</p>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>
+from machine import Pin, PWM   # 匯入 Pin 與 PWM 類別，用來控制 GPIO 與硬體 PWM
+import time                    # 匯入 time 模組，用來做延遲（微秒級）
+
+# ===== 定義 IR 發射類別 =====
+class IRSender:
+    def __init__(self, pin=1, freq=38000):
+        # 建立 PWM 物件，控制紅外線 LED 載波
+        # pin: 使用哪個 GPIO 腳位輸出
+        # freq: PWM 頻率，NEC 協議通常 38kHz
+        # duty=0: 初始不輸出紅外線
+        self.pwm = PWM(Pin(pin), freq=freq, duty=0)
+
+    # 發射紅外線脈衝序列
+    # pulses: [mark, space, mark, space ...] 單位為微秒
+    def send(self, pulses):
+        if not pulses:
+            return False             # 若脈衝序列為空，直接返回 False 表示發射失敗
+
+        for i, duration in enumerate(pulses):
+            if i % 2 == 0:
+                self.pwm.duty(0)    # 奇數 index = space，紅外線關閉
+                
+            else:
+                self.pwm.duty(512)  # 偶數 index = mark，紅外線開啟，duty 50%
+            time.sleep_us(duration)  # 延遲對應微秒數，維持 mark/space 寬度
+
+        self.pwm.duty(0)            # 發射完成後，確保紅外線關閉
+        return True                 # 回傳 True 表示發射成功
+</code></pre>
+        </div>
+
+        <br>
+
+        <p>main.py</p>
+
+        <div class="redbackground">
+            ⚠️ 程式為無限迴圈執行，<br />
+            <span class="highlight-yellow"><strong>若要停止程式，請在Thonny 連按兩次 Ctrl + C</strong></span>
+        </div>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>
+import network
+import time
+import ure
+
+import StaModeHttpServer as http
+import OledShowText as oled
+from IR_Sender import IRSender
+import IR_Codes
+
+# ===== WiFi =====
+SSID = "您家的SSID"
+PASSWORD = "您家的PASSWORD"
+
+sta = network.WLAN(network.STA_IF)
+if sta.active():
+    sta.active(False)
+time.sleep(0.5)
+sta.active(True)
+sta.connect(SSID, PASSWORD)
+
+oled.show("WiFi Connecting...")
+while not sta.isconnected():
+    time.sleep(0.5)
+
+ip = sta.ifconfig()[0]
+oled.show("WiFi OK", "IP:", ip)
+print("IP:", ip)
+
+# ===== IR =====
+ir = IRSender(pin=1)
+
+def send_ir(code_name):
+    pulses = IR_Codes.CODES.get(code_name)
+    if pulses:
+        ir.send(pulses)
+        print("IR pulses:", pulses)  
+        print("IR 發射:", code_name)  
+
+# ===== HTTP =====
+server = http.start_server()
+oled.show("HTTP Server Ready", ip)  # OLED 只顯示 IP
+
+def on_request(cl):
+    req = cl.recv(1024).decode()
+    #print("REQ:", req)
+
+    # 直接用 if 判斷 URL，對應 IR
+    for url, code_name in IR_Codes.CODES.items():
+        if f"GET /{url} " in req:
+            send_ir(url)
+            response_body = f"{url} 發射完成"
+            break
+    else:
+        response_body = "未知指令"
+
+    response = (
+        "HTTP/1.1 200 OK\r\n"
+        "Content-Type: text/plain; charset=utf-8\r\n\r\n"
+        + response_body
+    )
+    cl.send(response.encode('utf-8'))
+
+# ===== 主迴圈 =====
+while True:
+    http.handle_client(server, on_request)
+    time.sleep_ms(10)
+
+</code></pre>
+        </div>
+
+        <br>
+
+        <p>OledShowText.py</p>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>
+from machine import Pin, I2C          # 從 machine 模組匯入 Pin 與 I2C 類別，用來控制 GPIO 與 I2C 通訊
+import ssd1306                        # 匯入 SSD1306 OLED 顯示驅動模組
+
+# === 初始化 I2C ===
+i2c = I2C(1, scl=Pin(6), sda=Pin(5), freq=400000)  # 建立 I2C 物件，使用 I2C1，SCL 接 GPIO6，SDA 接 GPIO5，頻率 400kHz
+oled = ssd1306.SSD1306_I2C(128, 64, i2c)          # 建立 OLED 物件，解析度 128x64，透過上面建立的 I2C 物件控制
+
+# === 顯示文字函式 ===
+def show(*lines):                # 定義 show 函式，可傳入多行文字參數
+    oled.fill(0)                  # 將 OLED 畫面填滿黑色（清空畫面）
+    y = 0                         # 初始 y 座標為 0，用來控制文字行位置
+    for line in lines:            # 逐行讀取傳入的文字
+        oled.text(line, 0, y)    # 在 OLED 畫面指定 x=0, y 位置顯示文字
+        y += 15                   # y 座標增加 15 像素，為下一行文字預留空間
+    oled.show()                   # 將畫面更新到 OLED，實際顯示文字
+
+</code></pre>
+        </div>
+
+        <br>
+
+        <p>ssd1306.py</p>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>
+# MicroPython SSD1306 OLED driver, I2C and SPI interfaces
+
+from micropython import const
+import framebuf
+
+SET_CONTRAST = const(0x81)
+SET_ENTIRE_ON = const(0xA4)
+SET_NORM_INV = const(0xA6)
+SET_DISP = const(0xAE)
+SET_MEM_ADDR = const(0x20)
+SET_COL_ADDR = const(0x21)
+SET_PAGE_ADDR = const(0x22)
+SET_DISP_START_LINE = const(0x40)
+SET_SEG_REMAP = const(0xA0)
+SET_MUX_RATIO = const(0xA8)
+SET_COM_OUT_DIR = const(0xC0)
+SET_DISP_OFFSET = const(0xD3)
+SET_COM_PIN_CFG = const(0xDA)
+SET_DISP_CLK_DIV = const(0xD5)
+SET_PRECHARGE = const(0xD9)
+SET_VCOM_DESEL = const(0xDB)
+SET_CHARGE_PUMP = const(0x8D)
+
+class SSD1306:
+    def __init__(self, width, height, external_vcc):
+        self.width = width
+        self.height = height
+        self.external_vcc = external_vcc
+        self.pages = self.height // 8
+        self.buffer = bytearray(self.pages * self.width)
+        self.fb = framebuf.FrameBuffer(
+            self.buffer, self.width, self.height, framebuf.MONO_VLSB
+        )
+        self.init_display()
+
+    def init_display(self):
+        for cmd in (
+            SET_DISP | 0x00,
+            SET_MEM_ADDR, 0x00,
+            SET_DISP_START_LINE | 0x00,
+            SET_SEG_REMAP | 0x01,
+            SET_MUX_RATIO, self.height - 1,
+            SET_COM_OUT_DIR | 0x08,
+            SET_DISP_OFFSET, 0x00,
+            SET_COM_PIN_CFG, 0x02 if self.height == 32 else 0x12,
+            SET_DISP_CLK_DIV, 0x80,
+            SET_PRECHARGE, 0x22 if self.external_vcc else 0xF1,
+            SET_VCOM_DESEL, 0x30,
+            SET_CONTRAST, 0xFF,
+            SET_ENTIRE_ON,
+            SET_NORM_INV,
+            SET_CHARGE_PUMP, 0x10 if self.external_vcc else 0x14,
+            SET_DISP | 0x01,
+        ):
+            self.write_cmd(cmd)
+
+    def fill(self, col):
+        self.fb.fill(col)
+
+    def pixel(self, x, y, col):
+        self.fb.pixel(x, y, col)
+
+    def text(self, string, x, y, col=1):
+        self.fb.text(string, x, y, col)
+
+    def show(self):
+        self.write_cmd(SET_COL_ADDR)
+        self.write_cmd(0)
+        self.write_cmd(self.width - 1)
+        self.write_cmd(SET_PAGE_ADDR)
+        self.write_cmd(0)
+        self.write_cmd(self.pages - 1)
+        self.write_data(self.buffer)
+
+class SSD1306_I2C(SSD1306):
+    def __init__(self, width, height, i2c, addr=0x3C, external_vcc=False):
+        self.i2c = i2c
+        self.addr = addr
+        self.temp = bytearray(2)
+        super().__init__(width, height, external_vcc)
+
+    def write_cmd(self, cmd):
+        self.temp[0] = 0x80
+        self.temp[1] = cmd
+        self.i2c.writeto(self.addr, self.temp)
+
+    def write_data(self, buf):
+        self.i2c.writeto(self.addr, b"\x40" + buf)
+
+</code></pre>
+        </div>
+
+        <br>
+
+        <p>StaModeHttpServer.py</p>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>
+import socket  # 匯入 socket 模組，用來建立網路連線（HTTP Server）
+
+# ===== 建立 HTTP Server =====
+def start_server():
+    addr = socket.getaddrinfo("0.0.0.0", 80)[0][-1]  # 取得 0.0.0.0:80 的地址資訊（監聽所有網卡）
+    s = socket.socket()                               # 建立 TCP socket 物件
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # 設定 socket 選項，允許重複使用同一個地址
+    s.bind(addr)                                     # 綁定 socket 到指定地址（IP + port）
+    s.listen(1)                                      # 開始監聽，最多排隊 1 個連線
+    s.settimeout(0.1)                                # 設定 accept() 最多等待 0.1 秒，不會阻塞主程式
+    return s                                         # 回傳建立好的 socket 物件
+
+# ===== 處理 HTTP Client =====
+def handle_client(server, on_request):
+    try:
+        cl, addr = server.accept()                  # 嘗試接受 client 連線，cl 為 client socket，addr 為 client 地址
+    except:
+        return                                     # 若沒有連線或超時，直接回傳，不做任何處理
+
+    try:
+        on_request(cl)                              # 呼叫傳入的處理函式 on_request()，由使用者定義如何處理 HTTP 請求
+    except Exception as e:
+        print("處理 client 發生錯誤:", e)           # 捕捉錯誤並印出
+    finally:
+        cl.close()                                  # 不論是否出錯，都關閉 client socket，釋放資源
+</code></pre>
+        </div>
+    </section>
+
+    <section>
+        <h2>執行IR_Receiver.py範例程式</h2>
+
+        <div class="redbackground">
+            <p>IR_Receiver.py</p>
+            ⚠️ 程式為無限迴圈執行，<br />
+            <span class="highlight-yellow"><strong>若要停止程式，請在Thonny 連按兩次 Ctrl + C</strong></span>
+        </div>
+
+        <div class="orangebackground">
+            <ol>
+                <li>電視的開機跟關機是<span class="highlight-yellow">相同</span>的紅外線。</li>
+                <li>冷氣的開機跟關機是<span class="highlight-yellow">不同</span>的紅外線。</li>
+                <li>冷氣的紅外線高達440個，它是把所有設定包在一起傳送。</li>
+
+            </ol>
+        </div>
+
+        <ol>
+            <li>
+                執行後拿國際牌冷氣遙控器按一下電源鍵，會接收到如下圖的脈衝。（我這台固定是440個脈衝。
+                <img src="../00-Assets/Project04-Panasonic_AC_Remote_Control/03.png" alt="03.png" />
+            </li>
+
+            <br>
+
+            <li>
+                <p>把pulses複製出來。(我拿之前錄好的來做)</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code>
+整理後脈衝: array('I', [
+    10368, 3488,
+    1728, 432, 432, 432, 1296, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 1296, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 1296, 432, 1296, 432, 1296, 432,
+    432, 432, 432, 432, 1296, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 1296, 432, 1296, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    10368, 3488,
+    1728, 432, 432, 432, 1296, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 1296, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 1296, 432, 1296, 432, 1296, 432,
+    432, 432, 432, 432, 1296, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 1296, 432, 432, 432, 432, 432, 1296, 432,
+    1296, 432, 1296, 432, 432, 432, 432, 432, 432, 432,
+    1296, 432, 1296, 432, 432, 432, 1296, 432, 1296, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 1296, 432,
+    1296, 432, 432, 432, 432, 432, 432, 432, 1296, 432,
+    1296, 432, 432, 432, 432, 432, 1296, 432, 432, 432,
+    432, 432, 1296, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    1296, 432, 1296, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 1296, 432, 1296, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 1296, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 1296, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 1296, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 432, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 1296, 432,
+    432, 432, 432, 432, 432, 432, 432, 432, 1296, 432,
+    432, 432, 1296, 432, 432, 432, 1296, 432, 1296, 432,
+    432, 432, 1296, 432, 1296, 432
+    ]
+</code></pre>
+                </div>
+            </li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>打開IR_Codes.py範例程式</h2>
+
+        <ol>
+            <li>
+                把pulses貼在Panasonic_AC_PowerON這裡，記得按下儲存檔案。
+                <img src="../00-Assets/Project04-Panasonic_AC_Remote_Control/04.png" alt="04.png" />
+            </li>
+        </ol>
+    </section>
+
+    <section>
+        <h2>打開main.py範例程式</h2>
+
+        <div class="redbackground">
+            <p>main.py</p>
+            ⚠️ 程式為無限迴圈執行，<br />
+            <span class="highlight-yellow"><strong>若要停止程式，請在Thonny 連按兩次 Ctrl + C</strong></span>
+        </div>
+
+        <ol>
+            <li>
+                換上您家的WIFI SSID跟密碼，然後執行腳本。
+                <img src="../00-Assets/Project04-Panasonic_AC_Remote_Control/05.png" alt="05.png" />
+            </li>
+
+            <br>
+
+            <li>
+                連線成功後，列出連線成功後取得的內網IP。
+                <img src="../00-Assets/Project04-Panasonic_AC_Remote_Control/06.png" alt="06.png" />
+            </li>
+
+            <br>
+
+            <li>
+                用瀏覽器測試一下http://10.0.4.68/NEC_TV_POWER。<br>假如有成功會顯示如下圖。
+                <img src="../00-Assets/Project04-Panasonic_AC_Remote_Control/07.png" alt="07.png" />
+            </li>
+
+            <li>這時侯可以考慮找適合的方式讓這個遙控器派上用場。<br>
+                假如您有iPad也會用SwiftPlaygrounds，就問Chatgpt，用這個http://10.0.4.68/Panasonic_AC_PowerON做遙控器View。
+
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code>
+我有一塊Esp32已連上網路，透過http://10.0.4.68/Panasonic_AC_PowerON來發射紅外線脈衝。
+用Swiftui做一個View給我，按鈕按下它會傳送http://10.0.4.68/Panasonic_AC_PowerON。
+</code></pre>
+                </div>
+            </li>
+
+            <li>如果您沒有iPad只有iPhone，可以透過徑捷來做這個動作，也能透過呼叫Siri來執行這個動作。</li>
+        </ol>
+    </section>
+
+    <section>
+        <div class="orangebackground">
+            <h2>⚠ 注意事項</h2>
+            <ul>
+                <li>OLED 顯示前請確認 SSD1306 library 已正確安裝在設備。</li>
+                <li>WIFI 天線務必裝上。</li>
+                <li>紅外線距離官方寫10公尺，好像沒那麼遠。</li>
+                <li>注意IR_Sender的發射跟關閉的剛好跟電視遙控器範例的正好相反。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+        <h2>▶ 執行結果</h2>
+        <ul>
+            <li>連線成功後，螢幕會顯示HTTP Server Ready跟IP。</li>
+        </ul>
+    </section>
+
+    <!-- 相關連結的section -->
+    <section>
+        <h2>🔗 相關連結</h2>
+
+        <div class="link-icons">
+            <a href="https://easyway0301.github.io/" target="_blank">
+                <span class="icon">🏠</span>
+                <span class="text">主頁</span>
+            </a>
+
+            <a href="mailto:easyway0301@gmail.com">
+                <span class="icon">✉️</span>
+                <span class="text">Email</span>
+            </a>
+        </div>
+    </section>
+
+    <script>
+        function copyCode(btn) {
+            const code = btn.nextElementSibling.innerText;
+            navigator.clipboard.writeText(code);
+            btn.innerText = "Copied!";
+            setTimeout(() => btn.innerText = "Copy", 1500);
+        }
+    </script>
+</body>
+
+</html>
