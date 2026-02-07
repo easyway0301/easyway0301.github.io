@@ -2,6 +2,8 @@
 <html lang="zh-Hant">
 
 <head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1749995304255800"
+        crossorigin="anonymous"></script>
     <meta charset="UTF-8" />
     <title>從零開始學Esp32</title>
 
@@ -207,67 +209,67 @@
 
 
 <body>
-  <h1>擴充板的無源蜂鳴器</h1>
+    <h1>擴充板的無源蜂鳴器</h1>
 
-  <section>
-    <h2>需要的材料</h2>
-    <div class="orangebackground">
-      <ul>
-        <li>Seeed XIAO Esp32-S3開發板1片。</li>
-        <li>Seeeduino XIAO Expansion Board擴充板1片。</li>
-      </ul>
-    </div>
-  </section>
+    <section>
+        <h2>需要的材料</h2>
+        <div class="orangebackground">
+            <ul>
+                <li>Seeed XIAO Esp32-S3開發板1片。</li>
+                <li>Seeeduino XIAO Expansion Board擴充板1片。</li>
+            </ul>
+        </div>
+    </section>
 
-  <section>
-    <h2>認識 Seeeduino XIAO Expansion Board擴充板</h2>
+    <section>
+        <h2>認識 Seeeduino XIAO Expansion Board擴充板</h2>
 
-    <p>
-      在開始撰寫程式之前，先來認識這塊擴充板。
-    </p>
+        <p>
+            在開始撰寫程式之前，先來認識這塊擴充板。
+        </p>
 
-    <div class="greenbackground">
-      <ul>
-        <li>D1按鈕</li>
-        <li>無源蜂鳴器</li>
-        <li>0.96" OLED 顯示模組</li>
-        <li>MicroSD 卡插槽</li>
-        <li>RTC 電池座</li>
-      </ul>
-    </div>
+        <div class="greenbackground">
+            <ul>
+                <li>D1按鈕</li>
+                <li>無源蜂鳴器</li>
+                <li>0.96" OLED 顯示模組</li>
+                <li>MicroSD 卡插槽</li>
+                <li>RTC 電池座</li>
+            </ul>
+        </div>
 
-    <h2>操作示意圖</h2>
-    <img src="../00-Assets/EB02-PassiveBuzzer.jpg" alt="EB02-PassiveBuzzer" />
-  </section>
+        <h2>操作示意圖</h2>
+        <img src="../00-Assets/EB02-PassiveBuzzer.jpg" alt="EB02-PassiveBuzzer" />
+    </section>
 
-  <!-- 腳位圖 -->
-  <section>
-    <h2>正面圖</h2>
-    <img src="../00-Assets/EBfront.png" alt="Seeeduino XIAO Expansion Board擴充板正面" />
+    <!-- 腳位圖 -->
+    <section>
+        <h2>正面圖</h2>
+        <img src="../00-Assets/EBfront.png" alt="Seeeduino XIAO Expansion Board擴充板正面" />
 
-    <br>
-    <h2>背面圖</h2>
-    <img src="../00-Assets/EBback.png" alt="Seeeduino XIAO Expansion Board擴充板背面" />
+        <br>
+        <h2>背面圖</h2>
+        <img src="../00-Assets/EBback.png" alt="Seeeduino XIAO Expansion Board擴充板背面" />
 
-    <br>
-    <h2>腳位圖</h2>
-    <img src="../00-Assets/Pin-List(EB).png" alt="Seeeduino XIAO Expansion Board擴充板腳位圖" />
+        <br>
+        <h2>腳位圖</h2>
+        <img src="../00-Assets/Pin-List(EB).png" alt="Seeeduino XIAO Expansion Board擴充板腳位圖" />
 
-    <div class="source">
-      圖片來源：
-      <a href="https://wiki.seeedstudio.com/cn/Seeeduino-XIAO-Expansion-Board/" target="_blank">
-        Seeed Studio 官方文件
-      </a>
-    </div>
-  </section>
+        <div class="source">
+            圖片來源：
+            <a href="https://wiki.seeedstudio.com/cn/Seeeduino-XIAO-Expansion-Board/" target="_blank">
+                Seeed Studio 官方文件
+            </a>
+        </div>
+    </section>
 
-  <section>
-    <h2>開啟 Thonny 並執行範例程式</h2>
-    <p>PassiveBuzzer.py</p>
+    <section>
+        <h2>開啟 Thonny 並執行範例程式</h2>
+        <p>PassiveBuzzer.py</p>
 
-    <div class="code-block">
-      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-      <pre>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre>
 from machine import Pin, PWM
 import time
 
@@ -328,50 +330,50 @@ for note in song:
 # 播放完畢後關閉 PWM
 buzzer.deinit()
 </pre>
-    </div>
-  </section>
+        </div>
+    </section>
 
-  <section>
-    <div class="orangebackground">
-      <h2>⚠ 注意事項</h2>
-      <ul>
-        <li>無源蜂鳴器一定要使用 PWM，否則不會發聲。</li>
-        <li>duty 值可調整音量大小（0～1023）。</li>
-        <li>長時間播放請注意蜂鳴器與電源溫度。</li>
-      </ul>
-    </div>
-  </section>
+    <section>
+        <div class="orangebackground">
+            <h2>⚠ 注意事項</h2>
+            <ul>
+                <li>無源蜂鳴器一定要使用 PWM，否則不會發聲。</li>
+                <li>duty 值可調整音量大小（0～1023）。</li>
+                <li>長時間播放請注意蜂鳴器與電源溫度。</li>
+            </ul>
+        </div>
+    </section>
 
-  <section>
-    <h2>▶ 執行結果</h2>
-    <p>蜂鳴器會依序播放旋律音符，完成後自動停止發聲。</p>
-  </section>
+    <section>
+        <h2>▶ 執行結果</h2>
+        <p>蜂鳴器會依序播放旋律音符，完成後自動停止發聲。</p>
+    </section>
 
-  <!-- 相關連結的section -->
-  <section>
-    <h2>🔗 相關連結</h2>
+    <!-- 相關連結的section -->
+    <section>
+        <h2>🔗 相關連結</h2>
 
-    <div class="link-icons">
-      <a href="https://easyway0301.github.io/" target="_blank">
-        <span class="icon">🏠</span>
-        <span class="text">主頁</span>
-      </a>
+        <div class="link-icons">
+            <a href="https://easyway0301.github.io/" target="_blank">
+                <span class="icon">🏠</span>
+                <span class="text">主頁</span>
+            </a>
 
-      <a href="mailto:easyway0301@gmail.com">
-        <span class="icon">✉️</span>
-        <span class="text">Email</span>
-      </a>
-    </div>
-  </section>
+            <a href="mailto:easyway0301@gmail.com">
+                <span class="icon">✉️</span>
+                <span class="text">Email</span>
+            </a>
+        </div>
+    </section>
 
-  <script>
-    function copyCode(btn) {
-      const code = btn.nextElementSibling.innerText;
-      navigator.clipboard.writeText(code);
-      btn.innerText = "Copied!";
-      setTimeout(() => btn.innerText = "Copy", 1500);
-    }
-  </script>
+    <script>
+        function copyCode(btn) {
+            const code = btn.nextElementSibling.innerText;
+            navigator.clipboard.writeText(code);
+            btn.innerText = "Copied!";
+            setTimeout(() => btn.innerText = "Copy", 1500);
+        }
+    </script>
 </body>
 
 </html>
