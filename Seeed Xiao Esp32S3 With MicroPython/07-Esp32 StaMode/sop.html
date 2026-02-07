@@ -2,6 +2,8 @@
 <html lang="zh-Hant">
 
 <head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1749995304255800"
+        crossorigin="anonymous"></script>
     <meta charset="UTF-8" />
     <title>從零開始學Esp32</title>
 
@@ -207,40 +209,40 @@
 
 <body>
 
-  <h1>ESP32 Wi-Fi Station 模式</h1>
+    <h1>ESP32 Wi-Fi Station 模式</h1>
 
-  <section>
-    <h2>需要的材料</h2>
-    <div class="orangebackground">
-      <ul>
-        <li>Seeed XIAO Esp32-S3 開發板1片。</li>
-      </ul>
-    </div>
-  </section>
+    <section>
+        <h2>需要的材料</h2>
+        <div class="orangebackground">
+            <ul>
+                <li>Seeed XIAO Esp32-S3 開發板1片。</li>
+            </ul>
+        </div>
+    </section>
 
-  <section>
-    <h2>認識 ESP32-S3 開發板</h2>
-    <p>使用ESP32-S3 作為 Wi-Fi Station（STA）模式，連接到既有的無線網路。</p>
-    <div class="highlight">
-      ⚠️ 你需要知道要連接的 SSID（熱點名稱）與密碼<br>
-      📌 若無法連線，請確認 Wi-Fi SSID 及密碼正確、Wi-Fi 訊號良好。
-    </div>
-  </section>
+    <section>
+        <h2>認識 ESP32-S3 開發板</h2>
+        <p>使用ESP32-S3 作為 Wi-Fi Station（STA）模式，連接到既有的無線網路。</p>
+        <div class="highlight">
+            ⚠️ 你需要知道要連接的 SSID（熱點名稱）與密碼<br>
+            📌 若無法連線，請確認 Wi-Fi SSID 及密碼正確、Wi-Fi 訊號良好。
+        </div>
+    </section>
 
-  <section>
-    <h2>📶 Wi-Fi 設定參數</h2>
-    <ul>
-      <li><strong>SSID：</strong>你的無線網路名稱</li>
-      <li><strong>Password：</strong>你的 Wi-Fi 密碼</li>
-    </ul>
-  </section>
+    <section>
+        <h2>📶 Wi-Fi 設定參數</h2>
+        <ul>
+            <li><strong>SSID：</strong>你的無線網路名稱</li>
+            <li><strong>Password：</strong>你的 Wi-Fi 密碼</li>
+        </ul>
+    </section>
 
-  <section>
-    <h2>開啟 Thonny 並執行範例程式</h2>
+    <section>
+        <h2>開啟 Thonny 並執行範例程式</h2>
 
-    <div class="code-block">
-      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-      <pre><code>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>
 import network        # 引用 Wi-Fi 模組
 import time
 
@@ -273,46 +275,46 @@ else:
     print("❌ Wi-Fi 連線失敗")
 
     </code></pre>
-    </div>
-  </section>
+        </div>
+    </section>
 
-  <section>
-    <h2>▶ 執行結果</h2>
-    <p>
-      若成功連上 Wi-Fi，你會在序列埠看到類似：</p>
-    <ul>
-      <li>📶 開始連線…</li>
-      <li>✅ Wi-Fi 連線成功！</li>
-      <li>📍 IP 位址: 192.168.1.xxx</li>
-    </ul>
-    <p>若沒成功連線會顯示 <strong>❌ Wi-Fi 連線失敗</strong>。</p>
-  </section>
+    <section>
+        <h2>▶ 執行結果</h2>
+        <p>
+            若成功連上 Wi-Fi，你會在序列埠看到類似：</p>
+        <ul>
+            <li>📶 開始連線…</li>
+            <li>✅ Wi-Fi 連線成功！</li>
+            <li>📍 IP 位址: 192.168.1.xxx</li>
+        </ul>
+        <p>若沒成功連線會顯示 <strong>❌ Wi-Fi 連線失敗</strong>。</p>
+    </section>
 
-  <!-- 相關連結的section -->
-  <section>
-    <h2>🔗 相關連結</h2>
+    <!-- 相關連結的section -->
+    <section>
+        <h2>🔗 相關連結</h2>
 
-    <div class="link-icons">
-      <a href="https://easyway0301.github.io/" target="_blank">
-        <span class="icon">🏠</span>
-        <span class="text">主頁</span>
-      </a>
+        <div class="link-icons">
+            <a href="https://easyway0301.github.io/" target="_blank">
+                <span class="icon">🏠</span>
+                <span class="text">主頁</span>
+            </a>
 
-      <a href="mailto:easyway0301@gmail.com">
-        <span class="icon">✉️</span>
-        <span class="text">Email</span>
-      </a>
-    </div>
-  </section>
+            <a href="mailto:easyway0301@gmail.com">
+                <span class="icon">✉️</span>
+                <span class="text">Email</span>
+            </a>
+        </div>
+    </section>
 
-  <script>
-    function copyCode(btn) {
-      const code = btn.nextElementSibling.innerText;
-      navigator.clipboard.writeText(code);
-      btn.innerText = "Copied!";
-      setTimeout(() => btn.innerText = "Copy", 1500);
-    }
-  </script>
+    <script>
+        function copyCode(btn) {
+            const code = btn.nextElementSibling.innerText;
+            navigator.clipboard.writeText(code);
+            btn.innerText = "Copied!";
+            setTimeout(() => btn.innerText = "Copy", 1500);
+        }
+    </script>
 
 </body>
 
