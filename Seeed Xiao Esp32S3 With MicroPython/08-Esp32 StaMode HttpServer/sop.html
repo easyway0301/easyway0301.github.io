@@ -207,33 +207,39 @@
 
 <body>
 
-  <h1>Wi-Fi HTTP Server (UserLed 控制)</h1>
+    <h1>Wi-Fi HTTP Server (UserLed 控制)</h1>
 
-  <section>
-    <h2>需要的材料</h2>
-    <div class="orangebackground">
-      <ul>
-        <li>Seeed XIAO Esp32-S3 開發板1片。</li>
-      </ul>
-    </div>
-  </section>
+    <section>
+        <h2>需要的材料</h2>
+        <div class="orangebackground">
+            <ul>
+                <li>Seeed XIAO Esp32-S3 開發板1片。</li>
+            </ul>
+        </div>
+    </section>
 
-  <section>
-    <h2>認識 ESP32-S3 開發板</h2>
-    <p>ESP32‑S3 以 Wi-Fi Station 模式連線，並建立 HTTP Server 控制板上的 UserLed。</p>
-    <ul>
-      <li>連接你的 Wi-Fi 網路</li>
-      <li>建立 HTTP Server，監聽 Port 80</li>
-      <li>透過瀏覽器或網頁請求控制 UserLed 開關</li>
-    </ul>
-    <div class="greenbackground">✔ 適合初學 MicroPython & ESP32 的 IoT 範例</div>
-  </section>
+    <section>
+        <h2>認識 ESP32-S3 開發板</h2>
+        <p>ESP32‑S3 以 Wi-Fi Station 模式連線，並建立 HTTP Server 控制板上的 UserLed。</p>
+        <ul>
+            <li>連接你的 Wi-Fi 網路</li>
+            <li>建立 HTTP Server，監聽 Port 80</li>
+            <li>透過瀏覽器或網頁請求控制 UserLed 開關</li>
+        </ul>
+        <div class="greenbackground">✔ 適合初學 MicroPython & ESP32 的 IoT 範例</div>
+    </section>
 
-  <section>
-    <h2>開啟 Thonny 並執行範例程式</h2>
-    <div class="code-block">
-      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-      <pre><code>import network
+    <section>
+        <h2>開啟 Thonny 並執行範例程式</h2>
+
+        <div class="redbackground">
+            ⚠️ 程式為無限迴圈執行，<br />
+            <span class="highlight-yellow"><strong>若要停止程式，請在Thonny 連按兩次 Ctrl + C</strong></span>
+        </div>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>import network
 import socket
 import time
 from machine import Pin
@@ -294,57 +300,57 @@ while True:
     cl.send(response.encode())
     cl.close()
 </code></pre>
-    </div>
-  </section>
+        </div>
+    </section>
 
-  <section>
-    <h2>🧪 測試方式</h2>
-    <ol>
-      <li>將程式上傳至 ESP32-S3</li>
-      <li>透過序列埠查看印出的 IP</li>
-      <li>✅ Wi-Fi 連線成功！</li>
-      <li>📍 IP 位址：10.0.4.33</li>
-      <li>瀏覽器輸入 http://10.0.4.33/turnOn</li>
-      <li>瀏覽器輸入 http://10.0.4.33/turnOff</li>
-      <li>LED 亮／滅表示操作成功</li>
-    </ol>
-    <div class="orangebackground">📌 若無法控制 LED，請確認 Wi-Fi 名稱及密碼正確</div>
-  </section>
+    <section>
+        <h2>🧪 測試方式</h2>
+        <ol>
+            <li>將程式上傳至 ESP32-S3</li>
+            <li>透過序列埠查看印出的 IP</li>
+            <li>✅ Wi-Fi 連線成功！</li>
+            <li>📍 IP 位址：10.0.4.33</li>
+            <li>瀏覽器輸入 http://10.0.4.33/turnOn</li>
+            <li>瀏覽器輸入 http://10.0.4.33/turnOff</li>
+            <li>LED 亮／滅表示操作成功</li>
+        </ol>
+        <div class="orangebackground">📌 若無法控制 LED，請確認 Wi-Fi 名稱及密碼正確</div>
+    </section>
 
-  <section>
-    <h2>⚠ 注意事項</h2>
-    <ul>
-      <li>UserLed 為板上預設 LED（GPIO21）</li>
-      <li>Server 需可接受外部連線</li>
-      <li>避免將密碼寫死在程式碼中，實務可用 config 檔</li>
-    </ul>
-  </section>
+    <section>
+        <h2>⚠ 注意事項</h2>
+        <ul>
+            <li>UserLed 為板上預設 LED（GPIO21）</li>
+            <li>Server 需可接受外部連線</li>
+            <li>避免將密碼寫死在程式碼中，實務可用 config 檔</li>
+        </ul>
+    </section>
 
-  <!-- 相關連結的section -->
-  <section>
-    <h2>🔗 相關連結</h2>
+    <!-- 相關連結的section -->
+    <section>
+        <h2>🔗 相關連結</h2>
 
-    <div class="link-icons">
-      <a href="https://easyway0301.github.io/" target="_blank">
-        <span class="icon">🏠</span>
-        <span class="text">主頁</span>
-      </a>
+        <div class="link-icons">
+            <a href="https://easyway0301.github.io/" target="_blank">
+                <span class="icon">🏠</span>
+                <span class="text">主頁</span>
+            </a>
 
-      <a href="mailto:easyway0301@gmail.com">
-        <span class="icon">✉️</span>
-        <span class="text">Email</span>
-      </a>
-    </div>
-  </section>
+            <a href="mailto:easyway0301@gmail.com">
+                <span class="icon">✉️</span>
+                <span class="text">Email</span>
+            </a>
+        </div>
+    </section>
 
-  <script>
-    function copyCode(btn) {
-      const code = btn.nextElementSibling.innerText;
-      navigator.clipboard.writeText(code);
-      btn.innerText = "Copied!";
-      setTimeout(() => btn.innerText = "Copy", 1500);
-    }
-  </script>
+    <script>
+        function copyCode(btn) {
+            const code = btn.nextElementSibling.innerText;
+            navigator.clipboard.writeText(code);
+            btn.innerText = "Copied!";
+            setTimeout(() => btn.innerText = "Copy", 1500);
+        }
+    </script>
 
 </body>
 
