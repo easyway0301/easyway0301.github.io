@@ -206,67 +206,73 @@
 </head>
 
 <body>
-  <h1>擴充板 OLED 顯示文字</h1>
+    <h1>擴充板 OLED 顯示文字</h1>
 
-  <section>
-    <h2>需要的材料</h2>
-    <div class="orangebackground">
-      <ul>
-        <li>Seeed XIAO Esp32-S3開發板1片。</li>
-        <li>Seeeduino XIAO Expansion Board擴充板1片。</li>
-      </ul>
-    </div>
-  </section>
+    <section>
+        <h2>需要的材料</h2>
+        <div class="orangebackground">
+            <ul>
+                <li>Seeed XIAO Esp32-S3開發板1片。</li>
+                <li>Seeeduino XIAO Expansion Board擴充板1片。</li>
+            </ul>
+        </div>
+    </section>
 
-  <section>
-    <h2>認識 Seeeduino XIAO Expansion Board擴充板</h2>
+    <section>
+        <h2>認識 Seeeduino XIAO Expansion Board擴充板</h2>
 
-    <p>
-      在開始撰寫程式之前，先來認識這塊擴充板。
-    </p>
+        <p>
+            在開始撰寫程式之前，先來認識這塊擴充板。
+        </p>
 
-    <div class="greenbackground">
-      <ul>
-        <li>D1按鈕</li>
-        <li>無源蜂鳴器</li>
-        <li>0.96" OLED 顯示模組</li>
-        <li>MicroSD 卡插槽</li>
-        <li>RTC 電池座</li>
-      </ul>
-    </div>
+        <div class="greenbackground">
+            <ul>
+                <li>D1按鈕</li>
+                <li>無源蜂鳴器</li>
+                <li>0.96" OLED 顯示模組</li>
+                <li>MicroSD 卡插槽</li>
+                <li>RTC 電池座</li>
+            </ul>
+        </div>
 
-    <h2>操作示意圖</h2>
-    <img src="../00-Assets/EB03-Oled Show Text.png" alt="EB03-Oled Show Text" />
-  </section>
+        <h2>操作示意圖</h2>
+        <img src="../00-Assets/EB03-Oled Show Text.png" alt="EB03-Oled Show Text" />
+    </section>
 
-  <!-- 腳位圖 -->
-  <section>
-    <h2>正面圖</h2>
-    <img src="../00-Assets/EBfront.png" alt="Seeeduino XIAO Expansion Board擴充板正面" />
+    <!-- 腳位圖 -->
+    <section>
+        <h2>正面圖</h2>
+        <img src="../00-Assets/EBfront.png" alt="Seeeduino XIAO Expansion Board擴充板正面" />
 
-    <br>
-    <h2>背面圖</h2>
-    <img src="../00-Assets/EBback.png" alt="Seeeduino XIAO Expansion Board擴充板背面" />
+        <br>
+        <h2>背面圖</h2>
+        <img src="../00-Assets/EBback.png" alt="Seeeduino XIAO Expansion Board擴充板背面" />
 
-    <br>
-    <h2>腳位圖</h2>
-    <img src="../00-Assets/Pin-List(EB).png" alt="Seeeduino XIAO Expansion Board擴充板腳位圖" />
+        <br>
+        <h2>腳位圖</h2>
+        <img src="../00-Assets/Pin-List(EB).png" alt="Seeeduino XIAO Expansion Board擴充板腳位圖" />
 
-    <div class="source">
-      圖片來源：
-      <a href="https://wiki.seeedstudio.com/cn/Seeeduino-XIAO-Expansion-Board/" target="_blank">
-        Seeed Studio 官方文件
-      </a>
-    </div>
-  </section>
+        <div class="source">
+            圖片來源：
+            <a href="https://wiki.seeedstudio.com/cn/Seeeduino-XIAO-Expansion-Board/" target="_blank">
+                Seeed Studio 官方文件
+            </a>
+        </div>
+    </section>
 
-  <section>
-    <h2>開啟 Thonny 並執行範例程式</h2>
-    <p>ssd1306.py</p>
+    <section>
+        <h2>開啟 Thonny 並上傳或新增範例程式，總共有兩個PY檔。</h2>
 
-    <div class="code-block">
-      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-      <pre><code>
+        <ul>
+            <li>OledShowText.py</li>
+            <li>ssd1306.py</li>
+        </ul>
+
+        <p>ssd1306.py</p>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>
 # MicroPython SSD1306 OLED driver, I2C and SPI interfaces
 
 from micropython import const
@@ -356,17 +362,15 @@ class SSD1306_I2C(SSD1306):
     def write_data(self, buf):
         self.i2c.writeto(self.addr, b"\x40" + buf)
 </code></pre>
-    </div>
-  </section>
+        </div>
 
-  <section>
-    <h2>開啟 Thonny 並執行範例程式</h2>
-    <p>OledShowText.py</p>
+        <br>
 
-    <div class="code-block">
-      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-      <pre><code>
+        <p>OledShowText.py</p>
 
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>
 from machine import Pin, I2C       # 匯入 I2C 類別
 import ssd1306                     # 匯入 SSD1306 顯示驅動
 import time                        # 匯入時間
@@ -395,49 +399,50 @@ time.sleep(5)
 oled.fill(0)                      # 填滿黑色
 oled.show()                       # 顯示更新
 </code></pre>
-    </div>
-  </section>
+        </div>
 
-  <section>
-    <div class="orangebackground">
-      <h2>⚠ 注意事項</h2>
-      <ul>
-        <li>OLED 顯示前請確認 SSD1306 library 已正確安裝在設備。</li>
-        <li> I2C 介面的 OLED 顯示屏（常見 128×64 SSD1306）。</li>
-      </ul>
-    </div>
-  </section>
+    </section>
 
-  <section>
-    <h2>▶ 執行結果</h2>
-    <p>OLED 螢幕會顯示兩行英文文字，顯示5秒後清除。</p>
-  </section>
+    <section>
+        <div class="orangebackground">
+            <h2>⚠ 注意事項</h2>
+            <ul>
+                <li>OLED 顯示前請確認 SSD1306 library 已正確安裝在設備。</li>
+                <li> I2C 介面的 OLED 顯示屏（常見 128×64 SSD1306）。</li>
+            </ul>
+        </div>
+    </section>
 
-  <!-- 相關連結的section -->
-  <section>
-    <h2>🔗 相關連結</h2>
+    <section>
+        <h2>▶ 執行結果</h2>
+        <p>OLED 螢幕會顯示兩行英文文字，顯示5秒後清除。</p>
+    </section>
 
-    <div class="link-icons">
-      <a href="https://easyway0301.github.io/" target="_blank">
-        <span class="icon">🏠</span>
-        <span class="text">主頁</span>
-      </a>
+    <!-- 相關連結的section -->
+    <section>
+        <h2>🔗 相關連結</h2>
 
-      <a href="mailto:easyway0301@gmail.com">
-        <span class="icon">✉️</span>
-        <span class="text">Email</span>
-      </a>
-    </div>
-  </section>
+        <div class="link-icons">
+            <a href="https://easyway0301.github.io/" target="_blank">
+                <span class="icon">🏠</span>
+                <span class="text">主頁</span>
+            </a>
 
-  <script>
-    function copyCode(btn) {
-      const code = btn.nextElementSibling.innerText;
-      navigator.clipboard.writeText(code);
-      btn.innerText = "Copied!";
-      setTimeout(() => btn.innerText = "Copy", 1500);
-    }
-  </script>
+            <a href="mailto:easyway0301@gmail.com">
+                <span class="icon">✉️</span>
+                <span class="text">Email</span>
+            </a>
+        </div>
+    </section>
+
+    <script>
+        function copyCode(btn) {
+            const code = btn.nextElementSibling.innerText;
+            navigator.clipboard.writeText(code);
+            btn.innerText = "Copied!";
+            setTimeout(() => btn.innerText = "Copy", 1500);
+        }
+    </script>
 </body>
 
 </html>
