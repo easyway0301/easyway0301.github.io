@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://easyway0301.github.io/</loc>
+    <priority>1.0</priority>
+  </url>
+
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/Project04-Panasonic_AC_Remote_Control/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/Project03-Nec_Remote_Control/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/Project02-Brick_Breaker_Game/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/Project01-DHT22_And_ThingSpeak/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/00-thingspeak/sop.html</loc></url>
+
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/GB03-Grove Sht31/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/GB02-Grove IR_Receiver/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/GB01-Grove IR_Sender/sop.html</loc></url>
+
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/EB10-Oled Show Image/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/EB09-Grove Sht31/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/EB08-Grove IR_Sender/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/EB07-Grove IR_Receiver/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/EB06-Oled Show ChineseFont/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/EB05-MicroSD/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/EB04-Oled Show Real Time Clock/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/EB03-Oled Show Text/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/EB02-Passive Buzzer/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/EB01-UserButton/sop.html</loc></url>
+
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/B18-WS2812 4X4 LED/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/B17-Active Buzzer/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/B16-YS-IRTM/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/B15-Keyes Vs1838B IR Receiver/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/B14-Keyes Vs1838B IR Transmitter/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/B13-SG90(360) Servo/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/B12-MG90S(180) Servo/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/B11-Keyes SC8002B/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/B10-Max7219 8x8 Led/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/B09-Joystick/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/B08-DHT22(AM2302)/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/B07-GY-68 BMP180/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/B06-DALLAS DS18B20/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/B05-HC-SR04/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/B04-OLED SH1106 Display/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/B03-LCD1602A I2C/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/B02-Traffic Light LED Module/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/B01-Keyes LED RGB 140C05/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/B00-Breadboard/sop.html</loc></url>
+
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/S04-SimpleWebCam/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/S03-CaptureSaveToSd/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/S02-SingleShot/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/S01-MicroSD/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/S00-Flash MicroPython onto the Board/sop.html</loc></url>
+
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/08-Esp32 StaMode HttpServer/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/07-Esp32 StaMode/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/06-Esp32 ApMode/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/05-ESP NOW/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/04-Capacitive Touch UserLed/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/03-Capacitive Touch/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/02-TurnOn UserLed/sop.html</loc></url>
+  <url><loc>https://easyway0301.github.io/Seeed Xiao Esp32S3 With MicroPython/01-Flash MicroPython onto the Board/sop.html</loc></url>
+
+</urlset>
